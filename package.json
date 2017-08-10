@@ -48,5 +48,5 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "vinyl-source-stream": "^1.1.0"
   },
-  "main": "src/index.js"
+  "main": "src/app/index.js"
 }

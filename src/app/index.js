@@ -1,6 +1,8 @@
+import angular from 'angular';
 import TestComponent from './smoke-test/test-component';
+import "./app.templates";
 
-let webSMS = angular.module('webSMS', [])
+let webSMS = angular.module('webSMS', ['templates'])
 
 // comment-out this line to stop printing debug messages in console
 console.debug = console.log;
@@ -11,7 +13,7 @@ console.debug = console.log;
 
 webSMS
   .component('test', TestComponent)
-  .factory('httpRequestInterceptor', function ($q, MockService) {
+  .factory('httpRequestInterceptor', function () {
     return {
       request: function (config) {        
         config.headers['Auth-Key'] = window.auth_value;

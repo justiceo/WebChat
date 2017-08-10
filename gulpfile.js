@@ -36,7 +36,7 @@ var interceptErrors = function(error) {
 
 
 gulp.task("browserify", function() {
-  return browserify("./src/index.js")
+  return browserify("./src/app/index.js")
       .transform(babelify, {presets: ["es2015"]})
       .transform(ngAnnotate)
       .bundle()
@@ -68,7 +68,7 @@ gulp.task("views", function() {
       }))
       .on("error", interceptErrors)
       .pipe(rename("app.templates.js"))
-      .pipe(gulp.dest("./src/core/"));
+      .pipe(gulp.dest("./src/app/"));
       // todo: core doesn't need to know about all the templates from other modules - refactor!
 });
 
@@ -127,15 +127,6 @@ gulp.task("build", ["clean", "sass", "copyData", "copyDirectories", "html", "vie
 gulp.task("repipe", function() {
   buildDir = "/var/www/html/wp-content/plugins/angularize_wp/"
 });
-
-gulp.task("reload-on-server", ["repipe", "build"], function() {
-  gulp.start(["browserify"]);
-  gulp.watch(sassFiles, ["sass"]);
-  gulp.watch("src/index.html", ["html"]);
-  gulp.watch(viewFiles, ["views"]);
-  gulp.watch(jsFiles, ["browserify"]);
-  gulp.watch(serverFiles, ["copyData"]);
-})
 
 gulp.task("default", ["build"], function() {
 
