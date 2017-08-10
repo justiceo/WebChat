@@ -1,9 +1,12 @@
 
- *, *:before, *:after {
+ @import '_bootstrap-custom';
+
+ /*
+*, *:before, *:after {
   box-sizing: border-box;
 }
 
-conversations {
+conversations.container-x {
   display: block;
 }
 
@@ -423,3 +426,4 @@ body {
     opacity: 1;
   }
 }
+*/

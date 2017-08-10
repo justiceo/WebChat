@@ -84,7 +84,7 @@ export class ConversationsCtrl {
 }
 
 let Conversations = {
-  templateUrl: 'app/conversations/conversations.html',
+  templateUrl: 'app/conversations/conversations-bootstrap.html',
   controller: ConversationsCtrl
 }
 

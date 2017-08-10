@@ -13,6 +13,8 @@ var del           = require("del");
 var gutil         = require('gulp-util');
 var karmaServer   = require('karma').Server;
 var zip           = require('gulp-zip');
+var postcss       = require('gulp-postcss');
+var autoprefixer  = require('autoprefixer');
 
 // Where our files are located
 var sassFiles   = "src/style/*.scss";
@@ -51,6 +53,7 @@ gulp.task("sass", function() {
   return gulp.src(sassFiles)
       .pipe(sass())
       .on("error", interceptErrors)
+      .pipe(postcss([ autoprefixer() ]))
       .pipe(minifyCSS())
       .pipe(gulp.dest(buildDir));
 });
