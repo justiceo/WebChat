@@ -10,6 +10,7 @@ export class ConversationsCtrl {
       },
       {
         id: "2",
+        isActive: true,
         name: "Jason Mars",
         time: "9:00 PM",
         body: "Hello dear,what are you to...",

@@ -4,26 +4,18 @@
         <a href="#" class="search"></a>
     </div>
     <ul class="people">
-        <li class="person" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+        <li class="person" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
             <img ng-src="{{convo.avatarUrl}}" alt="" />
             <span class="name" ng-bind="convo.name">Thomas Bangalter</span>
             <span class="time" ng-bind="convo.time">2:09 PM</span>
             <span class="preview" ng-bind="convo.body">I was wondering...</span>
-        </li>       
+        </li>
     </ul>
 </div>
 <div class="right">
     <div class="top"><span>To: <span class="name">Dog Woofson</span></span>
     </div>
-    <div class="chat" data-chat="person1">
-        <div class="conversation-start">
-            <span>Today, 6:48 AM</span>
-        </div>
-        <div class="bubble you">
-            Hello,
-        </div>
-    </div>
-    <div class="chat" data-chat="person2">
+    <div class="chat active-chat" data-chat="person2">
         <div class="conversation-start">
             <span>Today, 5:38 PM</span>
         </div>
@@ -44,27 +36,6 @@
         </div>
         <div class="bubble you">
             I've forgotten how it felt before
-        </div>
-    </div>
-    <div class="chat" data-chat="person3">
-        <div class="conversation-start">
-            <span>Today, 3:38 AM</span>
-        </div>
-    </div>
-    <div class="chat" data-chat="person4">
-        <div class="conversation-start">
-            <span>Yesterday, 4:20 PM</span>
-        </div>
-    </div>
-    <div class="chat" data-chat="person5">
-        <div class="conversation-start">
-            <span>Today, 6:28 AM</span>
-        </div>
-
-    </div>
-    <div class="chat" data-chat="person6">
-        <div class="conversation-start">
-            <span>Monday, 1:27 PM</span>
         </div>
     </div>
     <div class="write">

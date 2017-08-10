@@ -27,7 +27,7 @@ body {
   transform: translate(-50%, 0);
 }
 
-.container {
+.container-x {
   position: relative;
   top: 50%;
   left: 50%;
@@ -36,7 +36,7 @@ body {
   background-color: #fff;
   transform: translate(-50%, -50%);
 }
-.container .left {
+.container-x .left {
   float: left;
   width: 37.6%;
   height: 100%;
@@ -45,13 +45,13 @@ body {
   overflow-x: hidden;
   overflow-y: overlay;
 }
-.container .left .top {
+.container-x .left .top {
   position: relative;
   width: 100%;
   height: 96px;
   padding: 29px;
 }
-.container .left .top:after {
+.container-x .left .top:after {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -62,7 +62,7 @@ body {
   background-color: #e6e6e6;
   transform: translate(-50%, 0);
 }
-.container .left input {
+.container-x .left input {
   float: left;
   width: 188px;
   height: 42px;
@@ -73,10 +73,10 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
 }
-.container .left input:focus {
+.container-x .left input:focus {
   outline: none;
 }
-.container .left a.search {
+.container-x .left a.search {
   display: block;
   float: left;
   width: 42px;
@@ -89,7 +89,7 @@ body {
   background-position: top 12px left 14px;
   border-radius: 50%;
 }
-.container .left .people {
+.container-x .left .people {
   margin-left: -1px;
   border-right: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
@@ -97,14 +97,14 @@ body {
   padding-left: 0;
   list-style: none;
 }
-.container .left .people .person {
+.container-x .left .people .person {
   position: relative;
   width: 100%;
   padding: 12px 10% 16px;
   cursor: pointer;
   background-color: #fff;
 }
-.container .left .people .person:after {
+.container-x .left .people .person:after {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -115,21 +115,21 @@ body {
   background-color: #e6e6e6;
   transform: translate(-50%, 0);
 }
-.container .left .people .person img {
+.container-x .left .people .person img {
   float: left;
   width: 40px;
   height: 40px;
   margin-right: 12px;
   border-radius: 50%;
 }
-.container .left .people .person .name {
+.container-x .left .people .person .name {
   font-size: 14px;
   line-height: 22px;
   color: #1a1a1a;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 600;
 }
-.container .left .people .person .time {
+.container-x .left .people .person .time {
   font-size: 14px;
   position: absolute;
   top: 16px;
@@ -138,7 +138,7 @@ body {
   color: #999;
   background-color: #fff;
 }
-.container .left .people .person .preview {
+.container-x .left .people .person .preview {
   font-size: 14px;
   display: inline-block;
   overflow: hidden !important;
@@ -147,7 +147,7 @@ body {
   text-overflow: ellipsis;
   color: #999;
 }
-.container .left .people .person.active, .container .left .people .person:hover {
+.container-x .left .people .person.active,.container-x-x .left .people .person:hover {
   margin-top: -1px;
   margin-left: -1px;
   padding-top: 13px;
@@ -156,35 +156,35 @@ body {
   width: calc(100% + 2px);
   padding-left: calc(10% + 1px);
 }
-.container .left .people .person.active span, .container .left .people .person:hover span {
+.container-x .left .people .person.active span,.container-x-x .left .people .person:hover span {
   color: #fff;
   background: transparent;
 }
-.container .left .people .person.active:after, .container .left .people .person:hover:after {
+.container-x .left .people .person.active:after,.container-x-x .left .people .person:hover:after {
   display: none;
 }
-.container .right {
+.container-x .right {
   position: relative;
   float: left;
   width: 62.4%;
   height: 100%;
 }
-.container .right .top {
+.container-x .right .top {
   width: 100%;
   height: 47px;
   padding: 15px 29px;
   background-color: #eceff1;
 }
-.container .right .top span {
+.container-x .right .top span {
   font-size: 15px;
   color: #999;
 }
-.container .right .top span .name {
+.container-x .right .top span .name {
   color: #1a1a1a;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 600;
 }
-.container .right .chat {
+.container-x .right .chat {
   position: relative;
   display: none;
   overflow: hidden;
@@ -196,67 +196,67 @@ body {
   justify-content: flex-end;
   flex-direction: column;
 }
-.container .right .chat.active-chat {
+.container-x .right .chat.active-chat {
   display: block;
   display: flex;
 }
-.container .right .chat.active-chat .bubble {
+.container-x .right .chat.active-chat .bubble {
   -moz-transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
   -o-transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
   -webkit-transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
   transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
 }
-.container .right .chat.active-chat .bubble:nth-of-type(1) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(1) {
   -moz-animation-duration: 0.15s;
   -webkit-animation-duration: 0.15s;
   animation-duration: 0.15s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(2) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(2) {
   -moz-animation-duration: 0.3s;
   -webkit-animation-duration: 0.3s;
   animation-duration: 0.3s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(3) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(3) {
   -moz-animation-duration: 0.45s;
   -webkit-animation-duration: 0.45s;
   animation-duration: 0.45s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(4) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(4) {
   -moz-animation-duration: 0.6s;
   -webkit-animation-duration: 0.6s;
   animation-duration: 0.6s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(5) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(5) {
   -moz-animation-duration: 0.75s;
   -webkit-animation-duration: 0.75s;
   animation-duration: 0.75s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(6) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(6) {
   -moz-animation-duration: 0.9s;
   -webkit-animation-duration: 0.9s;
   animation-duration: 0.9s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(7) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(7) {
   -moz-animation-duration: 1.05s;
   -webkit-animation-duration: 1.05s;
   animation-duration: 1.05s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(8) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(8) {
   -moz-animation-duration: 1.2s;
   -webkit-animation-duration: 1.2s;
   animation-duration: 1.2s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(9) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(9) {
   -moz-animation-duration: 1.35s;
   -webkit-animation-duration: 1.35s;
   animation-duration: 1.35s;
 }
-.container .right .chat.active-chat .bubble:nth-of-type(10) {
+.container-x .right .chat.active-chat .bubble:nth-of-type(10) {
   -moz-animation-duration: 1.5s;
   -webkit-animation-duration: 1.5s;
   animation-duration: 1.5s;
 }
-.container .right .write {
+.container-x .right .write {
   position: absolute;
   bottom: 29px;
   left: 30px;
@@ -267,7 +267,7 @@ body {
   width: calc(100% - 58px);
   border-radius: 5px;
 }
-.container .right .write input {
+.container-x .right .write input {
   font-size: 16px;
   float: left;
   width: 347px;
@@ -280,7 +280,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
 }
-.container .right .write .write-link.attach:before {
+.container-x .right .write .write-link.attach:before {
   display: inline-block;
   float: left;
   width: 20px;
@@ -290,7 +290,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-.container .right .write .write-link.smiley:before {
+.container-x .right .write .write-link.smiley:before {
   display: inline-block;
   float: left;
   width: 20px;
@@ -300,7 +300,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-.container .right .write .write-link.send:before {
+.container-x .right .write .write-link.send:before {
   display: inline-block;
   float: left;
   width: 20px;
@@ -311,7 +311,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-.container .right .bubble {
+.container-x .right .bubble {
   font-size: 16px;
   position: relative;
   display: inline-block;
@@ -321,7 +321,7 @@ body {
   vertical-align: top;
   border-radius: 5px;
 }
-.container .right .bubble:before {
+.container-x .right .bubble:before {
   position: absolute;
   top: 19px;
   display: block;
@@ -330,7 +330,7 @@ body {
   content: '\00a0';
   transform: rotate(29deg) skew(-35deg);
 }
-.container .right .bubble.you {
+.container-x .right .bubble.you {
   float: left;
   color: #fff;
   background-color: #00b0ff;
@@ -339,11 +339,11 @@ body {
   -webkit-animation-name: slideFromLeft;
   animation-name: slideFromLeft;
 }
-.container .right .bubble.you:before {
+.container-x .right .bubble.you:before {
   left: -3px;
   background-color: #00b0ff;
 }
-.container .right .bubble.me {
+.container-x .right .bubble.me {
   float: right;
   color: #1a1a1a;
   background-color: #eceff1;
@@ -352,22 +352,22 @@ body {
   -webkit-animation-name: slideFromRight;
   animation-name: slideFromRight;
 }
-.container .right .bubble.me:before {
+.container-x .right .bubble.me:before {
   right: -3px;
   background-color: #eceff1;
 }
-.container .right .conversation-start {
+.container-x .right .conversation-start {
   position: relative;
   width: 100%;
   margin-bottom: 27px;
   text-align: center;
 }
-.container .right .conversation-start span {
+.container-x .right .conversation-start span {
   font-size: 14px;
   display: inline-block;
   color: #999;
 }
-.container .right .conversation-start span:before, .container .right .conversation-start span:after {
+.container-x .right .conversation-start span:before,.container-x-x .right .conversation-start span:after {
   position: absolute;
   top: 10px;
   display: inline-block;
@@ -376,10 +376,10 @@ body {
   content: '';
   background-color: #e6e6e6;
 }
-.container .right .conversation-start span:before {
+.container-x .right .conversation-start span:before {
   left: 0;
 }
-.container .right .conversation-start span:after {
+.container-x .right .conversation-start span:after {
   right: 0;
 }
 
