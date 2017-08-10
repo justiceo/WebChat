@@ -42,6 +42,8 @@ body {
   height: 100%;
   border: 1px solid #e6e6e6;
   background-color: #fff;
+  overflow-x: hidden;
+  overflow-y: overlay;
 }
 .container .left .top {
   position: relative;
