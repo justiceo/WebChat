@@ -1,6 +1,7 @@
 import angular from 'angular';
-import TestComponent from './smoke-test/test-component';
 import "./app.templates";
+import TestComponent from './smoke-test/test-component';
+import Conversations from './conversations/conversations';
 
 let webSMS = angular.module('webSMS', ['templates'])
 
@@ -13,6 +14,7 @@ console.debug = console.log;
 
 webSMS
   .component('test', TestComponent)
+  .component('conversations', Conversations)
   .factory('httpRequestInterceptor', function () {
     return {
       request: function (config) {        
