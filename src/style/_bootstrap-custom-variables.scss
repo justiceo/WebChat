@@ -23,6 +23,8 @@ $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
 $brand-danger:          #d9534f !default;
 
+$progress-bg:           lighten($brand-base, 30.5%);
+$progress-fg:           darken($brand-base, 6.5%);
 
 //== Scaffolding
 //

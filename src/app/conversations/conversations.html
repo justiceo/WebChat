@@ -26,7 +26,7 @@
                 <input type="search" class="form-control" placeholder="Search" />
             </div>
             <div class="people list-group">
-                <a class="person list-group-item" ng-class="{'active': convo.isActive, 'unread': convo.unread}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+                <a class="person list-group-item" ng-click="$ctrl.select(convo)" ng-class="{'active': convo.isActive, 'unread': convo.unread}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
                     <div class="media">
                         <div class="media-left media-middle">
                             <img class="media-object img-circle" ng-src="{{convo.avatarUrl}}" alt="" />
@@ -138,6 +138,9 @@
         </div>
     </div>
     <!-- ./row -->
+    <div class="progress">
+        <div class="done"></div>
+    </div>
 </div>
 <!-- ./container -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">

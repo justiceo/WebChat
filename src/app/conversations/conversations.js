@@ -15,7 +15,6 @@ export class ConversationsCtrl {
       },
       {
         id: "2",
-        isActive: true,
         name: "Jason Mars",
         time: "9:00 PM",
         body: "when the going gets hard, the hard gets going",
@@ -87,12 +86,21 @@ export class ConversationsCtrl {
       },
     ];
 
-    // todo: scroll last item into view https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+
+    // automatically select first conversation
+    if(this.conversations) {
+      this.select(this.conversations[0])
+    }
   } 
   
   scrollToBottom() {
     let element = document.querySelector("li.message:last-child");
     element.scrollIntoView({'behavior':'smooth'});
+  }
+
+  select(convo) {
+    this.conversations.forEach(c => c.isActive = false);
+    convo.isActive = true;
   }
 
 }
