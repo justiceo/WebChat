@@ -1,5 +1,11 @@
 export class ConversationsCtrl {
   constructor() {
+
+    angular.element(document).ready(function() {
+      let element = document.querySelector("li.message:last-child");
+      element.scrollIntoView({'behavior':'smooth'});
+    });
+
     this.conversations = [
       {
         id: "1",
@@ -82,7 +88,9 @@ export class ConversationsCtrl {
     ];
 
     // todo: scroll last item into view https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-  }  
+  } 
+  
+  
 
 }
 
