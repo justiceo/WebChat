@@ -1,6 +1,6 @@
 export class ConversationsCtrl {
-  constructor() {
-
+  constructor(SocketService) {
+    this.socket = SocketService;
     angular.element(document).ready(() => {
         this.scrollToBottom()
     });
