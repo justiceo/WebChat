@@ -1,47 +1,122 @@
-<div class="left">
-    <div class="top">
-        <input type="text" />
-        <a href="#" class="search"></a>
+<div class="conversations container-fluid">
+    <div class="row">
+        <div class="left col col-xs-5 col-sm-4 no-padding">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                        <img alt="Profile image" src="https://s13.postimg.org/ih41k9tqr/img1.jpg">
+                    </a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button class="btn navbar-btn"><i class="fa fa-commenting-o" aria-hidden="true"></i></button></li>
+                        <li><button class="btn navbar-btn"><i class="fa fa-bars" aria-hidden="true"></i></button></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="list-group-item">
+                <input type="search" class="form-control" placeholder="Search" />
+            </div>
+            <ul class="people list-group">
+                <li class="person list-group-item" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            <img class="media-object img-circle" ng-src="{{convo.avatarUrl}}" alt="" />
+                        </div>
+                        <div class="media-body">
+                            <span class="time badge" ng-bind="convo.time">2:09 PM</span>
+                            <h4 class="list-group-item-heading" ng-bind="convo.name">Thomas Bangalter</h4>
+                            <p class="list-group-item-text" ng-bind="convo.body">I was wondering...</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="right col col-xs-7 col-sm-8 no-padding">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Current Person Name</a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button class="btn navbar-btn" title="Search"><i class="fa fa-search" aria-label="hidden"></i></button></li>
+                        <li><button class="btn navbar-btn" title="Attach"><i class="fa fa-paperclip" aria-label="hidden"></i></button></li>
+                        <li><button class="btn navbar-btn" title="Menu"><i class="fa fa-ellipsis-v" aria-label="hidden"></i></button></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="messages-wrapper">
+            <ul class="messages list-group">
+                <li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
+                    <div class="media-body">
+                        <span class="time badge" ng-bind="message.time">2:09 PM</span>
+                        <h6 class="list-group-item-heading" ng-bind="message.name">Thomas Bangalter</h6>
+                        <p class="list-group-item-text" ng-bind="message.body">I was wondering...</p>
+                    </div>
+                </li>
+                <li class="message message-start list-group-item">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Today 2:23 PM</p>
+                    </div>
+                </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Just me sending a message
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Okay got the message, did you get mine?
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Yep
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">I'm about to send two messages in succession
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">here it comes
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">and another one to make it sweeter
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">followed by mine which happens to be really long.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu f
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                
+            </ul>
+            </div>
+            <div class="list-group-item">
+                <input type="search" class="form-control" placeholder="Enter message here" />
+            </div>
+        </div>
     </div>
-    <ul class="people">
-        <li class="person" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
-            <img ng-src="{{convo.avatarUrl}}" alt="" />
-            <span class="name" ng-bind="convo.name">Thomas Bangalter</span>
-            <span class="time" ng-bind="convo.time">2:09 PM</span>
-            <span class="preview" ng-bind="convo.body">I was wondering...</span>
-        </li>
-    </ul>
+    <!-- ./row -->
 </div>
-<div class="right">
-    <div class="top"><span>To: <span class="name">Dog Woofson</span></span>
-    </div>
-    <div class="chat active-chat" data-chat="person2">
-        <div class="conversation-start">
-            <span>Today, 5:38 PM</span>
-        </div>
-        <div class="bubble you">
-            Hello, can you hear me?
-        </div>
-        <div class="bubble you">
-            I'm in California dreaming
-        </div>
-        <div class="bubble me">
-            ... about who we used to be.
-        </div>
-        <div class="bubble me">
-            Are you serious?
-        </div>
-        <div class="bubble you">
-            When we were younger and free...
-        </div>
-        <div class="bubble you">
-            I've forgotten how it felt before
-        </div>
-    </div>
-    <div class="write">
-        <a href="javascript:;" class="write-link attach"></a>
-        <input type="text" />
-        <a href="javascript:;" class="write-link smiley"></a>
-        <a href="javascript:;" class="write-link send"></a>
-    </div>
-</div>
+<!-- ./container -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
