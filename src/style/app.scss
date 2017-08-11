@@ -57,6 +57,10 @@ i.icons {
 
 /* set mobile breakpoint to 0 to prevent ever getting to it */
 body {
+  background: #36D1DC;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #5B86E5, #36D1DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   min-width: 830px;
 }
 
@@ -83,6 +87,21 @@ body {
       }
     }    
   }
+  .right {
+    .sms-input {
+      border: none;
+      position: relative;
+      border-radius: 0;
+      background: #eee;
+      border-top: 1px solid #ccc;
+      input {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        border-radius: none;
+      }
+    }
+  }
   .section-header {
     background: $gray-lighter;
     z-index: 1;
@@ -98,16 +117,22 @@ body {
         display:inline-block;
     }
   }
+  .people.list-group, .messages-wrapper {
+    height: 75vh;
+    overflow-x: hidden;
+    overflow-y: overlay;
+
+    .list-group-item:last-child {
+      border-radius: 0
+    }
+  }
 }
 
-.people.list-group, .messages-wrapper {
-  height: 75vh;
-  overflow-x: hidden;
-  overflow-y: overlay;
-}
+
 
 .people.list-group {
     margin-bottom: 0;
+    border-radius: 0;
   /* todo: add text ellipsis
   .person .list-group-item-text {     
     white-space: nowrap;
@@ -143,6 +168,10 @@ body {
     &.active {
       z-index: initial;
       .time { color: $primary-white; }
+    }
+
+    &:last-child, &:first-child {
+      border-radius: 0;
     }
   }
   
