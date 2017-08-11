@@ -86,7 +86,8 @@ ul.people.list-group {
       .list-group-item-text {
         padding: 7px 10px;
         border-radius: 6px;
-        background: lightblue;
+        background: rgb(0,138,255);
+        color: white;
         max-width: 500px;
         width: auto;
         display: inline-block;
@@ -101,6 +102,7 @@ ul.people.list-group {
       }
       &.you .list-group-item-text {
         background: #eee;
+        color: #111;
       }
       &.me .media-body {
         text-align: right;

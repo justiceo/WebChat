@@ -1,19 +1,12 @@
 <div class="conversations container-fluid">
     <div class="row">
-        <div class="left col col-xs-5 col-sm-4 no-padding">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#">
-                        <img alt="Profile image" src="https://s13.postimg.org/ih41k9tqr/img1.jpg">
-                    </a>
-                    </div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><button class="btn navbar-btn"><i class="fa fa-commenting-o" aria-hidden="true"></i></button></li>
-                        <li><button class="btn navbar-btn"><i class="fa fa-bars" aria-hidden="true"></i></button></li>
-                    </ul>
+        <div class="left col col-xs-5 col-sm-4 no-padding">            
+            <div class="list-group-item">
+                <div class="conversation-menu">
+                        <button class="btn btn-lg navbar-btn"><i class="fa fa-commenting-o" aria-hidden="true"></i></button>
+                        <button class="btn btn-lg navbar-btn"><i class="fa fa-bars" aria-hidden="true"></i></button>
                 </div>
-            </nav>
+            </div>
             <div class="list-group-item">
                 <input type="search" class="form-control" placeholder="Search" />
             </div>
@@ -120,3 +113,14 @@
 </div>
 <!-- ./container -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
+
+<style>
+    .primary-color {
+        color: rgb(0,138,255);
+        background: white;
+    }
+    .primary-bg {
+        color: white;
+        background: rgb(0,138,255);
+    }
+    </style>
