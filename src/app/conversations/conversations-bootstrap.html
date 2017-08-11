@@ -46,13 +46,68 @@
                 </div>
             </nav>
             <ul class="messages list-group">
-                <li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
+                <!--<li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
                     <div class="media-body">
                         <span class="time badge" ng-bind="message.time">2:09 PM</span>
                         <h6 class="list-group-item-heading" ng-bind="message.name">Thomas Bangalter</h6>
                         <p class="list-group-item-text" ng-bind="message.body">I was wondering...</p>
                     </div>
+                </li>-->
+                <li class="message-start list-group-item">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Today 2:23 PM</p>
+                    </div>
                 </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Just me sending a message
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Okay got the message, did you get mine?
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">Yep
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">I'm about to send two messages in succession
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">here it comes
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item you">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">and another one to make it sweeter
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                <li class="message list-group-item me">
+                    <div class="media-body">                        
+                        <p class="list-group-item-text">followed by mine which happens to be really long.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu f
+                            <span class="time">2:09 PM</span>
+                        </p>
+                    </div>
+                </li>
+                
             </ul>
             <div class="list-group-item">
                 <input type="search" class="form-control" placeholder="Enter message here" />
@@ -137,5 +192,28 @@
         max-width: 300px;
         width: auto;
         display: inline-block;
+        text-align: left;
+    }
+    .message.you .list-group-item-text{
+        background: #eee;
+    }
+
+    .message.me .media-body {
+        text-align: right;
+    }
+    .message .time {
+        display: block;
+        text-align: right;
+        font-size: 80%;
+        margin-top: 2px;
+    }
+
+    .message {
+        padding-bottom: 0;
+        padding-top: 15px;
+        border: none;
+    }
+    .message.you + .message.you {
+        padding-top: 3px;
     }
 </style>

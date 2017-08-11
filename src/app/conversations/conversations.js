@@ -79,8 +79,11 @@ export class ConversationsCtrl {
         body: "Hello dear,what are you to",
         avatarUrl: "https://s16.postimg.org/ete1l89z5/img5.jpg"
       },
-    ]
-  }
+    ];
+
+    // todo: scroll last item into view https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+  }  
+
 }
 
 let Conversations = {
