@@ -1,11 +1,11 @@
 <div class="conversations container-fluid">
     <div class="row">
         <div class="left col col-xs-4 no-padding">
-            <div class="list-group-item">
+            <div class="list-group-item section-header">
                 <div class="section-menu btn-toolbar" role="toolbar" aria-label="...">
-                    <button class="btn btn-default btn-icon btn-group" role="group" aria-label="..."><i class="icons icon-speech" aria-hidden="true"></i></button>
+                    <button class="btn btn-icon btn-group" role="group" aria-label="..."><i class="icons icon-speech" aria-hidden="true"></i></button>
                     <div class="btn-group" role="group">
-                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-icon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="icons icon-options-vertical" aria-hidden="true"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -24,28 +24,28 @@
             <div class="list-group-item">
                 <input type="search" class="form-control" placeholder="Search" />
             </div>
-            <ul class="people list-group">
-                <li class="person list-group-item" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+            <div class="people list-group">
+                <a class="person list-group-item" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
                     <div class="media">
                         <div class="media-left media-middle">
                             <img class="media-object img-circle" ng-src="{{convo.avatarUrl}}" alt="" />
                         </div>
                         <div class="media-body">
                             <span class="time badge" ng-bind="convo.time">2:09 PM</span>
-                            <h4 class="list-group-item-heading" ng-bind="convo.name">Thomas Bangalter</h4>
-                            <p class="list-group-item-text" ng-bind="convo.body">I was wondering...</p>
+                            <p class="list-group-item-heading" ng-bind="convo.name">Thomas Bangalter</p>
+                            <p class="list-group-item-text"><small ng-bind="convo.body">I was wondering...</small></p>
                         </div>
                     </div>
-                </li>
-            </ul>
+                </a>
+            </div>
         </div>
         <div class="right col col-xs-8 no-padding">            
-            <div class="list-group-item">
+            <div class="list-group-item section-header">
                 <div class="section-menu btn-toolbar" role="toolbar" aria-label="...">
-                    <button class="btn btn-group" role="group" aria-label="..."><i class="icons icon-magnifier" aria-hidden="true"></i></button>
-                    <button class="btn btn-group" role="group" aria-label="..."><i class="icons icon-paper-clip" aria-hidden="true"></i></button>                    
+                    <button class="btn btn-icon btn-group" role="group" aria-label="..."><i class="icons icon-magnifier" aria-hidden="true"></i></button>
+                    <button class="btn btn-icon btn-group" role="group" aria-label="..."><i class="icons icon-paper-clip" aria-hidden="true"></i></button>                    
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-icon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="icons icon-options-vertical" aria-hidden="true"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">

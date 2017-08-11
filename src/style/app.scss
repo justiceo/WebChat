@@ -9,8 +9,27 @@
   padding-right: 0;
 }
 
-.icons {
-  font-size: 180%;
+i.icons {
+  font-size: 120%;
+  line-height: 1.6em;
+}
+.btn-icon {
+    border: 1px solid black;
+    background: transparent;
+    border-radius: 2px;
+    padding-top: 12px;
+    padding: auto 12px;
+    margin-top: 3px;
+
+    &:hover {
+      color: $brand-primary;
+      border-color: $brand-primary;
+    }
+
+    &:focus {
+      color: $primary-white;
+      background: $brand-primary;
+    }
 }
 
 * {
@@ -42,32 +61,33 @@ body {
 }
 
 .conversations {
-  .primary-color {
-      color: rgb(0, 138, 255);
-      background: white;
+  .left {
+    border-right: 1px solid #ccc;
   }
+  .section-header {
+    background: $gray-lighter;
+    z-index: 1;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
 
-  .primary-bg {
-      color: white;
-      background: rgb(0, 138, 255);
-  }
-
-  .section-menu {
-      float: right;
-  }
-  .section-head-text {
-      height: 50px;
-      display:inline-block;
+    .section-menu {
+        float: right;
+    }
+    .section-head-text {
+        height: 50px;
+        display:inline-block;
+    }
   }
 }
 
-ul.people.list-group, .messages-wrapper {
+.people.list-group, .messages-wrapper {
   height: 75vh;
   overflow-x: hidden;
   overflow-y: overlay;
 }
 
-ul.people.list-group {
+.people.list-group {
     margin-bottom: 0;
   /* todo: add text ellipsis
   .person .list-group-item-text {     
@@ -75,9 +95,21 @@ ul.people.list-group {
     overflow: hidden;
     text-overflow: ellipsis;
   }*/
+
+  .img-circle {
+    width: 40px;
+  }
+
+  .list-group-item-heading {
+    margin-bottom: -1px;
+  }
+
+  .person.active .time.badge {
+    color: $primary-white;
+  }
   .time.badge {
     background: transparent;
-    color: black;
+    color: $gray-darker;
     float: right;
     font-weight: lighter;
   }
@@ -85,7 +117,7 @@ ul.people.list-group {
 
 .messages-wrapper {
   position: relative;
-  ul.messages.list-group {
+  .messages.list-group {
 
     margin-bottom: 0;
     /* todo: wire up 'push-down' class with angular viewport code */
