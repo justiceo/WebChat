@@ -75,7 +75,7 @@
         font-weight: lighter;
     }
 
-    .list-group-item-text {
+    .person .list-group-item-text {
         /* todo: add text ellipsis */
         white-space: nowrap;
         overflow: hidden;
@@ -88,8 +88,8 @@
 
     @media (min-width: 1200px) {
         .conversations.container-fluid {
-            width: 90vw;
-            margin-top: 5vh;
+            width: 80vw;
+            margin-top: 8vh;
             box-shadow: 0 0 2px #555;
         }
     }
@@ -130,10 +130,12 @@
         background-color: #777;
     }
 
-    .messages .media-body {
-        width: auto;
-        background: lightblue;
+    .message .list-group-item-text {
         padding: 5px;
-        border-radius: 3px !important;
+        border-radius: 4px !important;
+        background: lightblue;
+        max-width: 300px;
+        width: auto;
+        display: inline-block;
     }
 </style>
