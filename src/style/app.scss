@@ -1,17 +1,28 @@
 $icon-font-path: 'bootstrap/';
 @import '_bootstrap-custom';
 
-/* set mobile breakpoint to 0 to prevent ever getting to it */
 
-body {
-  background: #f1f1f1;
-  min-width: 830px;
+
+/** Utils **/
+
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
 }
 
-
-
-
-
+* {
+  &::-webkit-scrollbar-track {
+    background-color: #fff;
+    border: none;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #fff;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+  }
+}
 
 
 @media (min-width: 1200px) {
@@ -22,13 +33,10 @@ body {
   }
 }
 
-.no-padding {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-* {
-  border-radius: 0 !important;
+/* set mobile breakpoint to 0 to prevent ever getting to it */
+body {
+  background: #f1f1f1;
+  min-width: 830px;
 }
 
 .navbar {
@@ -44,16 +52,14 @@ ul.people.list-group, .messages-wrapper {
   overflow-y: overlay;
 }
 
-ul {
-  &.people.list-group, &.messages.list-group {
+ul.people.list-group {
     margin-bottom: 0;
-  }
-  .person .list-group-item-text {
-    /* todo: add text ellipsis */
+  /* todo: add text ellipsis
+  .person .list-group-item-text {     
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
+  }*/
   .time.badge {
     background: transparent;
     color: black;
@@ -65,6 +71,8 @@ ul {
 .messages-wrapper {
   position: relative;
   ul.messages.list-group {
+
+    margin-bottom: 0;
     /* todo: wire up 'push-down' class with angular viewport code */
     &.push-down {
       position: absolute;
@@ -72,14 +80,24 @@ ul {
     }
 
     .message {
+      padding: 10px 30px 5px 30px;
+      border: none;
+
       .list-group-item-text {
-        padding: 5px;
-        border-radius: 4px !important;
+        padding: 7px 10px;
+        border-radius: 6px;
         background: lightblue;
         max-width: 500px;
         width: auto;
         display: inline-block;
         text-align: left;
+
+        .time {
+          display: block;
+          text-align: right;
+          font-size: 80%;
+          margin-top: 2px;
+        }
       }
       &.you .list-group-item-text {
         background: #eee;
@@ -87,16 +105,7 @@ ul {
       &.me .media-body {
         text-align: right;
       }
-      .time {
-        display: block;
-        text-align: right;
-        font-size: 80%;
-        margin-top: 2px;
-      }
-      padding-bottom: 5px;
-      padding-top: 10px;
-      border: none;
-      &.you + .message.you {
+      &.you + .message.you, &.me + .message.me {
         padding-top: 0px;
       }
       &.message-start {
@@ -114,17 +123,4 @@ ul {
 
 
 
-* {
-  &::-webkit-scrollbar-track {
-    background-color: #fff;
-    border: none;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color: #fff;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-  }
-}
 
