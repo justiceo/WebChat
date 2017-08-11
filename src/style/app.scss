@@ -39,10 +39,23 @@ body {
   min-width: 830px;
 }
 
-.navbar {
-  margin-bottom: 0;  
-  .navbar-brand img {
-    width: 24px;
+.conversations {
+  .primary-color {
+      color: rgb(0, 138, 255);
+      background: white;
+  }
+
+  .primary-bg {
+      color: white;
+      background: rgb(0, 138, 255);
+  }
+
+  .section-menu {
+      float: right;
+  }
+  .section-head-text {
+      height: 50px;
+      display:inline-block;
   }
 }
 
