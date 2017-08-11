@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="left col col-sm-4">
+        <ul class="people list-group">
+            <li class="person list-group-item" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <img class="media-object img-circle" ng-src="{{convo.avatarUrl}}" alt="" />
+                    </div>
+                    <div class="media-body">
+                        <span class="time badge" ng-bind="convo.time">2:09 PM</span>
+                        <h4 class="list-group-item-heading" ng-bind="convo.name">Thomas Bangalter</h4>
+                        <p class="list-group-item-text" ng-bind="convo.body">I was wondering...</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="right col col-sm-8">
+        hello world
+    </div>
+</div>
+<style>
+    .time.badge {
+        background: transparent;
+        color: black;
+        float: right;
+        font-weight: lighter;
+    }
+
+    .list-group-item-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
