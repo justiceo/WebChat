@@ -47,13 +47,13 @@
             </nav>
             <div class="messages-wrapper">
             <ul class="messages list-group">
-                <!--<li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
+                <li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
                     <div class="media-body">
                         <span class="time badge" ng-bind="message.time">2:09 PM</span>
                         <h6 class="list-group-item-heading" ng-bind="message.name">Thomas Bangalter</h6>
                         <p class="list-group-item-text" ng-bind="message.body">I was wondering...</p>
                     </div>
-                </li>-->
+                </li>
                 <li class="message message-start list-group-item">
                     <div class="media-body">                        
                         <p class="list-group-item-text">Today 2:23 PM</p>
@@ -179,24 +179,23 @@
 
     /* start from bottom while displaying messages */
     .messages-wrapper { position: relative }
-    ul.messages.list-group {
+    /* todo: wire up 'push-down' class with angular viewport code */
+    ul.messages.list-group.push-down {
         position: absolute;
         bottom: 0;
     }
-    
 
-
-    ul.list-group::-webkit-scrollbar-track {
+    *::-webkit-scrollbar-track {
         background-color: #fff;
         border: none;
     }
 
-    ul.list-group::-webkit-scrollbar {
+    *::-webkit-scrollbar {
         width: 6px;
         background-color: #fff;
     }
 
-    ul.list-group::-webkit-scrollbar-thumb {
+    *::-webkit-scrollbar-thumb {
         background-color: #777;
     }
 
@@ -236,5 +235,6 @@
         background: lightgreen;
         display: inline-block;
         padding: 3px 8px;
+        margin: 20px auto;
     }
 </style>
