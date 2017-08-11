@@ -21,11 +21,12 @@
                     <img class="img-circle" src="https://s13.postimg.org/ih41k9tqr/img1.jpg" />
                 </div>
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item search">
+                <span class="icons icon-magnifier"></span>
                 <input type="search" class="form-control" placeholder="Search" />
             </div>
             <div class="people list-group">
-                <a class="person list-group-item" ng-class="{'active': convo.isActive}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
+                <a class="person list-group-item" ng-class="{'active': convo.isActive, 'unread': convo.unread}" data-chat="{{ person + convo.id }}" ng-repeat="convo in $ctrl.conversations">
                     <div class="media">
                         <div class="media-left media-middle">
                             <img class="media-object img-circle" ng-src="{{convo.avatarUrl}}" alt="" />

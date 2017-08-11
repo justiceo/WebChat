@@ -63,6 +63,25 @@ body {
 .conversations {
   .left {
     border-right: 1px solid #ccc;
+    .search {
+      position:relative;
+      border: none;
+
+      input { 
+        text-indent: 30px;
+        border: none;
+        box-shadow: none;
+        border-radius: 0; 
+      }
+      .icons {
+        position: absolute;
+        top: 21px;
+        left: 27px;
+      }
+      &:hover {
+        color: $brand-primary;
+      }
+    }    
   }
   .section-header {
     background: $gray-lighter;
@@ -96,23 +115,37 @@ body {
     text-overflow: ellipsis;
   }*/
 
-  .img-circle {
-    width: 40px;
-  }
+  .person {
+    border-left: 0;
+    border-right: 0;
+    padding: 13px 15px;
+    .img-circle {
+      width: 40px;
+    }
 
-  .list-group-item-heading {
-    margin-bottom: -1px;
-  }
+    .list-group-item-heading {
+      margin-bottom: -1px;
+    }
+    .time.badge {
+      background: transparent;
+      color: $gray-darker;
+      float: right;
+      font-weight: lighter;
+    }
 
-  .person.active .time.badge {
-    color: $primary-white;
+    &.unread {
+      .list-group-item-heading, .time {
+        font-weight: bold;
+        color: $gray-darker;
+      }      
+    }
+
+    &.active {
+      z-index: initial;
+      .time { color: $primary-white; }
+    }
   }
-  .time.badge {
-    background: transparent;
-    color: $gray-darker;
-    float: right;
-    font-weight: lighter;
-  }
+  
 }
 
 .messages-wrapper {

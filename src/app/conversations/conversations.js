@@ -31,6 +31,7 @@ export class ConversationsCtrl {
       {
         id: "4",
         name: "Drake Mantis",
+        unread: 2,
         time: "3:14 PM",
         body: "It’s not that bad",
         avatarUrl: "https://s3.postimg.org/quect8isv/img4.jpg"
