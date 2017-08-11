@@ -45,6 +45,7 @@
                     </ul>
                 </div>
             </nav>
+            <div class="messages-wrapper">
             <ul class="messages list-group">
                 <!--<li class="message list-group-item" ng-repeat="message in $ctrl.conversations">
                     <div class="media-body">
@@ -53,7 +54,7 @@
                         <p class="list-group-item-text" ng-bind="message.body">I was wondering...</p>
                     </div>
                 </li>-->
-                <li class="message-start list-group-item">
+                <li class="message message-start list-group-item">
                     <div class="media-body">                        
                         <p class="list-group-item-text">Today 2:23 PM</p>
                     </div>
@@ -109,6 +110,7 @@
                 </li>
                 
             </ul>
+            </div>
             <div class="list-group-item">
                 <input type="search" class="form-control" placeholder="Enter message here" />
             </div>
@@ -165,12 +167,23 @@
     }
 
     ul.people.list-group,
-    ul.messages.list-group {
+    .messages-wrapper {
         height: 75vh;
-        margin-bottom: 0;
         overflow-x: hidden;
         overflow-y: overlay;
     }
+    ul.people.list-group,
+    ul.messages.list-group {
+        margin-bottom: 0;
+    }
+
+    /* start from bottom while displaying messages */
+    .messages-wrapper { position: relative }
+    ul.messages.list-group {
+        position: absolute;
+        bottom: 0;
+    }
+    
 
 
     ul.list-group::-webkit-scrollbar-track {
@@ -218,6 +231,7 @@
     .message.you + .message.you {
         padding-top: 3px;
     }
+    .message.message-start { text-align: center; }
     .message.message-start .list-group-item-text{
         background: lightgreen;
         display: inline-block;
