@@ -2,118 +2,129 @@ $icon-font-path: 'bootstrap/';
 @import '_bootstrap-custom';
 
 /* set mobile breakpoint to 0 to prevent ever getting to it */
+
 body {
-    background: #f1f1f1;
-    min-width: 830px;
+  background: #f1f1f1;
+  min-width: 830px;
 }
 
-.time.badge {
-    background: transparent;
-    color: black;
-    float: right;
-    font-weight: lighter;
+
+
+
+
+
+
+@media (min-width: 1200px) {
+  .conversations.container-fluid {
+    width: 80vw;
+    margin-top: 8vh;
+    box-shadow: 0 0 2px #555;
+  }
 }
 
-.person .list-group-item-text {
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+* {
+  border-radius: 0 !important;
+}
+
+.navbar {
+  margin-bottom: 0;  
+  .navbar-brand img {
+    width: 24px;
+  }
+}
+
+ul.people.list-group, .messages-wrapper {
+  height: 75vh;
+  overflow-x: hidden;
+  overflow-y: overlay;
+}
+
+ul {
+  &.people.list-group, &.messages.list-group {
+    margin-bottom: 0;
+  }
+  .person .list-group-item-text {
     /* todo: add text ellipsis */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .time.badge {
+    background: transparent;
+    color: black;
+    float: right;
+    font-weight: lighter;
+  }
 }
 
-.navbar-brand img {
-    width: 24px;
-}
-
-@media (min-width: 1200px) {
-    .conversations.container-fluid {
-        width: 80vw;
-        margin-top: 8vh;
-        box-shadow: 0 0 2px #555;
+.messages-wrapper {
+  position: relative;
+  ul.messages.list-group {
+    /* todo: wire up 'push-down' class with angular viewport code */
+    &.push-down {
+      position: absolute;
+      bottom: 0;
     }
+
+    .message {
+      .list-group-item-text {
+        padding: 5px;
+        border-radius: 4px !important;
+        background: lightblue;
+        max-width: 500px;
+        width: auto;
+        display: inline-block;
+        text-align: left;
+      }
+      &.you .list-group-item-text {
+        background: #eee;
+      }
+      &.me .media-body {
+        text-align: right;
+      }
+      .time {
+        display: block;
+        text-align: right;
+        font-size: 80%;
+        margin-top: 2px;
+      }
+      padding-bottom: 5px;
+      padding-top: 10px;
+      border: none;
+      &.you + .message.you {
+        padding-top: 0px;
+      }
+      &.message-start {
+        text-align: center;
+        .list-group-item-text {
+          background: lightgreen;
+          display: inline-block;
+          padding: 3px 8px;
+          margin: 20px auto;
+        }
+      }
+    }
+  }
 }
 
-.no-padding {
-    padding-left: 0;
-    padding-right: 0;
-}
+
 
 * {
-    border-radius: 0 !important;
-}
-
-.navbar {
-    margin-bottom: 0;
-}
-
-ul.people.list-group,
-.messages-wrapper {
-    height: 75vh;
-    overflow-x: hidden;
-    overflow-y: overlay;
-}
-ul.people.list-group,
-ul.messages.list-group {
-    margin-bottom: 0;
-}
-
-/* start from bottom while displaying messages */
-.messages-wrapper { position: relative }
-/* todo: wire up 'push-down' class with angular viewport code */
-ul.messages.list-group.push-down {
-    position: absolute;
-    bottom: 0;
-}
-
-*::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     background-color: #fff;
     border: none;
-}
-
-*::-webkit-scrollbar {
+  }
+  &::-webkit-scrollbar {
     width: 6px;
     background-color: #fff;
-}
-
-*::-webkit-scrollbar-thumb {
+  }
+  &::-webkit-scrollbar-thumb {
     background-color: #ccc;
+  }
 }
 
-.message .list-group-item-text {
-    padding: 5px;
-    border-radius: 4px !important;
-    background: lightblue;
-    max-width: 500px;
-    width: auto;
-    display: inline-block;
-    text-align: left;
-}
-.message.you .list-group-item-text{
-    background: #eee;
-}
-
-.message.me .media-body {
-    text-align: right;
-}
-.message .time {
-    display: block;
-    text-align: right;
-    font-size: 80%;
-    margin-top: 2px;
-}
-
-.message {
-    padding-bottom: 5px;
-    padding-top: 10px;
-    border: none;
-}
-.message.you + .message.you {
-    padding-top: 0px;
-}
-.message.message-start { text-align: center; }
-.message.message-start .list-group-item-text{
-    background: lightgreen;
-    display: inline-block;
-    padding: 3px 8px;
-    margin: 20px auto;
-}
