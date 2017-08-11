@@ -1,6 +1,5 @@
-$icon-font-path: 'bootstrap/';
-@import '_bootstrap-custom';
 
+@import '_bootstrap-custom';
 
 
 /** Utils **/
@@ -8,6 +7,10 @@ $icon-font-path: 'bootstrap/';
 .no-padding {
   padding-left: 0;
   padding-right: 0;
+}
+
+.icons {
+  font-size: 180%;
 }
 
 * {
@@ -35,7 +38,6 @@ $icon-font-path: 'bootstrap/';
 
 /* set mobile breakpoint to 0 to prevent ever getting to it */
 body {
-  background: #f1f1f1;
   min-width: 830px;
 }
 

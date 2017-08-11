@@ -4,6 +4,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+ // customizations
+ @import "./_bootstrap-custom-variables";
+
 // Core variables and mixins
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
