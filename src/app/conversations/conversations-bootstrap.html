@@ -1,6 +1,6 @@
 <div class="conversations container-fluid">
     <div class="row">
-        <div class="left col col-sm-4 no-padding">
+        <div class="left col col-xs-5 col-sm-4 no-padding">
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -32,7 +32,7 @@
                 </li>
             </ul>
         </div>
-        <div class="right col col-sm-8 no-padding">
+        <div class="right col col-xs-7 col-sm-8 no-padding">
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -119,8 +119,10 @@
 <!-- ./container -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
 <style>
+    /* set mobile breakpoint to 0 to prevent ever getting to it */
     body {
         background: #f1f1f1;
+        min-width: 830px;
     }
 
     .time.badge {
@@ -215,5 +217,10 @@
     }
     .message.you + .message.you {
         padding-top: 3px;
+    }
+    .message.message-start .list-group-item-text{
+        background: lightgreen;
+        display: inline-block;
+        padding: 3px 8px;
     }
 </style>
