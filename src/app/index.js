@@ -3,6 +3,7 @@ import "./app.templates";
 import SocketService from './socket-service';
 import TestComponent from './smoke-test/test-component';
 import Conversations from './conversations/conversations';
+import Authenticate from './authenticate/authenticate';
 
 let webSMS = angular.module('webSMS', ['templates'])
 
@@ -16,6 +17,7 @@ console.debug = console.log;
 webSMS
   .component('test', TestComponent)
   .component('conversations', Conversations)
+  .component('authenticate', Authenticate)
   .service('SocketService', SocketService)
   .factory('httpRequestInterceptor', function () {
     return {
