@@ -115,16 +115,7 @@ export class ConversationsCtrl {
           $('#thread').append('<li>' + data + '</li>');
       });
 
-      // listeners for authentication     
-      this.socket.io.on('authed', (data) => {
-      });    
-      this.socket.io.on('deauthed', (data) => {
-      });      
-      this.socket.io.on('tooFar', (data) => {
-      }); 
-      this.socket.io.on('closeBy', (data) => {
-      });
-
+      
 
       // listeners sms message updates           
       this.socket.io.on('latestConvo', (data) => {

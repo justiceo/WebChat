@@ -1,7 +1,25 @@
 export class AuthCtrl {
-    constructor($timeout) {
+    constructor($timeout,SocketService) {
         this.$timeout = $timeout;
+        this.socket = SocketService;
+        this.registerListeners();
         this.updateQRCode(); 
+    }
+
+    registerListeners() {
+        // listeners for authentication  
+        this.socket.io.on('token', (data) => {
+            console.log("recieved token", data);
+        });
+
+        this.socket.io.on('authed', (data) => {
+        });    
+        this.socket.io.on('deauthed', (data) => {
+        });      
+        this.socket.io.on('tooFar', (data) => {
+        }); 
+        this.socket.io.on('closeBy', (data) => {
+        });
     }
 
     updateQRCode() {
@@ -9,6 +27,7 @@ export class AuthCtrl {
         if(!this.authed)            
             this.$timeout(() => {return this.updateQRCode()}, 8000)
         // request new id from server and update code
+        this.socket.io.emit('tokenRequest', 'some data to request');
         window.QRCode.toDataURL(this.makeid(), (err, url) => {
             this.imgUrl = url;
         });
