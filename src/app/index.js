@@ -5,6 +5,7 @@ import TestComponent from './smoke-test/test-component';
 import Conversations from './conversations/conversations';
 import Authenticate from './authenticate/authenticate';
 
+window.QRCode = require('qrcode');
 let webSMS = angular.module('webSMS', ['templates'])
 
 // comment-out this line to stop printing debug messages in console

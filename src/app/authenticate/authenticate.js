@@ -1,7 +1,10 @@
 export class AuthCtrl {
-    constructor() {
-        this.imgUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png';
-        
+    constructor() {  
+    }
+    $onInit() {
+        window.QRCode.toDataURL('sample text dfadf fd adfdf af d fadf adf a daf afd', (err, url) => {
+            this.imgUrl = url;
+        });
     }
 }
 
