@@ -1,0 +1,32 @@
+<!doctype html>
+<html  ng-app="webSMS" lang="en">
+<head>
+    <title>Phone client simulator</title>  
+</head>
+
+<body>
+<h2>The client is running in the bg, view in console</h2>
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+<script>
+// initializing socket, connection to server
+var socket = io.connect('http://localhost:4000');
+socket.on('connect', function (data) {
+    socket.emit('join', 'Hello server from phone client');
+});
+
+// listener for 'thread' event, which updates messages
+socket.on('thread', function (data) {
+    $('#thread').append('<li>' + data + '</li>');
+});
+
+// prevents form from submitting and sends a message to server
+/*$('form').submit(function () {
+    var message = $('#message').val();
+    socket.emit('messages', message);
+    this.reset();
+    return false;
+});*/
+</script>
+
+</body>
+</html>
