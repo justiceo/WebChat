@@ -24,7 +24,23 @@ io.on('connection', (socket) => {
         let client = addOrUpdateClient(clientId, socket, makeToken());
         io.to(socket.id).emit('token', client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
     });
+
+    socket.on('testAuth', (data) => {
+        if(!isAuthorized(socket, data)) {
+            io.to(socket.id).emit('authError', 'authToken necessary to make requests');
+            return;
+        }
+        io.to(socket.id).emit('authed', 'Your token is valid');
+    })
     socket.on('tokenValidate', (data) => {
+        if(!isAuthorized(socket, data)) {
+            io.to(socket.id).emit('authError', 'authToken necessary to make requests');
+            return;
+        }
+
+        let qrcode = data.qrcode; // the qrcode is a browser's current authToken
+        // find the browser associated with this code
+        let browser = 
         console.log("received validation request")
         let token = data.token;
         let validatingDevice = data.deviceId;
@@ -75,19 +91,22 @@ function makeToken() {
 
     return text;
 }
-function authenticate(deviceId, token) {
-    return authorized[deviceId] === token;
+function isAuthorized(socket, data) {
+    let token = data.auth.authToken || false;
+    let client = clients.find(c => c.sockets.indexOf(socket) != -1);
+    if(!token || !client) return false;
+    return client.authToken === token;
 }
 
 function addOrUpdateClient(clientId, socket, authToken) {
-    let c = clients.find(c => c.clientId === clientId); 
-    console.log(c); 
+    let c = clients.find(c => c.clientId === clientId);
     if(c) {
         if(c.sockets.indexOf(socket) === -1)
             c.sockets.push(socket);
         c.authToken = authToken;
     }
     else {
+        console.log("creating new client with id " + clientId + " on socket " + socket.id);
         c = { clientId: clientId, sockets: [socket], authToken: authToken }  
         clients.push(c);
     }
