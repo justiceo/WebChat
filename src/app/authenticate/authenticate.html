@@ -5,7 +5,16 @@
         </div>
         <div class="right col col-xs-7 no-padding">
             <div class="qr-container">
-                <img alt="Scan QR Code" ng-src="{{ $ctrl.imgUrl }}">
+                 <div class='loader'>
+                    <div class='loader--dot'></div>
+                    <div class='loader--dot'></div>
+                    <div class='loader--dot'></div>
+                    <div class='loader--dot'></div>
+                    <div class='loader--dot'></div>
+                    <div class='loader--dot'></div>
+                    <div class='loader--text'></div>
+                </div>
+                <img alt="" ng-src="{{ $ctrl.imgUrl }}">
             </div>
         </div>
     </div>

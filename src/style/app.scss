@@ -42,6 +42,85 @@ i.icons {
   }
 }
 
+//colors
+$color_mantis_approx: #8cc759;
+$color_wisteria_approx: #8c6daf;
+$color_wild_watermelon_approx: #ef5d74;
+$color_yellow_orange_approx: #f9a74b;
+$color_viking_approx: #60beeb;
+$color_candy_corn_approx: #fbef5a;
+
+//fonts
+$font_0: Helvetica;
+
+.loader {
+	height: 20px;
+	width: 250px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  margin: auto;
+  
+
+  .loader--dot {
+    animation-name: loader;
+    animation-timing-function: ease-in-out;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    height: 20px;
+    width: 20px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 100%;
+    background-color: black;
+    position: absolute;
+    border: 2px solid white;
+    &:first-child {
+      background-color: $color_mantis_approx;
+      animation-delay: 0.5s;
+    }
+    &:nth-child(2) {
+      background-color: $color_wisteria_approx;
+      animation-delay: 0.4s;
+    }
+    &:nth-child(3) {
+      background-color: $color_wild_watermelon_approx;
+      animation-delay: 0.3s;
+    }
+    &:nth-child(4) {
+      background-color: $color_yellow_orange_approx;
+      animation-delay: 0.2s;
+    }
+    &:nth-child(5) {
+      background-color: $color_viking_approx;
+      animation-delay: 0.1s;
+    }
+    &:nth-child(6) {
+      background-color: $color_candy_corn_approx;
+      animation-delay: 0s;
+    }
+  }
+}
+@keyframes loader {
+	15% {
+		//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+		transform: translateX(0);
+	}
+	45% {
+		//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+		transform: translateX(230px);
+	}
+	65% {
+		//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+		transform: translateX(230px);
+	}
+	95% {
+		//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+		transform: translateX(0);
+	}
+}
+
 
 @media (min-width: 1200px) {
   .conversations.container-fluid, .auth.container-fluid {
@@ -66,7 +145,7 @@ body {
 /* todo: should we make text area a little transparent? */
 .auth {
   .left, .right {
-    height: calc(99vh);
+    height: calc(99.5vh);
     overflow-x: hidden;
     overflow-y: overlay;
   }
