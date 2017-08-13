@@ -19,7 +19,7 @@ export class AuthCtrl {
 
         this.socket.io.on('authed', (data) => {
             console.log("authed!", data);
-            this.authed = true;
+            //this.authed = true;
             this.phoneId = data.phone; //data should contain room info
             // todo: check the last time data was fetch and fetch from there
             this.socket.io.emit('latestDataRequest', Date.now - 10000);
