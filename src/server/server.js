@@ -27,10 +27,10 @@ io.on('connection', (socket) => {
 
     socket.on('testAuth', (data) => {
         if(!isAuthorized(socket, data)) {
-            io.to(socket.id).emit('authError', 'authToken necessary to make requests');
+            io.to(socket.id).emit('testAuthFail', 'authToken necessary to make requests: ' + data.toString());
             return;
         }
-        io.to(socket.id).emit('authed', 'Your token is valid');
+        io.to(socket.id).emit('testAuthSuccess', 'Your token is valid');
     })
     socket.on('tokenValidate', (data) => {
         if(!isAuthorized(socket, data)) {
@@ -92,7 +92,7 @@ function makeToken() {
     return text;
 }
 function isAuthorized(socket, data) {
-    let token = data.auth.authToken || false;
+    let token = data ? data.auth ? data.auth.authToken : false : false;
     let client = clients.find(c => c.sockets.indexOf(socket) != -1);
     if(!token || !client) return false;
     return client.authToken === token;

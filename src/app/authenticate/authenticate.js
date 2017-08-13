@@ -15,8 +15,16 @@ export class AuthCtrl {
             window.QRCode.toDataURL(token, (err, url) => {
                 this.imgUrl = url;
             });
+            let data = {
+                auth: { authToken: token },
+                message: 'This request should pass'
+            }
+            this.socket.io.emit('testAuth', data)
         });
 
+        this.socket.io.emit('testAuth', 'This request should fail');
+        this.socket.io.on('testAuthSuccess', mesage => console.log(mesage));
+        this.socket.io.on('testAuthFail', mesage => console.log(mesage));
         this.socket.io.on('authed', (data) => {
             console.log("authed!", data);
             //this.authed = true;
