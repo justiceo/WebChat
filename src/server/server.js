@@ -15,11 +15,12 @@ app.use('/', function (req, res, next) {
 
 
 io.on('connection', (socket) => {
-    console.log("connected to: ");
-
-    socket.on('tokenRequest', (data) => {
-        socket.broadcast.emit('token', 'here is token from server');
-        console.log("fulfilled token reqest")
+    socket.on('tokenRequest', (deviceId) => {
+        console.log('recieved token request from: ', deviceId);      
+        let token = makeid();  
+        // todo: stick it in a database
+        authorized[deviceId] = token;
+        socket.broadcast.emit('token', token);
     })
 });
 
@@ -27,3 +28,15 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log('server listening on port: ' + port);
 });
+
+
+var authorized = {};
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+<>?,./;'[]:{}|~`";
+
+    for (var i = 0; i < 100; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}

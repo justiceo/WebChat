@@ -23,6 +23,7 @@
     "angular-aria": "^1.6.5",
     "bootstrap-sass": "^3.3.7",
     "express": "^4.15.4",
+    "fingerprintjs2": "^1.5.1",
     "ng-file-upload": "^12.2.13",
     "qrcode": "^0.9.0",
     "socket.io": "^2.0.3",

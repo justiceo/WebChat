@@ -4,8 +4,13 @@ import SocketService from './socket-service';
 import TestComponent from './smoke-test/test-component';
 import Conversations from './conversations/conversations';
 import Authenticate from './authenticate/authenticate';
+import Fingerprint2 from 'fingerprintjs2';
 
 window.QRCode = require('qrcode');
+//require('fingerprintjs2');
+new Fingerprint2().get((result, components) => {
+  window.deviceId = result;
+})
 let webSMS = angular.module('webSMS', ['templates'])
 
 // comment-out this line to stop printing debug messages in console
