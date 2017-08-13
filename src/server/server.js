@@ -13,14 +13,18 @@ app.use('/', function (req, res, next) {
     return res.sendFile(__dirname + req.originalUrl);
 });
 
-
 io.on('connection', (socket) => {
+    setTimeout(() => {
+        console.log('mock authed')
+        socket.broadcast.emit('authed', {'room': 'abci23', 'phone': '213445'});
+    },20000);
     socket.on('tokenRequest', (deviceId) => {
         console.log('recieved token request from: ', deviceId);      
         let token = makeid();  
         // todo: stick it in a database
         authorized[deviceId] = token;
         socket.broadcast.emit('token', token);
+        console.log('dispatching token: ', token);
     })
 });
 
@@ -39,4 +43,7 @@ function makeid() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
+}
+function authenticate(deviceId, token) {
+    return authorized[deviceId] === token;
 }
