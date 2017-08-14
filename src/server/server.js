@@ -19,7 +19,8 @@ io.on('connection', (socket) => {
         console.log('mock authed')
         socket.broadcast.emit('authed', {'room': 'abci23', 'phone': '213445'});
     },20000);
-    socket.on('tokenRequest', (clientId) => { // clientId is different from socketId        
+    socket.on('tokenRequest', (clientId) => { // clientId is different from socketId  
+        if(!clientId) return; // don't generate tokens for nullable clients      
         console.log('recieved token request from: ', clientId, ' on socket: ', socket.id);
         let client = addOrUpdateClient(clientId, socket, makeToken());
         io.to(socket.id).emit('token', client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
