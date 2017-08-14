@@ -34,13 +34,13 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('testAuthSuccess', 'Your token is valid');
     })
     socket.on('tokenValidate', (data) => {
-        console.log("received validation request")
         if(!isAuthorized(socket, data)) {
             io.to(socket.id).emit('authError', 'authToken necessary to make requests');
             return;
         }
 
         let qrcodeToken = data.message; // the qrcode is a browser's current authToken
+        console.log("received request to validate: ", qrcodeToken.length, qrcodeToken);
         // find the browser associated with this code
         let browser = clients.find(c => c.authToken === qrcodeToken);
         let mobile = clients.find(c => c.sockets.indexOf(socket) != -1); // phone
@@ -78,12 +78,13 @@ var rooms = [
 var authorized = {};
 function makeToken() {
     var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+<>?,./;'[]:{}|~`";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < 100; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text;
+    return "Pi94BXqogmJlqyeEAAAA";
+    // todo: return text;
 }
 
 function isAuthorized(socket, data) {
