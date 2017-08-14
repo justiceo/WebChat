@@ -83,8 +83,8 @@ function makeToken() {
     for (var i = 0; i < 100; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return "Pi94BXqogmJlqyeEAAAA";
-    // todo: return text;
+    //return "Pi94BXqogmJlqyeEAAAA";
+    return text;
 }
 
 function isAuthorized(socket, data) {
