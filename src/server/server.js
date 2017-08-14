@@ -33,27 +33,20 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('testAuthSuccess', 'Your token is valid');
     })
     socket.on('tokenValidate', (data) => {
+        console.log("received validation request")
         if(!isAuthorized(socket, data)) {
             io.to(socket.id).emit('authError', 'authToken necessary to make requests');
             return;
         }
 
-        let qrcode = data.qrcode; // the qrcode is a browser's current authToken
+        let qrcodeToken = data.message; // the qrcode is a browser's current authToken
         // find the browser associated with this code
-        let browser = 
-        console.log("received validation request")
-        let token = data.token;
-        let validatingDevice = data.deviceId;
-        // check if token is valid
-        // emit authedToken (which both can use to communicate)
-        if(Object.values(authorized).some(x => x === token)) {
-            let authToken = makeToken();
-            authorized[authToken] = {
-                mobile: validatingDevice,
-                web: Object.keys(authorized).find(x => authorized[x] == token)
-            };
-            socket.broadcast.emit('authToken', authToken);
-        }
+        let browser = clients.find(c => c.authToken === qrcodeToken);
+        let mobile = clients.find(c => c.sockets.indexOf(socket) != -1); // phone
+        // send the browser the phone's socket.id (room) so it can join it.
+        socket.to(browser.sockets[0].id).emit('roomAuthed', {
+            roomId: socket.id, // because this event should only be trigged by the phone
+        }); 
     })
 });
 
@@ -91,6 +84,7 @@ function makeToken() {
 
     return text;
 }
+
 function isAuthorized(socket, data) {
     let token = data ? data.auth ? data.auth.authToken : false : false;
     let client = clients.find(c => c.sockets.indexOf(socket) != -1);

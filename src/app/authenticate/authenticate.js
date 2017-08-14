@@ -1,39 +1,54 @@
 export class AuthCtrl {
-    constructor($timeout, SocketService) {
+    constructor($timeout, $window, SocketService) {
         this.$timeout = $timeout;
-        this.socket = SocketService;
+        this.storage = window.sessionStorage;
+        this.init(SocketService.io);
+    }
+
+    init(socket) {
+        this.socket = socket;
         this.registerListeners();
         this.updateQRCode();
     }
 
+    cache(key,value) {
+        if(value !== undefined)
+            this.storage.setItem(key, JSON.stringify(value));
+        else
+            return JSON.parse(this.storage.getItem(key));
+    }
+
     registerListeners() {
         // listeners for authentication  
-        this.socket.io.on('token', (token) => {
+        this.socket.on('token', (token) => {
             console.log('recieved new token: ', token);
-            // todo: put token in localstorage
-            //this.token = token;
+            this.cache('authToken', token);
             window.QRCode.toDataURL(token, (err, url) => {
                 this.imgUrl = url;
-            });
-            let data = {
-                auth: { authToken: token },
-                message: 'This request should pass'
-            }
-            this.socket.io.emit('testAuth', data)
+            });            
         });
 
-        this.socket.io.emit('testAuth', 'This request should fail');
-        this.socket.io.on('testAuthSuccess', mesage => console.log(mesage));
-        this.socket.io.on('testAuthFail', mesage => console.log(mesage));
-        this.socket.io.on('authed', (data) => {
+        // test auth
+        this.socket.emit('testAuth', 'This request should fail');
+        this.socket.on('testAuthSuccess', mesage => console.log(mesage));
+        this.socket.on('testAuthFail', mesage => console.log(mesage));
+        this.$timeout(() => {
+            let data = {
+                auth: { authToken: this.cache('authToken') },
+                message: 'This request should pass'
+            }
+            this.socket.emit('testAuth', data)
+        }, 2000);
+        
+        // connected to room, start loading data
+        this.socket.on('roomAuthed', (data) => {
             console.log("authed!", data);
-            //this.authed = true;
-            this.phoneId = data.phone; //data should contain room info
+            this.cache('roomInfo', data);
+            this.socket.join(data.roomId)
+            this.authed = true;
+            // reload ui
             // todo: check the last time data was fetch and fetch from there
-            this.socket.io.emit('latestDataRequest', Date.now - 10000);
-        });
-        this.socket.io.on('deauthed', (data) => {
-            this.authed = false;
+            this.socket.emit('latestDataRequest', Date.now - 10000);
         });
     }
 
@@ -42,7 +57,7 @@ export class AuthCtrl {
         if (!this.authed)
             this.$timeout(() => { return this.updateQRCode() }, 8000)
         // request new id from server and update code
-        this.socket.io.emit('tokenRequest', window.deviceId);
+        this.socket.emit('tokenRequest', window.deviceId);
     }
 }
 
