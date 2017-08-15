@@ -2,6 +2,9 @@
 
 A web interface for Wisper SMS
 
+#### deploying with pm2
+NODE_ENV=production pm2 start server.js --name="webSMS" --watch
+
 #### to build docker image
  sudo docker build -f Dockerfile -t websms:latest .
 
