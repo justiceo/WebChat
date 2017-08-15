@@ -4,7 +4,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = 4000;
 var socketioJwt = require('socketio-jwt');
-console.log("jwt: ", socketioJwt);
+
 // return any file in the build dir except server.js
 app.use('/', function (req, res, next) {
     if (req.originalUrl === '/server.js') {
@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(port, () => {
+server.listen(port, 'localhost', () => {
     console.log('server listening on port: ' + port);
 });
 
