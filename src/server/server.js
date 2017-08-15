@@ -4,6 +4,9 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = 4000;
 var socketioJwt = require('socketio-jwt');
+var host = 'localhost';
+if(process.env.NODE_ENV == 'production')
+	host = '45.55.68.239';
 
 // return any file in the build dir except server.js
 app.use('/', function (req, res, next) {
@@ -52,8 +55,8 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(port, 'localhost', () => {
-    console.log('server listening on port: ' + port);
+server.listen(port, host, () => {
+    console.log('server listening on port: ' + host + ":" + port);
 });
 
 
