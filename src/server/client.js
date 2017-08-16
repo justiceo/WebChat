@@ -14,6 +14,7 @@ function Client(clientId, authToken, isMobile) {
     this.isMobile       = isMobile;
     this.roomId         = "";
     this.roomToken      = "";
+    this.isAuthorized   = false; // different from isActive()
 }
 
 /** Disconnects the given the socket, and if no socket given, disconnect itself
@@ -37,7 +38,7 @@ Client.prototype.sign = function(message) {
     // todo: implement on client-side
 }
 
-Client.prototype.isActive = function() {
+Client.prototype.hasActiveSocket = function() {
     return this.activeSocketId !== "";
 }
 
@@ -52,33 +53,48 @@ Client.prototype.getSocket = function(socketId) {
 Client.prototype.addSocket = function(socket) {
     if(this.hasSocket(socket)) return false; // no duplicate ids
     this.sockets.push(socket);
-    if(this.sockets.length == 1) // it's the first guy in
+    if(this.sockets.length == 1) // it's the first guy in, useful for mobile where there's just one guy and no plans to call activate
         this.activeSocketId = socket.id;
     return true;
+}
+
+/** Triggered when user opens new socket on existing client
+ * @param socket
+ */
+Client.prototype.handleNewSocket = function(socket) {
+    this.addSocket(socket);    
+
+    // if not yet authorized, make this socket the active socket
+    if(!this.isAuthorized && this.activeSocketId != socket.id) {
+        this.activate(socket.id);
+    }
+
+    // if already authorized, return 'activeSessionError'
+    if(this.isAuthorized) {
+        socket.emit('otherActiveSession', '');
+    }
+    
 }
 
 Client.prototype.activate = function(socketId) {
     if(!this.getSocket(socketId)) return false;
     
     // make sure we're not trying to re-activate it
-    if(this.activeSocketId === socketId) return;
+    if(this.activeSocketId === socketId) return;  
 
-    // if it's not active, just set it
-    if(!this.isActive()) {
-        this.activeSocketId = socketId;
-        return true;
-    }
-
-    // tell the current socket it's over
-    let currentActive = this.getSocket(this.activeSocketId);
-    currentActive.emit('otherSession', '');
-    currentActive.disconnect();
+    // tell the others sockets it's over
+    this.sockets.forEach(s => {
+        if(s.id !== socketId){
+            s.emit('otherActiveSession', '');
+            s.disconnect();
+        }
+    })
     this.activeSocketId = socketId;
     return true;
 }
 
 Client.prototype.emit = function(event, message) {
-    if(isActive())
+    if(this.hasActiveSocket())
         return this.getSocket(this.activeSocketId).emit(event, message);
 }
 

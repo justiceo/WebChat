@@ -7,11 +7,23 @@ function ClientManager() {
     this.mobileClient       = null;
 }
 
+/** Creates a client if it doesn't exist 
+ * @param {*} clientId
+ * @param {*} socket
+ */
 ClientManager.prototype.create = function(clientId, socket) {
     let isMobile = clientId.endsWith("elibom");
-    let client = new Client(clientId, this.makeToken(), isMobile);
-    client.addSocket(socket);
-    this.webClients.push(client);
+    // if this client currently exists
+    let client = this.getClientById(clientId);
+    if(client == null) {// there can only be one client with this id
+        client = new Client(clientId, this.makeToken(), isMobile);
+        client.addSocket(socket);
+        this.webClients.push(client);
+    }
+    else {// inform this socket that there's a new connectoin
+        client.handleNewSocket(socket);
+    }
+    
     if(this.webClients.length == 1)
         this.activeWebClient = client;
     return client;
@@ -24,8 +36,8 @@ ClientManager.prototype.makeToken = function() {
     for (var i = 0; i < 100; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return "Pi94BXqogmJlqyeEAAAA";
-    //return text;
+    //return "Pi94BXqogmJlqyeEAAAA";
+    return text;
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
