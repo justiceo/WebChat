@@ -128,7 +128,10 @@ $font_0: Helvetica;
     margin-top: 8vh;
     box-shadow: 0 0 2px #555;
   }
-  .people.list-group, .messages-wrapper, .auth .left, .auth .right {
+  .people.list-group, .messages-wrapper {
+    height: 75vh !important;
+  }
+  .auth .left, .auth .right {
     height: calc(75vh + 132px) !important;
   }
 }
