@@ -1,6 +1,10 @@
+
+import Fingerprint2 from 'fingerprintjs2';
+
 export class AuthCtrl {
     constructor($timeout, $window, SocketService) {
         this.$timeout = $timeout;
+        this.$window = $window;
         this.storage = window.sessionStorage;
         this.init(SocketService.io);
         this.inactive = false;
@@ -10,7 +14,11 @@ export class AuthCtrl {
     init(socket) {
         this.socket = socket;
         this.registerListeners();
-        this.socket.emit('tokenRequest', window.deviceId);
+        new Fingerprint2().get((result, components) => {
+            this.$window.deviceId = result;
+            this.socket.emit('tokenRequest', result);
+        })
+        
     }
 
     cache(key,value) {
