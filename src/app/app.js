@@ -1,8 +1,5 @@
 export class AppCtrl {
     constructor($scope) {
-        $scope.$watch(()=> this.appState, (e)=> {
-            console.log("appState: ", e);
-        })
     }
 }
 

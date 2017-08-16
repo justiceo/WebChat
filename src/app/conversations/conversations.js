@@ -115,34 +115,34 @@ export class ConversationsCtrl {
   }
 
   registerListeners() {
-    this.socket.io.on('connect', (data) => {
+    this.socket.on('connect', (data) => {
       console.log("connected: ", data);
-      this.socket.io.emit('join', 'Hello server from client');
+      this.socket.emit('join', 'Hello server from client');
     });
 
     // listener for 'thread' event, which updates messages
-    this.socket.io.on('thread', (data) => {
+    this.socket.on('thread', (data) => {
       $('#thread').append('<li>' + data + '</li>');
     });
 
 
 
     // listeners sms message updates           
-    this.socket.io.on('latestConvo', (data) => {
+    this.socket.on('latestConvo', (data) => {
     });
-    this.socket.io.on('received', (data) => {
-    });
-
-    this.socket.io.on('sent', (data) => {
+    this.socket.on('received', (data) => {
     });
 
-    this.socket.io.on('delivered', (data) => {
+    this.socket.on('sent', (data) => {
     });
 
-    this.socket.io.on('deliveryError', (data) => {
+    this.socket.on('delivered', (data) => {
     });
 
-    this.socket.io.on('deleted', (data) => {
+    this.socket.on('deliveryError', (data) => {
+    });
+
+    this.socket.on('deleted', (data) => {
     });
   }
 
