@@ -55,6 +55,7 @@ export class AuthCtrl {
         // this.socket.emit('testAuth', this.sign('This request should pass'));
         this.$window.QRCode.toDataURL(token, (err, url) => {
             this.loadingQRCode = false;
+            this.state = "loadedQrCode"
             this.imgUrl = url;
             this.$scope.$apply();
             // refresh the code every 8 secs after qrcode is actually displayed

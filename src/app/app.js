@@ -1,17 +1,16 @@
-import EVENTS from '../server/events';
 export class AppCtrl {
-    constructor() {
-        this.state = "testing";
-        this.EVENTS = EVENTS;
+    constructor($scope) {
+        $scope.$watch(()=> this.appState, (e)=> {
+            console.log("appState: ", e);
+        })
     }
 }
 
 let App = {
     template: `
-    <div class="wrapper" ng-switch="$ctrl.state">
-        <authenticate state="$ctrl.state" ng-switch-default"></authenticate>
-        <conversations ng-switch-when="{{ $ctrl.EVENTS.ROOM_AUTH }}"></conversations>
-        <p ng-switch-when="{{ $ctrl.EVENTS.INVALID_CLIENT }}"></p>
+    <div class="wrapper" ng-switch="$ctrl.appState">
+        <authenticate state="$ctrl.appState" ng-hide="$ctrl.appState=='roomAuthed'"></authenticate>
+        <conversations ng-show="$ctrl.appState=='roomAuthed'"></conversations>
     </div>
     `,
     controller: AppCtrl
