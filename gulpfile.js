@@ -109,6 +109,10 @@ gulp.task('test', ["build"], function (done) {
 
 gulp.task("build", ["clean", "sass", "assets", "html", "views", "browserify", "server"])
 
+gulp.task("watch-server", ["server"], function() {
+  gulp.watch(serverJs, ["server"]);
+});
+
 gulp.task("default", ["build"], function() {
 
   gulp.start(["browserify"]);
@@ -126,5 +130,5 @@ gulp.task("default", ["build"], function() {
   gulp.watch(viewFiles, ["views"]);
   gulp.watch(jsFiles, ["browserify"]);
   gulp.watch(assets, ["assets"]);
-  gulp.watch(serverJs, ["server"])
+  gulp.watch(serverJs, ["server"]);
 });

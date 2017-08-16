@@ -16,4 +16,5 @@ app.use('/', function (req, res, next) {
 app.server.listen(process.env.PORT || DEFAULT_PORT, () => {
     console.log(`Started on port ${app.server.address().port}`);
 });
-export default app.name;
+
+export default app;
