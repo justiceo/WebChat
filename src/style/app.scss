@@ -158,14 +158,14 @@ body {
     .qr-container {
       position: relative;
       height: 100%;
-      img, .errorDisplay {
+      img, .errorDisplay,.otherSession {
         width: 300px;
         left: 50%;
         top: 50%;
         position: absolute;
         transform: translate(-50%,-50%);
       }
-      .errorDisplay {
+      .errorDisplay, .otherSession {
         width: 400px;
         text-align: center;
 
