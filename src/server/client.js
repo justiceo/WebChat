@@ -50,6 +50,15 @@ Client.prototype.getSocket = function(socketId) {
     return this.sockets.find(s => s.id === socketId);
 }
 
+Client.prototype.hasToken = function(token) {
+    // todo, store next two tokens during validation phase only
+    return this.authToken === token;
+}
+
+Client.prototype.setToken = function(token) {
+    this.authToken = token;
+}
+
 Client.prototype.addSocket = function(socket) {
     if(this.hasSocket(socket)) return false; // no duplicate ids
     this.sockets.push(socket);

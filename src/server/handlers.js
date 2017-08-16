@@ -43,6 +43,11 @@ Handlers.prototype.garnish = function(io) {
             io.to(socket.id).emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
         });
 
+        socket.on(EVENTS.TOKEN_REFRESH, (oldToken) => {
+            let newToken = this.clientManager.refresh(token);
+            io.to(socket.id).emit(EVENTS.TOKEN, newToken);
+        })
+
         socket.on(EVENTS.TEST_AUTH, (data) => {
             if (!this.isAuthorized(socket, data)) {
                 io.to(socket.id).emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());

@@ -37,7 +37,17 @@ ClientManager.prototype.makeToken = function() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     //return "Pi94BXqogmJlqyeEAAAA";
+    // include-timestamp in tokens
     return text;
+}
+
+ClientManager.prototype.refresh = function(oldToken) {
+    let client = this.webClients.find(c => c.hasToken(oldToken));
+    if(client) {
+        client.setToken(this.makeToken());
+        return client.authToken;
+    }
+    return false;
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
