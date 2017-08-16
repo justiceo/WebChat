@@ -51,15 +51,8 @@ gulp.task("browserify", function() {
 });
 
 gulp.task("server", function() {
-  return browserify("./src/server/server.js")
-      .transform(babelify, {presets: ["es2015"]})
-      .transform(ngAnnotate)
-      .bundle()
-      .on("error", interceptErrors)
-      //Pass desired output filename to vinyl-source-stream
-      .pipe(source("server.js"))
-      // Start piping stream to tasks!
-      .pipe(gulp.dest(buildDir));
+  // todo: hopefully someday we'll be able to compile this and bundle it
+  gulp.src(serverJs).pipe(gulp.dest(buildDir));
 });
 
 gulp.task("sass", function() {
@@ -90,6 +83,7 @@ gulp.task("views", function() {
 
 // Copy over everything in assets directory
 gulp.task("assets", function() {
+  gulp.src(".env").pipe(gulp.dest(buildDir));
   gulp.src(assets).pipe(gulp.dest(buildDir));
 });
 
