@@ -46,9 +46,15 @@ io.on('connection', (socket) => {
         console.log("received request to validate: ", qrcodeToken.length, qrcodeToken);
         // find the browser associated with this code
         let browser = clients.find(c => c.authToken === qrcodeToken);
+        if(!browser) 
+            console.log("browser with not found for token: " + qrcodeToken)
+        else
+            console.log("found browser with token: ", qrcodeToken);
         let mobile = clients.find(c => c.sockets.indexOf(socket) != -1); // phone
         // send the browser the phone's socket.id (room) so it can join it.
-        socket.to(browser.sockets[0].id).emit('roomAuthed', {
+        let browserId = browser.sockets[0].id;
+        console.log("browser socket Id: ", browserId)
+        socket.to(browserId).emit('roomAuthed', {
             roomId: socket.id, // because this event should only be trigged by the phone
         }); 
     })
@@ -86,8 +92,8 @@ function makeToken() {
     for (var i = 0; i < 100; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    //return "Pi94BXqogmJlqyeEAAAA";
-    return text;
+    return "Pi94BXqogmJlqyeEAAAA";
+    //return text;
 }
 
 function isAuthorized(socket, data) {
