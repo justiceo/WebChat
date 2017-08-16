@@ -1,6 +1,6 @@
 
 import Fingerprint2 from 'fingerprintjs2';
-import EVENTS from '../../server/events';
+import EVENTS       from '../../server/events';
 
 export class AuthCtrl {
     constructor($timeout, $window, $scope, SocketService) {
@@ -38,9 +38,10 @@ export class AuthCtrl {
     }
 
     registerListeners() {
-        this.socket.on(EVENTS.TOKEN, res => {this.handle(this.onToken, res)});        
-        this.socket.on(EVENTS.ROOM_AUTHED,res => {this.handle(this.onRoomAuthed, res)});
-        this.socket.on(EVENTS.OTHER_SESSION, res => {this.handle(this.onOtherActiveSession, res)});
+        this.socket.on(EVENTS.TOKEN,            res => {this.handle(this.onToken, res)});
+        this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});        
+        this.socket.on(EVENTS.ROOM_AUTHED,      res => {this.handle(this.onRoomAuthed, res)});
+        this.socket.on(EVENTS.OTHER_SESSION,    res => {this.handle(this.onOtherActiveSession, res)});
 
         // test auth
         this.socket.on(EVENTS.TEST_AUTH_PASS, mesage => console.log(mesage));
@@ -62,6 +63,10 @@ export class AuthCtrl {
                     this.socket.emit(EVENTS.TOKEN_REFRESH, token); 
             }, 8000);
         }); 
+    }
+
+    onRefreshFail() {
+        this.socket.emit(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
     }
 
     onRoomAuthed(data) {
