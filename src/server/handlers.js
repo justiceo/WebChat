@@ -37,33 +37,42 @@ Handlers.prototype.garnish = function(io) {
 
         
         socket.on(EVENTS.TOKEN_REQUEST, (clientId) => { // clientId is different from socketId  
-            if (!clientId) return; // don't generate tokens for nullable clients      
-            console.log('recieved token request from: ', clientId, ' on socket: ', socket.id);
+            if (!clientId) {
+                console.log(this.TAG, "Event: " + EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', socket.id);
+                return; // don't generate tokens for nullable clients      
+            }
+            console.log(this.TAG, "Event: " + EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', socket.id);
             let client = this.clientManager.create(clientId, socket);
-            io.to(socket.id).emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
+            socket.emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
         });
 
         socket.on(EVENTS.TOKEN_REFRESH, (oldToken) => {
-            let newToken = this.clientManager.refresh(token);
-            io.to(socket.id).emit(EVENTS.TOKEN, newToken);
+            console.log(this.TAG, "Event: " + EVENTS.TOKEN_REFRESH + " - for socket: " + socket.id )
+            socket.emit(EVENTS.TEST_AUTH_FAIL, "testing refresh");
+            let newToken = this.clientManager.refresh(oldToken);
+            if(newToken)
+                socket.emit(EVENTS.TOKEN, newToken);
+            else {
+                socket.emit(EVENTS.TEST_AUTH_FAIL, "get fresh token");
+            }
         })
 
         socket.on(EVENTS.TEST_AUTH, (data) => {
             if (!this.isAuthorized(socket, data)) {
-                io.to(socket.id).emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());
+                socket.emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());
                 return;
             }
-            io.to(socket.id).emit(EVENTS.TEST_AUTH_PASS, 'Your token is valid');
+            socket.emit(EVENTS.TEST_AUTH_PASS, 'Your token is valid');
         });
 
         socket.on(EVENTS.TOKEN_VALIDATE, (data) => {
+            console.log(this.TAG, "Event: " + EVENTS.TOKEN_VALIDATE + " from: " + socket.id + " for: " + data.message)
             if (!this.isAuthorized(socket, data)) {
-                io.to(socket.id).emit('authError', 'authToken necessary to make requests');
+                socket.emit('authError', 'authToken necessary to make requests');
                 return;
             }
 
             let qrcodeToken = data.message; // the qrcode is a browser's current authToken
-            console.log("received request to validate: ", qrcodeToken);
             // find the browser associated with this code
             let browser = this.clientManager.getClientById(qrcodeToken);
             if (!browser)

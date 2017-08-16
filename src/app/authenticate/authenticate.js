@@ -3,12 +3,14 @@ export class AuthCtrl {
         this.$timeout = $timeout;
         this.storage = window.sessionStorage;
         this.init(SocketService.io);
+        this.inactive = false;
+        this.otherSessionActive = false;
     }
 
     init(socket) {
         this.socket = socket;
         this.registerListeners();
-        this.updateQRCode();
+        this.socket.emit('tokenRequest', window.deviceId);
     }
 
     cache(key,value) {
@@ -25,12 +27,19 @@ export class AuthCtrl {
             this.cache('authToken', token);
             window.QRCode.toDataURL(token, (err, url) => {
                 this.imgUrl = url;
-            });            
+            });  
+            
+            // refresh the code every 8 secs
+            this.$timeout(() => {
+                if(!this.authed && !this.otherSessionActive)
+                    this.socket.emit('tokenRefresh', token); 
+            }, 8000)
+                
         });
 
         // test auth
         this.socket.emit('testAuth', 'This request should fail');
-        this.socket.on('testAuthSuccess', mesage => console.log(mesage));
+        this.socket.on('testAuthPass', mesage => console.log(mesage));
         this.socket.on('testAuthFail', mesage => console.log(mesage));
         this.$timeout(() => {
             let data = {
@@ -50,14 +59,11 @@ export class AuthCtrl {
             // todo: check the last time data was fetch and fetch from there
             this.socket.emit('latestDataRequest', Date.now - 10000);
         });
-    }
 
-    updateQRCode() {
-        // refresh the code every 8 secs
-        if (!this.authed)
-            this.$timeout(() => { return this.updateQRCode() }, 8000)
-        // request new id from server and update code
-        this.socket.emit('tokenRequest', window.deviceId);
+        this.socket.on('otherActiveSession', (otherSession) => {
+            this.otherSessionActive = true;
+            console.log("other session is active: ", otherSession);
+        })
     }
 }
 

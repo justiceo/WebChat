@@ -89,11 +89,12 @@ Client.prototype.activate = function(socketId) {
     if(!this.getSocket(socketId)) return false;
     
     // make sure we're not trying to re-activate it
-    if(this.activeSocketId === socketId) return;  
+    if(this.activeSocketId == socketId) return;  
 
     // tell the others sockets it's over
     this.sockets.forEach(s => {
-        if(s.id !== socketId){
+        if(s.id != socketId){
+            console.log("emitting otherActiveSession to: ", s.id);
             s.emit('otherActiveSession', '');
             s.disconnect();
         }
