@@ -4,6 +4,7 @@ import SocketService from './socket-service';
 import TestComponent from './smoke-test/test-component';
 import Conversations from './conversations/conversations';
 import Authenticate from './authenticate/authenticate';
+import App from './app';
 
 window.QRCode = require('qrcode');
 //require('fingerprintjs2');
@@ -18,6 +19,8 @@ console.debug = console.log;
 
 webSMS
   .component('test', TestComponent)
+  .component('app', App)
+  //.component('about', {'templateUrl': 'app/about.html', controller: function(){}})
   .component('conversations', Conversations)
   .component('authenticate', Authenticate)
   .service('SocketService', SocketService)

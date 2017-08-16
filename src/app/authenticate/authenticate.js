@@ -77,7 +77,10 @@ export class AuthCtrl {
 
 let Authenticate = {
     templateUrl: 'app/authenticate/authenticate.html',
-    controller: AuthCtrl
+    controller: AuthCtrl,
+    bindings: {
+        authState: '='
+    }
 }
 
 export default Authenticate;
