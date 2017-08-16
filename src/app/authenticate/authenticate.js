@@ -1,5 +1,6 @@
 
 import Fingerprint2 from 'fingerprintjs2';
+import EVENTS from '../../server/events';
 
 export class AuthCtrl {
     constructor($timeout, $window, $scope, SocketService) {
@@ -14,7 +15,6 @@ export class AuthCtrl {
             this.state = 'isErrored';
         }
         else{
-            this.state = 'loading'
             this.init(SocketService.io);
         }
     }
@@ -25,7 +25,7 @@ export class AuthCtrl {
         new Fingerprint2().get((result, components) => {
             this.state = 'loadedQRCode';
             this.$window.deviceId = result;
-            this.socket.emit('tokenRequest', result);
+            this.socket.emit(EVENTS.TOKEN_REQUEST, result);
         })
         
     }
@@ -38,14 +38,14 @@ export class AuthCtrl {
     }
 
     registerListeners() {
-        this.socket.on('token', res => {this.handle(this.onToken, res)});        
-        this.socket.on('roomAuthed',res => {this.handle(this.onRoomAuthed, res)});
-        this.socket.on('otherActiveSession', res => {this.handle(this.onOtherActiveSession, res)});
+        this.socket.on(EVENTS.TOKEN, res => {this.handle(this.onToken, res)});        
+        this.socket.on(EVENTS.ROOM_AUTHED,res => {this.handle(this.onRoomAuthed, res)});
+        this.socket.on(EVENTS.OTHER_SESSION, res => {this.handle(this.onOtherActiveSession, res)});
 
         // test auth
-        this.socket.on('testAuthPass', mesage => console.log(mesage));
-        this.socket.on('testAuthFail', mesage => console.error(mesage));
-        this.socket.emit('testAuth', 'This request should fail');
+        this.socket.on(EVENTS.TEST_AUTH_PASS, mesage => console.log(mesage));
+        this.socket.on(EVENTS.TEST_AUTH_FAIL, mesage => console.error(mesage));
+        this.socket.emit(EVENTS.TEST_AUTH, 'This request should fail');
     }
 
     onToken(token) {
@@ -59,23 +59,21 @@ export class AuthCtrl {
             // refresh the code every 8 secs after qrcode is actually displayed
             this.$timeout(() => {
                 if(!this.authed && !this.isErrored)
-                    this.socket.emit('tokenRefresh', token); 
+                    this.socket.emit(EVENTS.TOKEN_REFRESH, token); 
             }, 8000);
         }); 
     }
 
     onRoomAuthed(data) {
         this.cache('roomInfo', data);
-        this.socket.join(data.roomId)
+        this.socket.join(data.roomId);
         this.authed = true;
-        // reload ui
-        // todo: check the last time data was fetch and fetch from there
+        this.state = EVENTS.ROOM_AUTHED;
         this.socket.emit('latestDataRequest', Date.now - 10000);
     }
 
     onOtherActiveSession(otherSession) {
-        this.state = 'otherSession';
-        this.$scope.$apply(); // notify angular about event outside it's watch
+        this.state = EVENTS.OTHER_SESSION;
     }
 
     sign(message) {
@@ -96,7 +94,7 @@ let Authenticate = {
     templateUrl: 'app/authenticate/authenticate.html',
     controller: AuthCtrl,
     bindings: {
-        authState: '='
+        state: '='
     }
 }
 

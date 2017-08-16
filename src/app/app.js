@@ -1,16 +1,17 @@
-
+import EVENTS from '../server/events';
 export class AppCtrl {
     constructor() {
-        this.state = "notAuthed";
+        this.state = "testing";
+        this.EVENTS = EVENTS;
     }
 }
 
 let App = {
     template: `
     <div class="wrapper" ng-switch="$ctrl.state">
-        <authenticate auth-state="$ctrl.state" ng-switch-when="notAuthed"></authenticate>
-        <conversations ng-switch-when="authed"></conversations>
-        <p ng-switch-default></p>
+        <authenticate state="$ctrl.state" ng-switch-default"></authenticate>
+        <conversations ng-switch-when="{{ $ctrl.EVENTS.ROOM_AUTH }}"></conversations>
+        <p ng-switch-when="{{ $ctrl.EVENTS.INVALID_CLIENT }}"></p>
     </div>
     `,
     controller: AppCtrl
