@@ -1,6 +1,8 @@
-export default class ClientManager {    
-    constructor() {
-        this.TAG = "ClientManager: ";
-        console.log(this.TAG, "initializing...")
-    }
+
+function ClientManager() {
+    this.TAG = "ClientManager: ";
+    console.log(this.TAG, "initializing...");
+    return this;
 }
+
+module.exports = ClientManager;
