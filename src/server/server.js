@@ -1,9 +1,13 @@
-import http from 'http';
-import express from 'express';
+import http         from 'http';
+import express      from 'express';
+import * as Socket  from 'socket.io';
+import ClientManager from './client-manager';
+import Handlers     from './handlers';
 
-const DEFAULT_PORT = 4000;
-let app = express();
-app.server = http.createServer(app);
+const DEFAULT_PORT  = 4000;
+let app             = express();
+let server          = http.createServer(app);
+let io              = Socket(server);
 
 // return any file in the build dir except server.js
 app.use('/', function (req, res, next) {
