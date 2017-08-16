@@ -5,13 +5,15 @@
  * @param {*} socket 
  * @param {*} authToken 
  */
-function Client(clientId, socket, authToken, isMobile) {
+function Client(clientId, authToken, isMobile) {
     this.TAG            = "Client: ";
     this.id             = clientId;
-    this.sockets        = [socket];
+    this.sockets        = [];
     this.authToken      = authToken;
     this.activeSocketId = "";
     this.isMobile       = isMobile;
+    this.roomId         = "";
+    this.roomToken      = "";
 }
 
 /** Disconnects the given the socket, and if no socket given, disconnect itself
@@ -19,7 +21,7 @@ function Client(clientId, socket, authToken, isMobile) {
  */
 Client.prototype.disconnect = function(socket) {
     if(this.hasSocket(socket)) {
-        this.log("disconnecting " + socket.id);
+        console.log(this.TAG, "disconnecting " + socket.id);
         if(socket.id == this.activeSocketId)
             this.activeSocketId = ""; 
         socket.disconnect();
