@@ -7,7 +7,7 @@ export class AuthCtrl {
         this.$timeout = $timeout;
         this.$window = $window;
         this.$scope = $scope;
-        this.storage = window.sessionStorage;
+        this.storage = $window.sessionStorage;
         this.inactive = false;
         this.loadingQRCode = true;
         

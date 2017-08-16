@@ -11,4 +11,10 @@ module.exports = {
     ROOM_AUTHED: "roomAuthed",      // emitted by server to webClients signaling approval of qr code
     OTHER_SESSION: "otherActiveSession",    // emitted by server when there's a new socket with same client id
     INVALID_CLIENT: "invalidClient",        // emitted by server or browser when client doesn't support websockets or ismobile browser
+    CONV_REQUEST: "convRequest",            // emitted by web client to get the latest conversations
+    CONV_DATA: "convData",                  // emitted by mobile client in response to conv_request
+    MSG_RECEIVE: "msgReceive",
+    MSG_SENT: "msgSent",
+    MSG_DELIVERED: "msgDelivered",
+    MSG_DELETE: "msgDelete"
 }

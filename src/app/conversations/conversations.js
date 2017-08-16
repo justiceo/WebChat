@@ -1,6 +1,11 @@
+import EVENTS from '../../server/events';
+
 export class ConversationsCtrl {
-  constructor(SocketService) {
-    this.socket = SocketService;
+  constructor($window, $scope, SocketService) {
+    this.$window = $window;
+    this.$scope = $scope;
+    this.storage = $window.sessionStorage;
+
     if (!SocketService.io) {
       console.error("AuthCtrl: socket.io not loaded");
       this.state = 'isErrored';
@@ -8,6 +13,7 @@ export class ConversationsCtrl {
     else {
       this.init(SocketService.io);
     }
+
     angular.element(document).ready(() => {
       this.scrollToBottom()
     });
@@ -100,7 +106,8 @@ export class ConversationsCtrl {
     }
   }
 
-  init() {
+  init(socket) {
+    this.socket = socket;
     this.registerListeners();
   }
 
@@ -114,36 +121,36 @@ export class ConversationsCtrl {
     convo.isActive = true;
   }
 
+  noop() {
+    console.log("noop")
+  }
+
   registerListeners() {
-    this.socket.on('connect', (data) => {
-      console.log("connected: ", data);
-      this.socket.emit('join', 'Hello server from client');
-    });
+    this.socket.emit(EVENTS.CONV_REQUEST);
+    this.socket.on(EVENTS.CONV_DATA, res => { this.handle(this.noop, res) });
 
-    // listener for 'thread' event, which updates messages
-    this.socket.on('thread', (data) => {
-      $('#thread').append('<li>' + data + '</li>');
-    });
+    this.socket.on(EVENTS.MSG_RECEIVE, res => { this.handle(this.noop, res) });
 
+    this.socket.on(EVENTS.MSG_SENT, res => { this.handle(this.noop, res) });
 
+    this.socket.on(EVENTS.MSG_DELIVERED, res => { this.handle(this.noop, res) });
 
-    // listeners sms message updates           
-    this.socket.on('latestConvo', (data) => {
-    });
-    this.socket.on('received', (data) => {
-    });
+    this.socket.on(EVENTS.MSG_DELETE, res => { this.handle(this.noop, res) });
 
-    this.socket.on('sent', (data) => {
-    });
+    this.socket.on(EVENTS.CONTACt_INFO, res => { this.handle(this.noop, res) });
+  }
 
-    this.socket.on('delivered', (data) => {
-    });
+  sign(message) {
+    return {
+      auth: { authToken: this.cache('authToken') },
+      message: message
+    }
+  }
 
-    this.socket.on('deliveryError', (data) => {
-    });
-
-    this.socket.on('deleted', (data) => {
-    });
+  handle(fn, args) {
+    console.log('<-Event: ' + fn.name);
+    this[fn.name](args);
+    this.$scope.$apply();
   }
 
 }
