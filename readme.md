@@ -6,10 +6,12 @@ A web interface for Wisper SMS
 NODE_ENV=production pm2 start server.js --name="webSMS" --watch
 
 #### to build docker image
+# -d allow it to run in background (detach from shell)
+
  sudo docker build -f Dockerfile -t websms:latest .
 
 #### to run the image
- sudo docker run -i -t websms:latest
+ sudo docker run --name websms_container -p 4000:4000 -i -td websms:latest
 
 ### todo
 ---------

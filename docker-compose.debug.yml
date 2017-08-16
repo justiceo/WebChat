@@ -7,7 +7,7 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - 3000:3000
+      - 4000:4000
       - 9229:9229
     volumes:
       - .:/usr/src/app

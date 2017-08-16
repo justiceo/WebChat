@@ -1,7 +1,7 @@
 #!/bin/bash
 
 gulp build
-cp -r build/* /var/www/wisper.chat/public/
-cd build
-node server.js # todo: stop using node to serve up static resources
+ssh -p1022 justice@wisper.chat 'rm -r /home/justice/code/websms/build/*'
+scp -r -P 1022 ./build/* justice@wisper.chat:/home/justice/code/websms/build/
+ssh -p1022 justice@wisper.chat 'cd /home/justice/code/websms/build && NODE_ENV=production /usr/bin/node server.js'
 
