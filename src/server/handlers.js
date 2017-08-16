@@ -1,13 +1,14 @@
+var EVENTS = require('./events');
 
 function Handlers(clientManager) {
     this.TAG = "Handlers: ";
     this.clientManager = clientManager;
     console.log(this.TAG, "initializing...");
-    //return this;
 }
 
 Handlers.prototype.garnish = function(io) {
-    io.on('connection', (socket) => {
+    io.on(EVENTS.CONNECTION, (socket) => {
+        console.log("initiated connection new socket: " + socket.id)
         socket.broadcast.emit('message', "Hey you're now connected to me - says server");
         setTimeout(() => {
             console.log('mock authed')
