@@ -1,7 +1,7 @@
 export default class SocketService {
     constructor() {
         if(typeof(io) == 'undefined') {
-            this.error = "Cannot connect to chat server";
+            console.error('SocketService: socket.io not loaded');
             return;
         }
         this.io = io.connect(window.location.origin);

@@ -11,7 +11,8 @@ export class AuthCtrl {
         this.inactive = false;
         this.loadingQRCode = true;
         
-        if(SocketService.error) {
+        if(!SocketService.io) {
+            console.error("AuthCtrl: socket.io not loaded");
             this.state = 'isErrored';
         }
         else{
@@ -49,6 +50,10 @@ export class AuthCtrl {
         this.socket.emit(EVENTS.TEST_AUTH, 'This request should fail');
     }
 
+    unregisterListeners() {
+        // todo implement
+    }
+
     onToken(token) {
         this.cache('authToken', token);
         // uncomment to test if token is working
@@ -77,6 +82,7 @@ export class AuthCtrl {
     }
 
     onOtherActiveSession(otherSession) {
+        this.unregisterListeners();
         this.state = EVENTS.OTHER_SESSION;
     }
 
@@ -85,6 +91,16 @@ export class AuthCtrl {
             auth: { authToken: this.cache('authToken') },
             message: message
         }
+    }
+
+    activateHere() {
+        console.log("active here");
+        this.socket.disconnect();
+        this.socket.connect();
+        this.socket.emit(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
+    }
+    reload() {        
+        window.location.reload();
     }
 
     handle(fn, args) {
