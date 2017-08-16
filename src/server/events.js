@@ -16,5 +16,7 @@ module.exports = {
     MSG_RECEIVE: "msgReceive",
     MSG_SENT: "msgSent",
     MSG_DELIVERED: "msgDelivered",
-    MSG_DELETE: "msgDelete"
+    MSG_DELETE: "msgDelete",
+    CONTACT_REQUEST: "contactRequest",
+    CONTACt_INFO: "contactInfo"
 }
