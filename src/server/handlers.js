@@ -1,4 +1,5 @@
 var EVENTS = require('./events');
+var Client = require('./client');
 
 function Handlers(clientManager) {
     this.TAG = "Handlers: ";
@@ -52,5 +53,59 @@ Handlers.prototype.garnish = function(io) {
         })
     });
 }
+
+
+var clients = [
+    {
+        clientId: "",   // the clients id
+        sockets: [],    // yes one client can open multiple sockets
+        roomId: "",     // a client can only be in one room (with the phone)
+        authToken: "",  // validates authenticity of client
+        roomToken: "",  // validates right to join room 
+    }
+];
+
+var rooms = [
+    {
+        id: "",
+        roomToken: "",
+        socketIds: []
+    }
+];
+
+var authorized = {};
+function makeToken() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 100; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return "Pi94BXqogmJlqyeEAAAA";
+    //return text;
+}
+
+function isAuthorized(socket, data) {
+    let token = data ? data.auth ? data.auth.authToken : false : false;
+    let client = clients.find(c => c.sockets.indexOf(socket) != -1);
+    if(!token || !client) return false;
+    return client.authToken === token;
+}
+
+function addOrUpdateClient(clientId, socket, authToken) {
+    let c = clients.find(c => c.clientId === clientId);
+    if(c) {
+        if(c.sockets.indexOf(socket) === -1)
+            c.sockets.push(socket);
+        c.authToken = authToken;
+    }
+    else {
+        console.log("creating new client with id " + clientId + " on socket " + socket.id);
+        c = { clientId: clientId, sockets: [socket], authToken: authToken }  
+        clients.push(c);
+    }
+    return c;
+}
+
 
 module.exports = Handlers
