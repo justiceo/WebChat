@@ -6,15 +6,23 @@ export class AuthCtrl {
         this.$timeout = $timeout;
         this.$window = $window;
         this.storage = window.sessionStorage;
-        this.init(SocketService.io);
         this.inactive = false;
-        this.otherSessionActive = false;
+        this.loadingQRCode = true;
+        
+        if(SocketService.error) {
+            this.state = 'isErrored';
+        }
+        else{
+            this.state = 'loading'
+            this.init(SocketService.io);
+        }
     }
 
     init(socket) {
         this.socket = socket;
         this.registerListeners();
         new Fingerprint2().get((result, components) => {
+            this.state = 'loadedQRCode';
             this.$window.deviceId = result;
             this.socket.emit('tokenRequest', result);
         })
@@ -33,13 +41,14 @@ export class AuthCtrl {
         this.socket.on('token', (token) => {
             console.log('recieved new token: ', token);
             this.cache('authToken', token);
-            window.QRCode.toDataURL(token, (err, url) => {
+            this.$window.QRCode.toDataURL(token, (err, url) => {
+                this.loadingQRCode = false;
                 this.imgUrl = url;
             });  
             
             // refresh the code every 8 secs
             this.$timeout(() => {
-                if(!this.authed && !this.otherSessionActive)
+                if(!this.authed && !this.isErrored)
                     this.socket.emit('tokenRefresh', token); 
             }, 8000)
                 
@@ -69,7 +78,7 @@ export class AuthCtrl {
         });
 
         this.socket.on('otherActiveSession', (otherSession) => {
-            this.otherSessionActive = true;
+            this.state = 'otherSession'
             console.log("other session is active: ", otherSession);
         })
     }
