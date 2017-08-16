@@ -58,7 +58,7 @@ export class AuthCtrl {
             this.$scope.$apply();
             // refresh the code every 8 secs after qrcode is actually displayed
             this.$timeout(() => {
-                if(!this.authed && !this.isErrored)
+                if(this.state != EVENTS.ROOM_AUTHED && this.state != 'isErrored')
                     this.socket.emit(EVENTS.TOKEN_REFRESH, token); 
             }, 8000);
         }); 
@@ -66,10 +66,8 @@ export class AuthCtrl {
 
     onRoomAuthed(data) {
         this.cache('roomInfo', data);
-        this.socket.join(data.roomId);
         this.authed = true;
         this.state = EVENTS.ROOM_AUTHED;
-        this.socket.emit('latestDataRequest', Date.now - 10000);
     }
 
     onOtherActiveSession(otherSession) {

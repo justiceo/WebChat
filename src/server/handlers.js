@@ -32,7 +32,7 @@ Handlers.prototype.garnish = function(io) {
         io.to(socket.id).emit('message', "Hey you're now connected to me - says server");
         setTimeout(() => {
             console.log('mock authed')
-            socket.broadcast.emit('authed', { 'room': 'abci23', 'phone': '213445' });
+            socket.emit(EVENTS.ROOM_AUTHED, { 'roomId': 'abci23'});
         }, 20000);
 
         
@@ -47,13 +47,12 @@ Handlers.prototype.garnish = function(io) {
         });
 
         socket.on(EVENTS.TOKEN_REFRESH, (oldToken) => {
-            console.log(this.TAG, "Event: " + EVENTS.TOKEN_REFRESH + " - for socket: " + socket.id )
-            socket.emit(EVENTS.TEST_AUTH_FAIL, "testing refresh");
+            console.log(this.TAG, "Event: " + EVENTS.TOKEN_REFRESH + " - for socket: " + socket.id );
             let newToken = this.clientManager.refresh(oldToken);
             if(newToken)
                 socket.emit(EVENTS.TOKEN, newToken);
             else {
-                socket.emit(EVENTS.TEST_AUTH_FAIL, "get fresh token");
+                socket.emit(EVENTS.REFRESH_FAIL);
             }
         })
 
