@@ -158,7 +158,7 @@ body {
     .qr-container {
       position: relative;
       height: 100%;
-      img {
+      img, .otherSessionActive {
         width: 300px;
         left: 50%;
         top: 50%;

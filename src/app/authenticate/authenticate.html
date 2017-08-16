@@ -14,7 +14,12 @@
                     <div class='loader--dot'></div>
                     <div class='loader--text'></div>
                 </div>
-                <img alt="" ng-src="{{ $ctrl.imgUrl }}">
+                <img alt="" ng-show="!$ctrl.otherSessionActive" ng-src="{{ $ctrl.imgUrl }}">
+                <div class="otherSessionActive" ng-show="$ctrl.otherSession">
+                    <span class="icons icon-info"></span>
+                    <p>Wisper web is currently active in another tab or window</p>
+                    <button class="btn btn-primary btn-lg">Activate Here</button>
+                </div>
             </div>
         </div>
     </div>
