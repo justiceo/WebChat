@@ -31,13 +31,6 @@ export class AuthCtrl {
         
     }
 
-    cache(key,value) {
-        if(value !== undefined)
-            this.storage.setItem(key, JSON.stringify(value));
-        else
-            return JSON.parse(this.storage.getItem(key));
-    }
-
     registerListeners() {
         this.socket.on(EVENTS.TOKEN,            res => {this.handle(this.onToken, res)});
         this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});        
@@ -86,13 +79,6 @@ export class AuthCtrl {
         this.state = EVENTS.OTHER_SESSION;
     }
 
-    sign(message) {
-        return {
-            auth: { authToken: this.cache('authToken') },
-            message: message
-        }
-    }
-
     activateHere() {
         console.log("active here");
         this.socket.disconnect();
@@ -107,6 +93,20 @@ export class AuthCtrl {
         console.log('<-Event: ' + fn.name);
         this[fn.name](args);
         this.$scope.$apply();
+    }
+
+    cache(key,value) {
+        if(value !== undefined)
+            this.storage.setItem(key, JSON.stringify(value));
+        else
+            return JSON.parse(this.storage.getItem(key));
+    }
+
+    sign(message) {
+        return {
+            auth: { authToken: this.cache('authToken') },
+            message: message
+        }
     }
 }
 

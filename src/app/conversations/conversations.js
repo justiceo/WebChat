@@ -126,17 +126,12 @@ export class ConversationsCtrl {
   }
 
   registerListeners() {
-    this.socket.emit(EVENTS.CONV_REQUEST);
+    this.socket.emit(EVENTS.CONV_REQUEST, this.sign(""));
     this.socket.on(EVENTS.CONV_DATA, res => { this.handle(this.noop, res) });
-
     this.socket.on(EVENTS.MSG_RECEIVE, res => { this.handle(this.noop, res) });
-
     this.socket.on(EVENTS.MSG_SENT, res => { this.handle(this.noop, res) });
-
     this.socket.on(EVENTS.MSG_DELIVERED, res => { this.handle(this.noop, res) });
-
     this.socket.on(EVENTS.MSG_DELETE, res => { this.handle(this.noop, res) });
-
     this.socket.on(EVENTS.CONTACt_INFO, res => { this.handle(this.noop, res) });
   }
 
@@ -151,6 +146,13 @@ export class ConversationsCtrl {
     console.log('<-Event: ' + fn.name);
     this[fn.name](args);
     this.$scope.$apply();
+  }
+
+  cache(key,value) {
+      if(value !== undefined)
+          this.storage.setItem(key, JSON.stringify(value));
+      else
+          return JSON.parse(this.storage.getItem(key));
   }
 
 }
