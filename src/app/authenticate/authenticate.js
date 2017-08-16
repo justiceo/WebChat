@@ -2,9 +2,10 @@
 import Fingerprint2 from 'fingerprintjs2';
 
 export class AuthCtrl {
-    constructor($timeout, $window, SocketService) {
+    constructor($timeout, $window, $scope, SocketService) {
         this.$timeout = $timeout;
         this.$window = $window;
+        this.$scope = $scope;
         this.storage = window.sessionStorage;
         this.inactive = false;
         this.loadingQRCode = true;
@@ -44,6 +45,7 @@ export class AuthCtrl {
             this.$window.QRCode.toDataURL(token, (err, url) => {
                 this.loadingQRCode = false;
                 this.imgUrl = url;
+                this.$scope.$apply();
             });  
             
             // refresh the code every 8 secs
@@ -78,8 +80,9 @@ export class AuthCtrl {
         });
 
         this.socket.on('otherActiveSession', (otherSession) => {
-            this.state = 'otherSession'
-            console.log("other session is active: ", otherSession);
+            this.state = 'otherSession';
+            this.$scope.$apply(); // notify angular about event outside it's watch
+            console.log("other session is active: ", otherSession);            
         })
     }
 }
