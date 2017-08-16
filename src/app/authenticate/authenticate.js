@@ -38,17 +38,9 @@ export class AuthCtrl {
     }
 
     registerListeners() {
-        this.socket.on('token', res => {this.handler(this.onToken, res)});
-        
-        this.socket.on('roomAuthed',res => { 
-            this.onRoomAuthed(res); 
-            this.$scope.$apply() 
-        });
-
-        this.socket.on('otherActiveSession', res => { 
-            this.onOtherActiveSession(res); 
-            this.$scope.$apply() 
-        });
+        this.socket.on('token', res => {this.handle(this.onToken, res)});        
+        this.socket.on('roomAuthed',res => {this.handle(this.onRoomAuthed, res)});
+        this.socket.on('otherActiveSession', res => {this.handle(this.onOtherActiveSession, res)});
 
         // test auth
         this.socket.on('testAuthPass', mesage => console.log(mesage));
@@ -57,9 +49,9 @@ export class AuthCtrl {
     }
 
     onToken(token) {
-        console.log('recieved new token: ', token);
         this.cache('authToken', token);
-        this.socket.emit('testAuth', this.sign('This request should pass'));
+        // uncomment to test if token is working
+        // this.socket.emit('testAuth', this.sign('This request should pass'));
         this.$window.QRCode.toDataURL(token, (err, url) => {
             this.loadingQRCode = false;
             this.imgUrl = url;
@@ -73,7 +65,6 @@ export class AuthCtrl {
     }
 
     onRoomAuthed(data) {
-        console.log("authed!", data);
         this.cache('roomInfo', data);
         this.socket.join(data.roomId)
         this.authed = true;
@@ -85,7 +76,6 @@ export class AuthCtrl {
     onOtherActiveSession(otherSession) {
         this.state = 'otherSession';
         this.$scope.$apply(); // notify angular about event outside it's watch
-        console.log("other session is active: ", otherSession);
     }
 
     sign(message) {
@@ -95,7 +85,8 @@ export class AuthCtrl {
         }
     }
 
-    handler(fn, args) {
+    handle(fn, args) {
+        console.log('<-Event: ' + fn.name);
         this[fn.name](args);
         this.$scope.$apply();
     }
