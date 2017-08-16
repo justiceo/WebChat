@@ -38,52 +38,66 @@ export class AuthCtrl {
     }
 
     registerListeners() {
-        // listeners for authentication  
-        this.socket.on('token', (token) => {
-            console.log('recieved new token: ', token);
-            this.cache('authToken', token);
-            this.$window.QRCode.toDataURL(token, (err, url) => {
-                this.loadingQRCode = false;
-                this.imgUrl = url;
-                this.$scope.$apply();
-            });  
-            
-            // refresh the code every 8 secs
-            this.$timeout(() => {
-                if(!this.authed && !this.isErrored)
-                    this.socket.emit('tokenRefresh', token); 
-            }, 8000)
-                
+        this.socket.on('token', res => {this.handler(this.onToken, res)});
+        
+        this.socket.on('roomAuthed',res => { 
+            this.onRoomAuthed(res); 
+            this.$scope.$apply() 
+        });
+
+        this.socket.on('otherActiveSession', res => { 
+            this.onOtherActiveSession(res); 
+            this.$scope.$apply() 
         });
 
         // test auth
-        this.socket.emit('testAuth', 'This request should fail');
         this.socket.on('testAuthPass', mesage => console.log(mesage));
-        this.socket.on('testAuthFail', mesage => console.log(mesage));
-        this.$timeout(() => {
-            let data = {
-                auth: { authToken: this.cache('authToken') },
-                message: 'This request should pass'
-            }
-            this.socket.emit('testAuth', data)
-        }, 2000);
-        
-        // connected to room, start loading data
-        this.socket.on('roomAuthed', (data) => {
-            console.log("authed!", data);
-            this.cache('roomInfo', data);
-            this.socket.join(data.roomId)
-            this.authed = true;
-            // reload ui
-            // todo: check the last time data was fetch and fetch from there
-            this.socket.emit('latestDataRequest', Date.now - 10000);
-        });
+        this.socket.on('testAuthFail', mesage => console.error(mesage));
+        this.socket.emit('testAuth', 'This request should fail');
+    }
 
-        this.socket.on('otherActiveSession', (otherSession) => {
-            this.state = 'otherSession';
-            this.$scope.$apply(); // notify angular about event outside it's watch
-            console.log("other session is active: ", otherSession);            
-        })
+    onToken(token) {
+        console.log('recieved new token: ', token);
+        this.cache('authToken', token);
+        this.socket.emit('testAuth', this.sign('This request should pass'));
+        this.$window.QRCode.toDataURL(token, (err, url) => {
+            this.loadingQRCode = false;
+            this.imgUrl = url;
+            this.$scope.$apply();
+            // refresh the code every 8 secs after qrcode is actually displayed
+            this.$timeout(() => {
+                if(!this.authed && !this.isErrored)
+                    this.socket.emit('tokenRefresh', token); 
+            }, 8000);
+        }); 
+    }
+
+    onRoomAuthed(data) {
+        console.log("authed!", data);
+        this.cache('roomInfo', data);
+        this.socket.join(data.roomId)
+        this.authed = true;
+        // reload ui
+        // todo: check the last time data was fetch and fetch from there
+        this.socket.emit('latestDataRequest', Date.now - 10000);
+    }
+
+    onOtherActiveSession(otherSession) {
+        this.state = 'otherSession';
+        this.$scope.$apply(); // notify angular about event outside it's watch
+        console.log("other session is active: ", otherSession);
+    }
+
+    sign(message) {
+        return {
+            auth: { authToken: this.cache('authToken') },
+            message: message
+        }
+    }
+
+    handler(fn, args) {
+        this[fn.name](args);
+        this.$scope.$apply();
     }
 }
 
