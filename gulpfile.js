@@ -20,8 +20,9 @@ var autoprefixer  = require('autoprefixer');
 var sassFiles   = "src/style/*.scss";
 var jsFiles     = "src/**/*.js";
 var viewFiles   = "src/**/*.html";
-var serverFiles = "src/server/**/*";
+var assets      = "src/assets/**/*";
 var buildDir    = "./build/";
+var serverJs    = "src/server/**/*.js";
 
 var interceptErrors = function(error) {
   var args = Array.prototype.slice.call(arguments);
@@ -45,6 +46,18 @@ gulp.task("browserify", function() {
       .on("error", interceptErrors)
       //Pass desired output filename to vinyl-source-stream
       .pipe(source("main.js"))
+      // Start piping stream to tasks!
+      .pipe(gulp.dest(buildDir));
+});
+
+gulp.task("server", function() {
+  return browserify("./src/server/server.js")
+      .transform(babelify, {presets: ["es2015"]})
+      .transform(ngAnnotate)
+      .bundle()
+      .on("error", interceptErrors)
+      //Pass desired output filename to vinyl-source-stream
+      .pipe(source("server.js"))
       // Start piping stream to tasks!
       .pipe(gulp.dest(buildDir));
 });
@@ -75,15 +88,9 @@ gulp.task("views", function() {
       // todo: core doesn't need to know about all the templates from other modules - refactor!
 });
 
-// Copy mock data to dist directly
-gulp.task("copyData", function() {
-  gulp.src(serverFiles)
-      .pipe(gulp.dest(buildDir));
-});
-
-gulp.task("copyDirectories", function() {
-  gulp.src(["./src/images/*", "./src/fonts/*"], {base: "src"})
-      .pipe(gulp.dest(buildDir));
+// Copy over everything in assets directory
+gulp.task("assets", function() {
+  gulp.src(assets).pipe(gulp.dest(buildDir));
 });
 
 // clean build folder
@@ -91,16 +98,8 @@ gulp.task("clean", function(){
   del.sync([buildDir], {force: true});
 });
 
-/**
- * Run test once and exit
- */
-gulp.task('test-no-build', function (done) {
-  new karmaServer({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
-});
 
+// Run test once and exit, commentout singleRun for watching and retesting
 gulp.task('test', ["build"], function (done) {
   new karmaServer({
     configFile: __dirname + '/karma.conf.js',
@@ -108,28 +107,7 @@ gulp.task('test', ["build"], function (done) {
   }, done).start();
 });
 
-/**
- * Watch for file changes and re-run tests on each change
- */
-gulp.task('tdd', function (done) {
-  new karmaServer({
-    configFile: __dirname + '/karma.conf.js'
-  }, done).start();
-});
-
-
-gulp.task("gen-plugin", ["build"], function() {
-  del.sync([buildDir + '/index.html'], {force: true});
-  gulp.src(buildDir + '/**/*')
-        .pipe(zip('angularize_wp.zip'))
-        .pipe(gulp.dest(buildDir))
-})
-
-gulp.task("build", ["clean", "sass", "copyData", "copyDirectories", "html", "views", "browserify"])
-
-gulp.task("repipe", function() {
-  buildDir = "/var/www/html/wp-content/plugins/angularize_wp/"
-});
+gulp.task("build", ["clean", "sass", "assets", "html", "views", "browserify", "server"])
 
 gulp.task("default", ["build"], function() {
 
@@ -147,5 +125,6 @@ gulp.task("default", ["build"], function() {
   gulp.watch("src/index.html", ["html"]);
   gulp.watch(viewFiles, ["views"]);
   gulp.watch(jsFiles, ["browserify"]);
-  gulp.watch(serverFiles, ["copyData"]);
+  gulp.watch(assets, ["assets"]);
+  gulp.watch(serverJs, ["server"])
 });
