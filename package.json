@@ -6,7 +6,8 @@
     "build": "gulp build",
     "test": "gulp test",
     "test-watch": "gulp tdd",
-    "start": "gulp"
+    "start-watch": "gulp",
+    "start":"gulp build && node ./build/server.js"
   },
   "repository": {
     "type": "git",
