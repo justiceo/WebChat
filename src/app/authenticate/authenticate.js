@@ -78,7 +78,7 @@ export class AuthCtrl {
             this.$timeout(() => {
                 if(this.state != EVENTS.ROOM_AUTHED && this.state != 'isErrored')
                     this.socket.emit(EVENTS.TOKEN_REFRESH, token); 
-            }, 8000);
+            }, 15000);
         }); 
     }
 

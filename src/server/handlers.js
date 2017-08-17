@@ -25,19 +25,19 @@ Handlers.prototype.makeToken = function () {
     //return text;
 }
 
-Handlers.prototype.onTokenRequest = function (clientId) {
+Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
     if (!clientId) {
-        console.log(this.TAG, "Event: " + EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', this.socket.id);
+        console.log(EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', this.socket.id);
         return; // don't generate tokens for nullable clients      
     }
-    console.log(this.TAG, "Event: " + EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', this.socket.id);
+    console.log(EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', this.socket.id);
     let client = this.clientManager.create(clientId, this.socket);
     this.socket.emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
 
 }
 
-Handlers.prototype.onTokenRefresh = function (oldToken) {
-    console.log(this.TAG, "Event: " + EVENTS.TOKEN_REFRESH + " - for socket: " + this.socket.id);
+Handlers.prototype.onTokenRefresh = function onTokenRefresh(oldToken) {
+    console.log(EVENTS.TOKEN_REFRESH + " - for socket: " + this.socket.id);
     let newToken = this.clientManager.refresh(oldToken);
     if (newToken)
         this.socket.emit(EVENTS.TOKEN, newToken);
@@ -46,7 +46,7 @@ Handlers.prototype.onTokenRefresh = function (oldToken) {
     }
 }
 
-Handlers.prototype.onTokenValidate = function (data) {
+Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     console.log(this.TAG, "Event: " + EVENTS.TOKEN_VALIDATE + " from: " + this.socket.id + " for: " + data.message)
     if (!this.isAuthorized(this.socket, data)) {
         this.socket.emit('authError', 'authToken necessary to make requests');
@@ -70,7 +70,7 @@ Handlers.prototype.onTokenValidate = function (data) {
     });
 }
 
-Handlers.prototype.onTestAuth = function (data) {
+Handlers.prototype.onTestAuth = function onTestAuth(data) {
     if (!this.isAuthorized(this.socket, data)) {
         this.socket.emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());
         return;
@@ -78,16 +78,17 @@ Handlers.prototype.onTestAuth = function (data) {
     this.socket.emit(EVENTS.TEST_AUTH_PASS, 'Your token is valid');
 }
 
-Handlers.prototype.onError = function (error) {
+Handlers.prototype.onError = function onError(error) {
     console.error(error);
 }
 
+// NOTE: transpilers 
 Handlers.prototype.handle = function (fn, args) {
     console.log('<-Event: ' + fn.name);
     this[fn.name](args);
 }
 
-Handlers.prototype.unhandledEvent = function (eventName) {
+Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {
     console.log("<-Unhandled Event: " + eventName + ", ", args);
 }
 
