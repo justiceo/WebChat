@@ -29,9 +29,7 @@
     "ng-file-upload": "^12.2.13",
     "qrcode": "^0.9.0",
     "socket.io": "^2.0.3",
-    "socketio-jwt": "^4.5.0"
-  },
-  "devDependencies": {
+    "socketio-jwt": "^4.5.0",
     "angular-mocks": "^1.6.5",
     "autoprefixer": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
