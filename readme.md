@@ -13,6 +13,9 @@ NODE_ENV=production pm2 start server.js --name="webSMS" --watch
 #### to run the image
  sudo docker run --name websms_container -p 4000:4000 -i -td websms:latest
 
+ on aws:
+ sudo env "PATH=$PATH" npm start
+
 ### todo
 ---------
 * write the code on paper - spending too much time looking at the screen bro
