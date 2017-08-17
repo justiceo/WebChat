@@ -99,12 +99,17 @@ Handlers.prototype.handle = function (fn, args) {
 }
 
 Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {    
-    let str = typeof(args) == 'object' ? '[object]' : args;
+    let str = typeof(args) == 'object' || typeof(args) == 'undefined' ? '[object]' : args;
     console.log("<-Unhandled Event: " + eventName + ", ", str);
 }
 
 Handlers.prototype.garnish = function (io) {
     io.on(EVENTS.CONNECTION, (socket) => {
+        console.log("clients count, sockets count, connected count ", 
+            io.engine.clientsCount, 
+            io.sockets.sockets.length, 
+            Object.keys(io.sockets.connected).length);
+            
         this.socket = socket;
         this.socket.on(EVENTS.DISCONNECT,       res => {this.unhandledEvent(EVENTS.DISCONNECT, res)});
         this.socket.on(EVENTS.DISCONNECTING,       res => {this.unhandledEvent(EVENTS.DISCONNECTING, res)});

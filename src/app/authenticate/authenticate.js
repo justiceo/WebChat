@@ -26,6 +26,9 @@ export class AuthCtrl {
         new Fingerprint2().get((result, components) => {
             this.state = 'loadedQRCode';
             this.$window.deviceId = result;
+            // using volatile means the connection doesn't have to succeed
+            // to prevent spamming the server with stale requests on-resume
+            // problem is how do we then resume?
             this.socket.emit(EVENTS.TOKEN_REQUEST, result);
         })
         
