@@ -114,7 +114,8 @@ export class AuthCtrl {
     }
 
     unhandledEvent(eventName, args) {
-        console.log("<-Unhandled Event: " + eventName + ", ", args);
+        let str = typeof(args) == 'object' ? '[object]' : args;
+        console.log("<-Unhandled Event: " + eventName + ", ", str);
     }
 
     cache(key,value) {

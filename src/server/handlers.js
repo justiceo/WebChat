@@ -88,8 +88,9 @@ Handlers.prototype.handle = function (fn, args) {
     this[fn.name](args);
 }
 
-Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {
-    console.log("<-Unhandled Event: " + eventName + ", ", args);
+Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {    
+    let str = typeof(args) == 'object' ? '[object]' : args;
+    console.log("<-Unhandled Event: " + eventName + ", ", str);
 }
 
 Handlers.prototype.garnish = function (io) {
