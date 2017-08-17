@@ -24,8 +24,6 @@ ClientManager.prototype.create = function(clientId, socket) {
         client.handleNewSocket(socket);
     }
     
-    if(this.webClients.length == 1)
-        this.activeWebClient = client;
     return client;
 }
 
@@ -56,6 +54,15 @@ ClientManager.prototype.getClientById = function(clientId) {
 
 ClientManager.prototype.getClientBySocket = function(socket) {
     return this.webClients.find(c => c.hasSocket(socket));
+}
+
+ClientManager.prototype.authorize = function(webClient, mobileClient) {
+    // todo: ensure webClient exists and that roomId is the socket.id of a mobile client
+    webClient.roomId = mobileClient.activeSocketId;
+    mobileClient.roomId = mobileClient.activeSocketId;
+
+    // web client only has the socket id but hasn't joined it yet
+    // todo: ask it to join? or handle it?
 }
 
 ClientManager.prototype.disconnectStale = function() {

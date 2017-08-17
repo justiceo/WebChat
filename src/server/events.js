@@ -14,7 +14,7 @@ module.exports = {
     RECONNECTING: "reconnecting",
     RECONNECT_ERROR: "reconnect_error",
     RECONNECT_FAILED: "reconnect_failed",
-    
+
     // custom events
     TOKEN_REQUEST: "tokenRequest",  // received from clients to obtain token
     TOKEN_REFRESH: "tokenRefresh",  // received from clients (with old tokens) for new ones
@@ -34,5 +34,6 @@ module.exports = {
     MSG_DELIVERED: "msgDelivered",
     MSG_DELETE: "msgDelete",
     CONTACT_REQUEST: "contactRequest",
-    CONTACt_INFO: "contactInfo"
+    CONTACt_INFO: "contactInfo",
+    SEND_MSG: "sendMSG",
 }

@@ -64,6 +64,10 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     if (!mobile.isMobile) {
         console.log("client trying to act as mobile: ", mobile.activeSocketId, mobile.id)
     }
+
+    // mark the browser as authorized
+    this.clientManager.authorize(browser, mobile);
+
     // send the browser the phone's this.socket.id (room) so it can join it.
     this.socket.to(browser.activeSocketId).emit(EVENTS.ROOM_AUTHED, {
         roomId: this.socket.id, // because this event should only be trigged by the phone
@@ -82,7 +86,13 @@ Handlers.prototype.onError = function onError(error) {
     console.error(error);
 }
 
-// NOTE: transpilers 
+Handlers.prototype.relay = function(event, args) {
+    let client = this.clientManager.getClientBySocket(this.socket);    
+    this.socket.to(client.roomId).emit(event, args);
+    // this is why clients should disconnect if they're not active
+}
+
+// NOTE: transpilers/minifiers can/will change functions names - which would break this code
 Handlers.prototype.handle = function (fn, args) {
     console.log('<-Event: ' + fn.name);
     this[fn.name](args);
@@ -104,6 +114,18 @@ Handlers.prototype.garnish = function (io) {
         this.socket.on(EVENTS.TOKEN_REFRESH, res => { this.handle(this.onTokenRefresh, res) });
         this.socket.on(EVENTS.TEST_AUTH, res => { this.handle(this.onTestAuth, res) });
         this.socket.on(EVENTS.TOKEN_VALIDATE, res => { this.handle(this.onTokenValidate, res) });
+
+        // Relay the message between clients
+        this.socket.on(EVENTS.CONV_REQUEST, res => { this.relay(EVENTS.CONV_REQUEST, res)});
+        this.socket.on(EVENTS.CONV_DATA, res => { this.relay(EVENTS.CONV_DATA, res)});
+        this.socket.on(EVENTS.MSG_RECEIVE, res => { this.relay(EVENTS.MSG_RECEIVE, res)});
+        this.socket.on(EVENTS.MSG_SENT, res => { this.relay(EVENTS.MSG_SENT, res)});
+        this.socket.on(EVENTS.MSG_DELIVERED, res => { this.relay(EVENTS.MSG_DELIVERED, res)});
+        this.socket.on(EVENTS.MSG_DELETE, res => { this.relay(EVENTS.MSG_DELETE, res)});
+        this.socket.on(EVENTS.CONTACT_REQUEST, res => { this.relay(EVENTS.CONTACT_REQUEST, res)});
+        this.socket.on(EVENTS.CONTACt_INFO, res => { this.relay(EVENTS.CONTACt_INFO, res)});
+        this.socket.on(EVENTS.SEND_MSG, res => { this.relay(EVENTS.SEND_MSG, res)});
+
     });
 };
 
