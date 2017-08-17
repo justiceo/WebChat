@@ -32,6 +32,16 @@ export class AuthCtrl {
     }
 
     registerListeners() {
+        this.socket.on(EVENTS.CONNECT_ERROR,    res => {this.handle(this.unhandledEvent, EVENTS.CONNECT_ERROR)});
+        this.socket.on(EVENTS.CONNECT_TIMEOUT,  res => {this.handle(this.unhandledEvent, EVENTS.CONNECT_TIMEOUT)});
+        this.socket.on(EVENTS.DISCONNECT,       res => {this.handle(this.onDisconnect, res)});
+        this.socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, res)});
+        this.socket.on(EVENTS.RECONNECT,        res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT)});
+        this.socket.on(EVENTS.RECONNECT_ATTEMPT,res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_ATTEMPT)});
+        this.socket.on(EVENTS.RECONNECT_ERROR,  res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_ERROR)});
+        this.socket.on(EVENTS.RECONNECT_FAILED, res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_FAILED)});
+        this.socket.on(EVENTS.RECONNECTING,     res => {this.handle(this.unhandledEvent, EVENTS.RECONNECTING)});
+
         this.socket.on(EVENTS.TOKEN,            res => {this.handle(this.onToken, res)});
         this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});        
         this.socket.on(EVENTS.ROOM_AUTHED,      res => {this.handle(this.onRoomAuthed, res)});
@@ -45,6 +55,18 @@ export class AuthCtrl {
 
     unregisterListeners() {
         // todo implement
+    }
+
+    onDisconnect(reason) {
+        this.unregisterListeners();
+    }
+    
+    onError(error) {
+        console.error(error);
+    }
+
+    unhandledEvent(eventName) {
+        console.log("Unhandled event for: " + eventName);
     }
 
     onToken(token) {

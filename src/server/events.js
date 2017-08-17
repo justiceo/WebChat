@@ -1,11 +1,20 @@
 module.exports = {
-    // socket io events
+    // socket.io events
     CONNECT: "connect",
     CONNECTION: "connection",
     DISCONNECT: "disconnect",       // Fired upon disconnection.
     DISCONNECTING: "disconnecting", // Fired when the client is going to be disconnected (but hasn't left its rooms yet).
     ERROR: "error",                 // Fired when an error occurs.
-
+    
+    // socket.io (client only events)
+    CONNECT_ERROR: "connect_error",
+    CONNECT_TIMEOUT: "connect_timeout",
+    RECONNECT: "reconnect",
+    RECONNECT_ATTEMPT: "reconnect_attempt",
+    RECONNECTING: "reconnecting",
+    RECONNECT_ERROR: "reconnect_error",
+    RECONNECT_FAILED: "reconnect_failed",
+    
     // custom events
     TOKEN_REQUEST: "tokenRequest",  // received from clients to obtain token
     TOKEN_REFRESH: "tokenRefresh",  // received from clients (with old tokens) for new ones
