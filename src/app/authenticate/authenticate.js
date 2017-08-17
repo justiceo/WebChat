@@ -32,15 +32,15 @@ export class AuthCtrl {
     }
 
     registerListeners() {
-        this.socket.on(EVENTS.CONNECT_ERROR,    res => {this.handle(this.unhandledEvent, EVENTS.CONNECT_ERROR)});
-        this.socket.on(EVENTS.CONNECT_TIMEOUT,  res => {this.handle(this.unhandledEvent, EVENTS.CONNECT_TIMEOUT)});
+        this.socket.on(EVENTS.CONNECT_ERROR,    res => {this.unhandledEvent(EVENTS.CONNECT_ERROR, res)});
+        this.socket.on(EVENTS.CONNECT_TIMEOUT,  res => {this.unhandledEvent(EVENTS.CONNECT_TIMEOUT, res)});
         this.socket.on(EVENTS.DISCONNECT,       res => {this.handle(this.onDisconnect, res)});
         this.socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, res)});
-        this.socket.on(EVENTS.RECONNECT,        res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT)});
-        this.socket.on(EVENTS.RECONNECT_ATTEMPT,res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_ATTEMPT)});
-        this.socket.on(EVENTS.RECONNECT_ERROR,  res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_ERROR)});
-        this.socket.on(EVENTS.RECONNECT_FAILED, res => {this.handle(this.unhandledEvent, EVENTS.RECONNECT_FAILED)});
-        this.socket.on(EVENTS.RECONNECTING,     res => {this.handle(this.unhandledEvent, EVENTS.RECONNECTING)});
+        this.socket.on(EVENTS.RECONNECT,        res => {this.unhandledEvent(EVENTS.RECONNECT, res)});
+        this.socket.on(EVENTS.RECONNECT_ATTEMPT,res => {this.unhandledEvent(EVENTS.RECONNECT_ATTEMPT, res)});
+        this.socket.on(EVENTS.RECONNECT_ERROR,  res => {this.unhandledEvent(EVENTS.RECONNECT_ERROR, res)});
+        this.socket.on(EVENTS.RECONNECT_FAILED, res => {this.unhandledEvent(EVENTS.RECONNECT_FAILED, res)});
+        this.socket.on(EVENTS.RECONNECTING,     res => {this.unhandledEvent(EVENTS.RECONNECTING, res)});
 
         this.socket.on(EVENTS.TOKEN,            res => {this.handle(this.onToken, res)});
         this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});        
@@ -63,10 +63,6 @@ export class AuthCtrl {
     
     onError(error) {
         console.error(error);
-    }
-
-    unhandledEvent(eventName) {
-        console.log("Unhandled event for: " + eventName);
     }
 
     onToken(token) {
@@ -115,6 +111,10 @@ export class AuthCtrl {
         console.log('<-Event: ' + fn.name);
         this[fn.name](args);
         this.$scope.$apply();
+    }
+
+    unhandledEvent(eventName, args) {
+        console.log("<-Unhandled Event: " + eventName + ", ", args);
     }
 
     cache(key,value) {
