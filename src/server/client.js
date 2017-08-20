@@ -8,7 +8,7 @@
 function Client(clientId, authToken, isMobile) {
     this.TAG            = "Client: ";
     this.id             = clientId;
-    this.sockets        = [];
+    this.sockets        = {};
     this.authToken      = authToken;
     this.activeSocketId = "";
     this.isMobile       = isMobile;
@@ -29,13 +29,9 @@ Client.prototype.disconnect = function(socket) {
         return;
     }
 
-    this.log("deactivating client " + this.id);
-    this.sockets.forEach(s => s.disconnect());
+    console.log("Info: Deactivating client " + this.id);
+    Object.values(this.sockets).forEach(s => s.disconnect());
     this.activeSocketId = "";
-}
-
-Client.prototype.sign = function(message) {
-    // todo: implement on client-side
 }
 
 Client.prototype.hasActiveSocket = function() {
@@ -43,11 +39,11 @@ Client.prototype.hasActiveSocket = function() {
 }
 
 Client.prototype.hasSocket = function(socket) {
-    return socket != null && this.getSocket(socket.id) != null;
+    return socket != null && this.sockets[socket.id] != null;
 }
 
 Client.prototype.getSocket = function(socketId) {
-    return this.sockets.find(s => s.id === socketId);
+    return this.sockets[socketId];
 }
 
 Client.prototype.hasToken = function(token) {
@@ -61,8 +57,8 @@ Client.prototype.setToken = function(token) {
 
 Client.prototype.addSocket = function(socket) {
     if(this.hasSocket(socket)) return false; // no duplicate ids
-    this.sockets.push(socket);
-    if(this.sockets.length == 1) // it's the first guy in, useful for mobile where there's just one guy and no plans to call activate
+    this.sockets[socket.id] = socket;
+    if(Object.keys(this.sockets).length == 1) // it's the first guy in, useful for mobile where there's just one guy and no plans to call activate
         this.activeSocketId = socket.id;
     return true;
 }
@@ -75,6 +71,7 @@ Client.prototype.handleNewSocket = function(socket) {
 
     // if not yet authorized, make this socket the active socket
     if(!this.isAuthorized && this.activeSocketId != socket.id) {
+        console.log("Info: Activating this socket since no socket on client is yet authorized: ", socket.id)
         this.activate(socket.id);
     }
 
@@ -86,15 +83,21 @@ Client.prototype.handleNewSocket = function(socket) {
 }
 
 Client.prototype.activate = function(socketId) {
-    if(!this.getSocket(socketId)) return false;
+    if(!this.getSocket(socketId)){
+        console.log("Error: cannot activate non-existent socket: ", socketId)
+        return false;
+    }
     
     // make sure we're not trying to re-activate it
-    if(this.activeSocketId == socketId) return;  
+    if(this.activeSocketId == socketId) {
+        console.log("Error: Trying to activate an already active socket: ", socketId)
+        return;  
+    }
 
     // tell the others sockets it's over
-    this.sockets.forEach(s => {
+    Object.values(this.sockets).forEach(s => {
         if(s.id != socketId){
-            console.log("emitting otherActiveSession to: ", s.id);
+            console.log("Info: Emitting otherActiveSession and disconnecting socket: ", s.id);
             s.emit('otherActiveSession', '');
             s.disconnect();
         }

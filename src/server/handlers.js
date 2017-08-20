@@ -27,37 +27,39 @@ Handlers.prototype.makeToken = function () {
 
 Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
     if (!clientId) {
-        console.log(EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', this.socket.id);
+        console.log(EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', this.socketName);
         return; // don't generate tokens for nullable clients      
     }
-    console.log(EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', this.socket.id);
+    console.log(EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', this.socketName);
     let client = this.clientManager.create(clientId, this.socket);
     this.socket.emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
 
 }
 
 Handlers.prototype.onTokenRefresh = function onTokenRefresh(oldToken) {
-    console.log(EVENTS.TOKEN_REFRESH + " - for socket: " + this.socket.id);
-    let newToken = this.clientManager.refresh(oldToken);
-    if (newToken)
-        this.socket.emit(EVENTS.TOKEN, newToken);
+    let client = this.clientManager.refresh(oldToken);
+    if (client) {
+        console.log("Info:",this.socketName,"- Updating token from->to: ", oldToken.substring(0,6), client.authToken.substring(0,6));
+        this.socket.emit(EVENTS.TOKEN, client.authToken);
+    }
     else {
         this.socket.emit(EVENTS.REFRESH_FAIL);
     }
 }
 
 Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
-    console.log(this.TAG, "Event: " + EVENTS.TOKEN_VALIDATE + " from: " + this.socket.id + " for: " + data.message)
+    console.log("Info: ",this.socketName," - Event: " + EVENTS.TOKEN_VALIDATE + " for: " + data.message)
     if (!this.isAuthorized(this.socket, data)) {
+        console.error("Error: ", this.socketName, " - The request failed authorization")
         this.socket.emit('authError', 'authToken necessary to make requests');
         return;
     }
 
     let qrcodeToken = data.message; // the qrcode is a browser's current authToken
     // find the browser associated with this code
-    let browser = this.clientManager.getClientById(qrcodeToken);
+    let browser = this.clientManager.getClientByAuthToken(qrcodeToken);
     if (!browser)
-        console.log("browser with not found for token: " + qrcodeToken)
+        console.log("browser with authToken not found for token: " + qrcodeToken)
     else
         console.log("found browser with token: ", qrcodeToken);
     let mobile = this.clientManager.getClientBySocket(this.socket); // phone
@@ -111,6 +113,7 @@ Handlers.prototype.garnish = function (io) {
             Object.keys(io.sockets.connected).length);
             
         this.socket = socket;
+        this.socketName = "soc#" + socket.id.substring(0,6);
         this.socket.on(EVENTS.DISCONNECT,       res => {this.unhandledEvent(EVENTS.DISCONNECT, res)});
         this.socket.on(EVENTS.DISCONNECTING,       res => {this.unhandledEvent(EVENTS.DISCONNECTING, res)});
         this.socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, res)});

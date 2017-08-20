@@ -43,13 +43,17 @@ ClientManager.prototype.refresh = function(oldToken) {
     let client = this.webClients.find(c => c.hasToken(oldToken));
     if(client) {
         client.setToken(this.makeToken());
-        return client.authToken;
+        return client;
     }
     return false;
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
     return this.webClients.find(c => c.id === clientId);
+}
+
+ClientManager.prototype.getClientByAuthToken = function(token) {
+    return this.webClients.find(c => c.authToken === token);
 }
 
 ClientManager.prototype.getClientBySocket = function(socket) {
