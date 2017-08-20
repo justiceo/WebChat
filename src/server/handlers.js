@@ -27,10 +27,10 @@ Handlers.prototype.makeToken = function () {
 
 Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
     if (!clientId) {
-        console.log(EVENTS.TOKEN_REQUEST + ' - discarding request with null deviceId on socket: ', this.socketName);
+        console.log('Error:', this.socketName, EVENTS.TOKEN_REQUEST + ' - null deviceId');
         return; // don't generate tokens for nullable clients      
     }
-    console.log(EVENTS.TOKEN_REQUEST + ' - recieved token request from: ', clientId, ' on socket: ', this.socketName);
+    console.log('Info:', this.socketName, EVENTS.TOKEN_REQUEST + ' - from: client#' + clientId.substring(0,6));
     let client = this.clientManager.create(clientId, this.socket);
     this.socket.emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
 
@@ -48,7 +48,7 @@ Handlers.prototype.onTokenRefresh = function onTokenRefresh(oldToken) {
 }
 
 Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
-    console.log("Info: ",this.socketName," - Event: " + EVENTS.TOKEN_VALIDATE + " for: " + data.message)
+    console.log("Info: ",this.socketName, EVENTS.TOKEN_VALIDATE + " for: " + data.message.substring(0,6))
     if (!this.isAuthorized(this.socket, data)) {
         console.error("Error: ", this.socketName, " - The request failed authorization")
         this.socket.emit('authError', 'authToken necessary to make requests');
@@ -58,10 +58,13 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     let qrcodeToken = data.message; // the qrcode is a browser's current authToken
     // find the browser associated with this code
     let browser = this.clientManager.getClientByAuthToken(qrcodeToken);
-    if (!browser)
-        console.log("browser with authToken not found for token: " + qrcodeToken)
+    if (!browser) {
+        console.log('Info:', this.socketName, "Browser with authToken not found for token: " + qrcodeToken.substring(0,6));
+        return false;
+    }
     else
-        console.log("found browser with token: ", qrcodeToken);
+        console.log('Info:', this.socketName, "Found browser with token: ", qrcodeToken.substring(0,6));
+    
     let mobile = this.clientManager.getClientBySocket(this.socket); // phone
     if (!mobile.isMobile) {
         console.log("client trying to act as mobile: ", mobile.activeSocketId, mobile.id)
@@ -96,13 +99,13 @@ Handlers.prototype.relay = function(event, args) {
 
 // NOTE: transpilers/minifiers can/will change functions names - which would break this code
 Handlers.prototype.handle = function (fn, args) {
-    console.log('<-Event: ' + fn.name);
+    console.log('Info:', this.socketName, '<-Event: ' + fn.name);
     this[fn.name](args);
 }
 
 Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {    
     let str = typeof(args) == 'object' || typeof(args) == 'undefined' ? '[object]' : args;
-    console.log("<-Unhandled Event: " + eventName + ", ", str);
+    console.log('Info:', this.socketName, "<-Unhandled Event: " + eventName + ", ", str);
 }
 
 Handlers.prototype.garnish = function (io) {
