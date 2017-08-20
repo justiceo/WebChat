@@ -25,6 +25,12 @@ Handlers.prototype.makeToken = function () {
     //return text;
 }
 
+Handlers.prototype.onDisconnect = function onDisconnect(reason) {
+    // remove the socket from it's client
+    let client = this.clientManager.getClientBySocket(this.socket);
+    client.disconnect(socket);
+}
+
 Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
     if (!clientId) {
         console.log('Error:', this.socketName, EVENTS.TOKEN_REQUEST + ' - null deviceId');
@@ -118,7 +124,7 @@ Handlers.prototype.garnish = function (io) {
             
         this.socket = socket;
         this.socketName = "soc#" + socket.id.substring(0,6);
-        this.socket.on(EVENTS.DISCONNECT,       res => {this.unhandledEvent(EVENTS.DISCONNECT, res)});
+        this.socket.on(EVENTS.DISCONNECT,       res => {this.handle(this.onDisconnect, res)});
         this.socket.on(EVENTS.DISCONNECTING,       res => {this.unhandledEvent(EVENTS.DISCONNECTING, res)});
         this.socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, res)});
 
