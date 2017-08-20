@@ -64,7 +64,7 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     }
     else
         console.log('Info:', this.socketName, "Found browser with token: ", qrcodeToken.substring(0,6));
-    
+
     let mobile = this.clientManager.getClientBySocket(this.socket); // phone
     if (!mobile.isMobile) {
         console.log("client trying to act as mobile: ", mobile.activeSocketId, mobile.id)
@@ -92,6 +92,7 @@ Handlers.prototype.onError = function onError(error) {
 }
 
 Handlers.prototype.relay = function(event, args) {
+    console.log('Info:', this.socketName, event, ' - is being relayed')
     let client = this.clientManager.getClientBySocket(this.socket);    
     this.socket.to(client.roomId).emit(event, args);
     // this is why clients should disconnect if they're not active
