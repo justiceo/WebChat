@@ -26,6 +26,7 @@ Client.prototype.disconnect = function(socket) {
         if(socket.id == this.activeSocketId)
             this.activeSocketId = ""; 
         socket.disconnect();
+        this.sockets[socket.id] = null;
         return;
     }
 
@@ -103,7 +104,9 @@ Client.prototype.activate = function(socketId) {
         if(s.id != socketId){
             console.log("Info: Emitting otherActiveSession and disconnecting socket: ", s.id);
             s.emit('otherActiveSession', '');
-            s.disconnect();
+            s.disconnect('otherActiveSession');
+            // todo: no need to emit 'otherActiveSession', just pass the reason in the ui - much smoother
+            // also ensures that disconnect is properly handled
         }
     })
     this.activeSocketId = socketId;
