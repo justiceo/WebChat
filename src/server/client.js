@@ -30,7 +30,7 @@ Client.prototype.disconnect = function(socket) {
     }
 
     console.log("Info: Deactivating client " + this.id);
-    socList.forEach(s => s.disconnect());
+    this.socList().forEach(s => s.disconnect());
     this.activeSocketId = "";
 }
 
@@ -99,7 +99,7 @@ Client.prototype.activate = function(socketId) {
     }
 
     // tell the others sockets it's over
-    this.socList.forEach(s => {
+    this.socList().forEach(s => {
         if(s.id != socketId){
             console.log("Info: Emitting otherActiveSession and disconnecting socket: ", s.id);
             s.emit('otherActiveSession', '');
