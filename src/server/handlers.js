@@ -28,7 +28,7 @@ Handlers.prototype.makeToken = function () {
 Handlers.prototype.onDisconnect = function onDisconnect(reason) {
     // remove the socket from it's client
     let client = this.clientManager.getClientBySocket(this.socket);
-    client.disconnect(socket);
+    client.disconnect(this.socket);
 }
 
 Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {

@@ -26,7 +26,8 @@ Client.prototype.disconnect = function(socket) {
         if(socket.id == this.activeSocketId)
             this.activeSocketId = ""; 
         socket.disconnect();
-        this.sockets[socket.id] = null;
+        // delete this.sockets[socket.id]; // we don't really know if it's dead
+        // wait till disconnect emits "reason" which is dead
         return;
     }
 
