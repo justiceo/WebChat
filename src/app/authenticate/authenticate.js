@@ -1,4 +1,5 @@
 
+import Typed from 'typed.js';
 import Fingerprint2 from 'fingerprintjs2';
 import EVENTS       from '../../server/events';
 
@@ -18,7 +19,25 @@ export class AuthCtrl {
         else{
             this.init(SocketService.io);
         }
+
+        var options = {
+            strings: [ "",  
+            "What if your SMS app was uhm ^200 a little magical?",
+            "What if your SMS app could send encryped messages?",
+            "What if your SMS app could be used on the web ^1000 like your chat apps?",
+            "What if your SMS app could send super-loooong messages without breaking it up? Like 1/4, ^200 2/4 ^500 somehow 4/4 comes before 3/4",
+            "What if your SMS app could", 
+            "What if your SMS app was ^200 . ^200 . ^200 . ^500 truly <strong>magical</strong>?",
+            ],
+            typeSpeed: 40,
+            startDelay: 20,
+            smartBackspace: true,
+            showCursor: false,
+        }
+
+        var typed = new Typed(".conviction", options);
     }
+            
 
     init(socket) {
         this.socket = socket;

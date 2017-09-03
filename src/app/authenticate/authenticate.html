@@ -1,16 +1,23 @@
 <div class="auth container-fluid">
     <div class="row">
         <div class="left col col-xs-6">
-            <img title="Wisper" alt="Wisper Logo" src=""/>
-            <p><small>Next-level SMS</small></p>
-            <div class="android-download">
-                <img src="android.png" />
-                <p>Get it on Google Play</p>
+            <div class="wrapper">
+                <img class="logo" alt="wisper Logo" src="logo.png" />
+                <h1 class="title">wisper</h1>
+                <p>Love Texting... Again</p>
+                
+                <div class="conviction">
+                </div>
+
+                <p>
+                <button class="btn primary-btn">Upgrade me please!</button>
+                <button class="btn btn-lg btn-default no-border">I'll think about it</button>
+                </p>
             </div>
         </div>
         <div class="right col col-xs-6">
             <div class="qr-container" ng-switch="$ctrl.state">
-                 <div ng-switch-default class='loader'>
+                <div ng-switch-default class='loader'>
                     <div class='loader--dot'></div>
                     <div class='loader--dot'></div>
                     <div class='loader--dot'></div>
@@ -38,9 +45,7 @@
     </div>
 </div>
 <style>
-.android-download {
-    /*background: #93C046;
+    .android-download {
+        /*background: #93C046;
     color: white;*/
-}
-
-
+    }

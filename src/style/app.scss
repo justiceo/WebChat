@@ -8,6 +8,16 @@
   padding-left: 0;
   padding-right: 0;
 }
+.no-border {
+  border: none;
+}
+
+.primary-btn {
+  @extend .btn-primary;
+  @extend .btn-lg;
+  border-radius: 30px;
+  padding: 10px 50px;  
+}
 
 i.icons {
   font-size: 120%;
@@ -181,6 +191,19 @@ body {
   .left {
     background: white;
 
+    .wrapper { padding: 50px; }
+
+    img.logo {
+      width: 200px;
+    }
+
+    .conviction {
+      margin: 80px 0 50px;      
+      max-width: 500px;
+      min-height: 150px;
+      font-size: 25px;
+    }
+
     .android-download {
       border-top: 1px solid #ccc;
       bottom: 60px;
@@ -198,6 +221,9 @@ body {
     .qr-container {
       position: relative;
       height: 100%;
+
+      img { border: 15px solid rgba(0,0,0,0.4); }
+
       img, .errorDisplay,.otherSession {
         width: 300px;
         left: 50%;
