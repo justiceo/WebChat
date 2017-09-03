@@ -123,7 +123,7 @@ $font_0: Helvetica;
 
 
 @media (min-width: 1200px) {
-  .conversations.container-fluid, .auth.container-fluid {
+  .conversations.container-fluid {
     width: 80vw;
     margin-top: 8vh;
     box-shadow: 0 0 2px #555;
@@ -131,9 +131,7 @@ $font_0: Helvetica;
   .people.list-group, .messages-wrapper {
     height: 75vh !important;
   }
-  .auth .left, .auth .right {
-    height: calc(75vh + 132px) !important;
-  }
+  
 }
 
 /* set mobile breakpoint to 0 to prevent ever getting to it */
@@ -146,15 +144,42 @@ body {
 }
 
 /* todo: should we make text area a little transparent? */
+@keyframes colorchange
+{
+  0%   {background: dodgerblue;}
+  25%  {background: darkblue;}
+  50%  {background: indigo;}
+  75%  {background: darkgreen;}
+  95%  {background: teal;}
+  100% {background: dodgerblue;}
+}
+
+@-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
+{
+  0%   {background: dodgerblue;}
+  25%  {background: darkblue;}
+  50%  {background: indigo;}
+  75%  {background: darkgreen;}
+  95%  {background: teal;}
+  100% {background: dodgerblue;}
+}
+
+.bg-colorchange {
+  animation: colorchange 200s infinite;
+  animation-delay: 5s;
+  
+  -webkit-animation: colorchange 200s infinite;
+  -webkit-animation-delay: 5s;  
+}
+
 .auth {
   .left, .right {
-    height: calc(99.5vh);
+    height: calc(99.6vh);
     overflow-x: hidden;
     overflow-y: overlay;
   }
   .left {
-    background: $brand-primary;
-    color: $primary-white;
+    background: white;
 
     .android-download {
       border-top: 1px solid #ccc;
@@ -167,7 +192,9 @@ body {
     }
   }
   .right {
-    background: $primary-white;
+    background: dodgerblue;
+    @extend .bg-colorchange;
+
     .qr-container {
       position: relative;
       height: 100%;
