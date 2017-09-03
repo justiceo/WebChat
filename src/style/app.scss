@@ -1,5 +1,6 @@
 
 @import '_bootstrap-custom';
+@import '../../node_modules/animate.css/animate.min.css';
 
 
 /** Utils **/
@@ -157,29 +158,17 @@ body {
 @keyframes colorchange
 {
   0%   {background: dodgerblue;}
-  25%  {background: darkblue;}
-  50%  {background: indigo;}
-  75%  {background: darkgreen;}
-  95%  {background: teal;}
-  100% {background: dodgerblue;}
-}
-
-@-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
-{
-  0%   {background: dodgerblue;}
-  25%  {background: darkblue;}
-  50%  {background: indigo;}
-  75%  {background: darkgreen;}
-  95%  {background: teal;}
+  25%  {background: purple;}
+  50%  {background: orange;}
+  75%  {background: lightgreen;}
+  95%  {background: #ef5d74;}
   100% {background: dodgerblue;}
 }
 
 .bg-colorchange {
-  animation: colorchange 200s infinite;
+  animation: colorchange 100s infinite;
   animation-delay: 5s;
   
-  -webkit-animation: colorchange 200s infinite;
-  -webkit-animation-delay: 5s;  
 }
 
 .auth {
