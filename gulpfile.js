@@ -22,7 +22,7 @@ var jsFiles     = "src/**/*.js";
 var viewFiles   = "src/**/*.html";
 var assets      = "src/assets/**/*";
 var buildDir    = "./build/";
-var serverJs    = "src/server/**/*.js";
+var serverJs    = "src/server/**/*";
 
 var interceptErrors = function(error) {
   var args = Array.prototype.slice.call(arguments);

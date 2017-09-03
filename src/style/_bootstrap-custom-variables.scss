@@ -49,7 +49,7 @@ $link-hover-decoration: underline !default;
 $lato-font: 'Lato', Helvetica, Arial, sans-serif;
 $source-sans-font: 'Source Sans Pro', sans-serif;
 
-$font-family-sans-serif:  $source-sans-font, "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif:  'Rubik', $source-sans-font, "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
