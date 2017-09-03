@@ -1,9 +1,14 @@
 <div class="auth container-fluid">
     <div class="row">
-        <div class="left col col-xs-5 no-padding">
-            Info here
+        <div class="left col col-xs-6">
+            <img title="Wisper" alt="Wisper Logo" src=""/>
+            <p><small>Next-level SMS</small></p>
+            <div class="android-download">
+                <img src="android.png" />
+                <p>Get it on Google Play</p>
+            </div>
         </div>
-        <div class="right col col-xs-7 no-padding">
+        <div class="right col col-xs-6">
             <div class="qr-container" ng-switch="$ctrl.state">
                  <div ng-switch-default class='loader'>
                     <div class='loader--dot'></div>
@@ -32,3 +37,10 @@
         <div class="done"></div>
     </div>
 </div>
+<style>
+.android-download {
+    /*background: #93C046;
+    color: white;*/
+}
+
+
