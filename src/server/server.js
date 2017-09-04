@@ -46,7 +46,7 @@ app.use('/', function (req, res, next) {
     return res.sendFile(__dirname + req.originalUrl);
 });
 
-let handlers = new Handlers(new ClientManager());
+let handlers = new Handlers(new ClientManager(dbClient));
 handlers.garnish(io);
 
 server.listen(port, host, () => {

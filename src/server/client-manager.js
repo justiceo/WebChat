@@ -1,10 +1,9 @@
 var Client = require('./client');
-function ClientManager() {
+function ClientManager(db) {
+    this.db                 = db;
     this.TAG                = "ClientManager: ";
-    console.log(this.TAG, "initializing...");
-    this.webClients         = [];
-    this.activeWebClient    = null;
-    this.mobileClient       = null;
+    this.clients            = [];
+    console.log(this.TAG, "initialized...");
 }
 
 /** Creates a client if it doesn't exist 
@@ -18,7 +17,7 @@ ClientManager.prototype.create = function(clientId, socket) {
     if(client == null) {// there can only be one client with this id
         client = new Client(clientId, this.makeToken(clientId), isMobile);
         client.addSocket(socket);
-        this.webClients.push(client);
+        this.clients.push(client);
     }
     else {// inform this socket that there's a new connectoin
         client.handleNewSocket(socket);
@@ -39,7 +38,7 @@ ClientManager.prototype.makeToken = function(tokenIdentifier) {
 }
 
 ClientManager.prototype.refresh = function(oldToken) {
-    let client = this.webClients.find(c => c.hasToken(oldToken));
+    let client = this.clients.find(c => c.hasToken(oldToken));
     if(client) {
         client.setToken(this.makeToken(client.id));
         return client;
@@ -48,28 +47,28 @@ ClientManager.prototype.refresh = function(oldToken) {
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
-    return this.webClients.find(c => c.id === clientId);
+    return this.clients.find(c => c.id === clientId);
 }
 
 ClientManager.prototype.getClientByAuthToken = function(token) {
-    return this.webClients.find(c => c.authToken === token);
+    return this.clients.find(c => c.authToken === token);
 }
 
 ClientManager.prototype.getClientBySocket = function(socket) {
-    return this.webClients.find(c => c.hasSocket(socket));
+    return this.clients.find(c => c.hasSocket(socket));
 }
 
-ClientManager.prototype.authorize = function(webClient, mobileClient) {
+ClientManager.prototype.authorize = function(webClient, phoneClient) {
     // todo: ensure webClient exists and that roomId is the socket.id of a mobile client
-    webClient.roomId = mobileClient.activeSocketId;
-    mobileClient.roomId = mobileClient.activeSocketId;
+    webClient.roomId = phoneClient.activeSocketId;
+    phoneClient.roomId = phoneClient.activeSocketId;
 
     // web client only has the socket id but hasn't joined it yet
     // todo: ask it to join? or handle it?
 }
 
 ClientManager.prototype.disconnectStale = function() {
-    this.webClients.forEach(c => {
+    this.clients.forEach(c => {
         if(!c.isActive())
             c.disconnect();
     });
