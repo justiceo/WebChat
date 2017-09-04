@@ -14,17 +14,6 @@ Handlers.prototype.isAuthorized = function (socket, data) {
     return client.authToken === token;
 }
 
-Handlers.prototype.makeToken = function () {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 100; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return "Pi94BXqogmJlqyeEAAAA";
-    //return text;
-}
-
 Handlers.prototype.onDisconnect = function onDisconnect(reason) {
     // remove the socket from it's client
     let client = this.clientManager.getClientBySocket(this.socket);

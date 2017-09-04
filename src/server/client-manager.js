@@ -16,7 +16,7 @@ ClientManager.prototype.create = function(clientId, socket) {
     // if this client currently exists
     let client = this.getClientById(clientId);
     if(client == null) {// there can only be one client with this id
-        client = new Client(clientId, this.makeToken(), isMobile);
+        client = new Client(clientId, this.makeToken(clientId), isMobile);
         client.addSocket(socket);
         this.webClients.push(client);
     }
@@ -27,22 +27,21 @@ ClientManager.prototype.create = function(clientId, socket) {
     return client;
 }
 
-ClientManager.prototype.makeToken = function() {
+ClientManager.prototype.makeToken = function(tokenIdentifier) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < 100; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    //return "Pi94BXqogmJlqyeEAAAA";
-    // include-timestamp in tokens
+    text += Date.now() + "--" + tokenIdentifier;
     return text;
 }
 
 ClientManager.prototype.refresh = function(oldToken) {
     let client = this.webClients.find(c => c.hasToken(oldToken));
     if(client) {
-        client.setToken(this.makeToken());
+        client.setToken(this.makeToken(client.id));
         return client;
     }
     return false;
