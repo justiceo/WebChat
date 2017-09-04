@@ -57,7 +57,7 @@ export class AuthCtrl {
             // using volatile means the connection doesn't have to succeed
             // to prevent spamming the server with stale requests on-resume
             // problem is how do we then resume?
-            this.socket.emit(EVENTS.TOKEN_REQUEST, result);
+            this.trigger(EVENTS.TOKEN_REQUEST, result);
         })
         
     }
@@ -81,7 +81,7 @@ export class AuthCtrl {
         // test auth
         this.socket.on(EVENTS.TEST_AUTH_PASS, mesage => console.log(mesage));
         this.socket.on(EVENTS.TEST_AUTH_FAIL, mesage => console.error(mesage));
-        this.socket.emit(EVENTS.TEST_AUTH, 'This request should fail');
+        this.trigger(EVENTS.TEST_AUTH, 'This request should fail');
     }
 
     unregisterListeners() {
@@ -97,9 +97,8 @@ export class AuthCtrl {
     }
 
     onToken(token) {
-        this.cache('authToken', token);
         // uncomment to test if token is working
-        // this.socket.emit('testAuth', this.sign('This request should pass'));
+        // this.trigger('testAuth', this.sign('This request should pass'));
         this.$window.QRCode.toDataURL(token, (err, url) => {
             this.loadingQRCode = false;
             this.state = "loadedQrCode"
@@ -108,13 +107,13 @@ export class AuthCtrl {
             // refresh the code every 8 secs after qrcode is actually displayed
             this.$timeout(() => {
                 if(this.state != EVENTS.ROOM_AUTHED && this.state != 'isErrored')
-                    this.socket.emit(EVENTS.TOKEN_REFRESH, token); 
+                    this.trigger(EVENTS.TOKEN_REFRESH, token); 
             }, 15000);
         }); 
     }
 
     onRefreshFail() {
-        this.socket.emit(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
+        this.trigger(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
     }
 
     onRoomAuthed(data) {
@@ -132,14 +131,15 @@ export class AuthCtrl {
         console.log("active here");
         this.socket.disconnect();
         this.socket.connect();
-        this.socket.emit(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
+        this.trigger(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
     }
     reload() {        
         window.location.reload();
     }
 
     handle(fn, args) {
-        console.log('<-Event: ' + fn.name);
+        let str = typeof(args) == 'object' ? '[object]' : args;
+        console.log('<-Event: ' + fn.name + ", ", str);
         this[fn.name](args);
         this.$scope.$apply();
     }
@@ -147,6 +147,12 @@ export class AuthCtrl {
     unhandledEvent(eventName, args) {
         let str = typeof(args) == 'object' ? '[object]' : args;
         console.log("<-Unhandled Event: " + eventName + ", ", str);
+    }
+
+    trigger(event, args) {
+        let str = typeof(args) == 'object' ? '[object]' : args;
+        console.log("->Triggering: " + event + ", ", str);
+        this.socket.emit(event, args);
     }
 
     cache(key,value) {
