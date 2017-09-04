@@ -4,6 +4,13 @@ function ClientManager(db) {
     this.TAG                = "ClientManager: ";
     this.clients            = [];
     console.log(this.TAG, "initialized...");
+
+    // db constants
+    this.R_TOKENS   = "AuthTokens"; // list of tokens issued
+    this.R_CLIENTS  = "Clients";    // client ids and their info
+    this.R_CSOCKETS = "ClientSockets";  // client ids and their sockets
+
+
 }
 
 /** Creates a client if it doesn't exist 
@@ -13,7 +20,7 @@ function ClientManager(db) {
 ClientManager.prototype.create = function(clientId, socket) {
     let isMobile = clientId.endsWith("elibom");
     // if this client currently exists
-    let client = this.getClientById(clientId);
+    let client = this.getClientById(clientId); // todo: parse this result
     if(client == null) {// there can only be one client with this id
         client = new Client(clientId, this.makeToken(clientId), isMobile);
         client.addSocket(socket);
@@ -27,31 +34,39 @@ ClientManager.prototype.create = function(clientId, socket) {
 }
 
 ClientManager.prototype.makeToken = function(tokenIdentifier) {
-    var text = "";
+    var token = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < 100; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+        token += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    text += Date.now() + "--" + tokenIdentifier;
-    return text;
+    token += Date.now() + "--" + tokenIdentifier;
+    this.db.set(tokenIdentifier+"-token", token);
+    this.db.expire(tokenIdentifier+"-token", 500); // expires in 500 seconds
+    return token;
 }
 
+// returns a promise
 ClientManager.prototype.refresh = function(oldToken) {
-    let client = this.clients.find(c => c.hasToken(oldToken));
-    if(client) {
-        client.setToken(this.makeToken(client.id));
-        return client;
-    }
-    return false;
+    let tokenIdentifier = oldToken.substring(0, oldToken.lastIndexOf("--"));
+    return this.db.exists(tokenIdentifier+"-token", (err, reply) => {
+        if(reply === 1)
+            return this.makeToken(tokenIdentifier);
+        else
+            return false;
+    });
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
-    return this.clients.find(c => c.id === clientId);
+    return this.db.hgetAll(this.R_CLIENTS, (err, clients) => {
+        if(clients[clientId])
+            return clients[clientId];
+        return false;
+    });
 }
 
 ClientManager.prototype.getClientByAuthToken = function(token) {
-    return this.clients.find(c => c.authToken === token);
+    return token.substring(token.lastIndexOf('--'));
 }
 
 ClientManager.prototype.getClientBySocket = function(socket) {
