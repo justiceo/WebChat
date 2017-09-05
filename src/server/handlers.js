@@ -30,7 +30,7 @@ Handlers.prototype.onTokenRequest = function onTokenRequest(socket, clientId) {
 }
 
 Handlers.prototype.onTokenRefresh = function onTokenRefresh(socket, oldToken) {
-    this.clientManager.refresh(oldToken, socket.id, (err, token)=>{
+    this.clientManager.refresh(oldToken, socket, (err, token)=>{
         if(err == EVENTS.OTHER_SESSION) {
             socket.emit(EVENTS.OTHER_SESSION);
             return;

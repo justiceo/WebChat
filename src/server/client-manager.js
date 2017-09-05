@@ -34,14 +34,14 @@ ClientManager.prototype.create = function(clientId, socket, callback) {
 }
 
 // returns a promise
-ClientManager.prototype.refresh = function(oldToken, socketId, callback) {
+ClientManager.prototype.refresh = function(oldToken, socket, callback) {
     // check if this socket is active socket
 
     let clientId = this.extractClientId(oldToken);
 
     this.db.get(clientId, (err0, lock) => {
         if(err0 !== null || !lock) return callback(EVENTS.REFRESH_FAIL, null);
-        if(lock !== socketId) {
+        if(lock !== socket.id) {
             console.log("Info: ", socket.name, " - lock: ", lock);
             return callback(EVENTS.OTHER_SESSION, null);
         }

@@ -1,3 +1,6 @@
+
+import EVENTS       from '../../server/events';
+
 export class SimulatorCtrl {
     constructor(SocketService) {
         console.log("started simulator");
@@ -10,25 +13,19 @@ export class SimulatorCtrl {
     }
 
     init(socket) {
-        var authToken = "";
+        this.socket = socket;
         socket.on('connect', function (data) {
             console.log("emulator: connected to server");
             // request token
-            socket.emit('tokenRequest', window.deviceId + "-emulator");
+            socket.emit(EVENTS.TOKEN_REQUEST, "web-emulator");
 
             // receive token, wait a moment and send validation request
-            socket.on('token', (tk) => {
-                console.log("emulator: recieved token", tk)
-                authToken = tk;
-                setTimeout(() => {
-                    socket.emit('tokenValidate', {
-                        auth: { authToken: authToken },
-                        message: "Pi94BXqogmJlqyeEAAAA"
-                    });
-                }, 2000);
+            socket.on(EVENTS.TOKEN, (authToken) => {                
+                console.log("emulator: recieved token", authToken)
+                this.authToken = authToken;               
 
-                socket.on('latestDataRequest', (req) => {
-                    socket.emit('latestConversations', {
+                socket.on(EVENTS.CONV_REQUEST, (req) => {
+                    socket.emit(EVENTS.CONV_DATA, {
                         auth: { authToken: authToken },
                         message: [
                             {
@@ -45,6 +42,10 @@ export class SimulatorCtrl {
 
     submitCode() {
         console.log("submitting ", this.qrcode);
+        this.socket.emit(EVENTS.TOKEN_VALIDATE, {
+            auth: { authToken: this.authToken },
+            message: this.qrcode
+        });
     }
 }
 
