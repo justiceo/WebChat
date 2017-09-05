@@ -42,7 +42,7 @@ ClientManager.prototype.refresh = function(oldToken, socketId, callback) {
     this.db.get(clientId, (err0, lock) => {
         if(err0 !== null || !lock) return callback(EVENTS.REFRESH_FAIL, null);
         if(lock !== socketId) {
-            console.log("lock: ", lock);
+            console.log("Info: ", socket.name, " - lock: ", lock);
             return callback(EVENTS.OTHER_SESSION, null);
         }
 
