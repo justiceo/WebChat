@@ -4,6 +4,7 @@ import SocketService from './socket-service';
 import TestComponent from './smoke-test/test-component';
 import Conversations from './conversations/conversations';
 import Authenticate from './authenticate/authenticate';
+import Simulator from './simulator/simulator';
 import App from './app';
 
 window.QRCode = require('qrcode');
@@ -23,6 +24,7 @@ webSMS
   //.component('about', {'templateUrl': 'app/about.html', controller: function(){}})
   .component('conversations', Conversations)
   .component('authenticate', Authenticate)
+  .component('simulator', Simulator)
   .service('SocketService', SocketService)
   .factory('httpRequestInterceptor', function () {
     return {

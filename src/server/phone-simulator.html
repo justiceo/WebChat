@@ -1,60 +1,52 @@
 <!doctype html>
-<html  ng-app="webSMS" lang="en">
+<html ng-app="webSMS" lang="en">
+
 <head>
-    <title>Phone client simulator</title>  
+    <title>Phone client simulator</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="./main.js"></script>
 </head>
 
 <body>
-<h2>The client is running in the bg, view in console</h2>
+    <simulator></simulator>
+</body>
+
 <script src="./socket.io/socket.io.js"></script>
 <script>
-// initializing socket, connection to server
-var socket = io.connect(window.location.origin);
-var authToken = "";
-socket.on('connect', function (data) {
-    console.log("emulator: connected to server");
-    // request token
-    socket.emit('tokenRequest',window.deviceId + "-emulator");
+    // initializing socket, connection to server
+    var socket = io.connect(window.location.origin);
+    var authToken = "";
+    socket.on('connect', function (data) {
+        console.log("emulator: connected to server");
+        // request token
+        socket.emit('tokenRequest', window.deviceId + "-emulator");
 
-    // receive token, wait a moment and send validation request
-    socket.on('token', (tk) => {
-        console.log("emulator: recieved token", tk)
-        authToken = tk;
-        setTimeout(()=> {
-            socket.emit('tokenValidate', {
-                auth: { authToken: authToken},
-                message: "Pi94BXqogmJlqyeEAAAA"
-            });
-        },2000);
+        // receive token, wait a moment and send validation request
+        socket.on('token', (tk) => {
+            console.log("emulator: recieved token", tk)
+            authToken = tk;
+            setTimeout(() => {
+                socket.emit('tokenValidate', {
+                    auth: { authToken: authToken },
+                    message: "Pi94BXqogmJlqyeEAAAA"
+                });
+            }, 2000);
 
-        socket.on('latestDataRequest', (req) => {
-            socket.emit('latestConversations', {
-                auth: {authToken: authToken},
-                message: [
-                    {
-                        "text": "hello world",
-                        "sender": "Nelson Mandela"
-                    }
-                ]
+            socket.on('latestDataRequest', (req) => {
+                socket.emit('latestConversations', {
+                    auth: { authToken: authToken },
+                    message: [
+                        {
+                            "text": "hello world",
+                            "sender": "Nelson Mandela"
+                        }
+                    ]
+                })
             })
-        })
+        });
+
     });
 
-});
-
-// listener for 'thread' event, which updates messages
-socket.on('thread', function (data) {
-    $('#thread').append('<li>' + data + '</li>');
-});
-
-// prevents form from submitting and sends a message to server
-/*$('form').submit(function () {
-    var message = $('#message').val();
-    socket.emit('messages', message);
-    this.reset();
-    return false;
-});*/
 </script>
 
-</body>
 </html>
