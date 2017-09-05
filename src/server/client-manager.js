@@ -83,11 +83,16 @@ ClientManager.prototype.disconnect = function(socket) {
 ClientManager.prototype.acquireLock = function(clientId, socket) {
     let token = this.makeToken(clientId);
     // give this socket the lock
-    this.db.set(clientId, socket.id);
-    this.db.expire(clientId, 500);
-    // save the socket's token
-    this.db.set(socket.id, token);
-    this.db.expire(socket.id, 500);
+    this.db.get(clientId, (err, lock) => {        
+        if(lock) {
+            socket.to(lock).emit(EVENTS.OTHER_SESSION);
+        }
+        this.db.set(clientId, socket.id);
+        this.db.expire(clientId, 500);
+        // save the socket's token
+        this.db.set(socket.id, token);
+        this.db.expire(socket.id, 500);
+    });    
     return token;
 }
 
