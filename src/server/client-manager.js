@@ -125,31 +125,6 @@ ClientManager.prototype.extractToken = function(authToken) {
     return authToken.substring(0, authToken.lastIndexOf('--'));
 }
 
-ClientManager.prototype.getClientById = function(clientId, callback) {
-    this.db.hgetall(this.R_CLIENTS, (err, clients) => {
-        if(err) {
-            callback(err, null);
-            return;
-        }
-            
-        if(clients[clientId])
-            return clients[clientId];
-        return false;
-    });
-}
-
-ClientManager.prototype.getClientBySocket = function(socket) {
-    return this.db.exists(socket.id, (err, hasSocket) => {
-        if(hasSocket === 1) {
-            return this.db.get(socket.id, (err2, authToken)=> {
-                return err === null ? 
-                    this.extractClientId(authToken) : null;
-            })
-        }
-        else return null;
-    });
-}
-
 ClientManager.prototype.authorize = function(webClient, phoneClient) {
     // todo: ensure webClient exists and that roomId is the socket.id of a mobile client
     webClient.roomId = phoneClient.activeSocketId;
