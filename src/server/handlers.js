@@ -16,8 +16,7 @@ Handlers.prototype.isAuthorized = function (socket, data) {
 
 Handlers.prototype.onDisconnect = function onDisconnect(reason) {
     // remove the socket from it's client
-    let client = this.clientManager.getClientBySocket(this.socket);
-    client.disconnect(this.socket);
+    this.clientManager.disconnect(this.socket);
 }
 
 Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
@@ -26,20 +25,24 @@ Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
         return; // don't generate tokens for nullable clients      
     }
     console.log('Info:', this.socketName, EVENTS.TOKEN_REQUEST + ' - from: client#' + clientId.substring(0,6));
-    let client = this.clientManager.create(clientId, this.socket);
-    this.socket.emit(EVENTS.TOKEN, client.authToken); // send the token to the one who asked for it (not everyone on the internet lol)
-
+    this.clientManager.create(clientId, this.socket, (err, token) => {
+        // todo: handle error
+        if(token) 
+            this.socket.emit(EVENTS.TOKEN, token);
+    });
 }
 
 Handlers.prototype.onTokenRefresh = function onTokenRefresh(oldToken) {
-    let client = this.clientManager.refresh(oldToken);
-    if (client) {
-        console.log("Info:",this.socketName,"- Updating token from->to: ", oldToken.substring(0,6), client.authToken.substring(0,6));
-        this.socket.emit(EVENTS.TOKEN, client.authToken);
-    }
-    else {
-        this.socket.emit(EVENTS.REFRESH_FAIL);
-    }
+    this.clientManager.refresh(oldToken, (err, token)=>{
+        if(err) {
+            console.log(this.TAG, err);
+            this.socket.emit(EVENTS.REFRESH_FAIL);
+        }
+        if(token) {
+            console.log("Info:",this.socketName,"- Updating token from->to: ", oldToken.substring(0,6), token.substring(0,6));
+            this.socket.emit(EVENTS.TOKEN, token);
+        }
+    });
 }
 
 Handlers.prototype.onTokenValidate = function onTokenValidate(data) {

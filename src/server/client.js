@@ -15,29 +15,25 @@ function Client(clientId, db) {
  * @param {*} socket
  */
 Client.prototype.disconnect = function(socket) {
-    // if socket has lock release
-    this.checkHasLock(socket).then(hasLock => {
-        console.log("client.js:20 - check has lock is a promise")
-        if(hasLock) {
-            this.relinquishLock();
-        }
+    this.hasLock(socket, (err, hasLock) => {
+        if(hasLock) this.relinquishLock();        
     });
 }
 
 /**
  * Returns true if the given socket has the lock on this client, false otherwise.
  */ 
-Client.prototype.checkHasLock = function(socket) {
-    return this.db.exists(clientId, (err, res) => {
-        if(res === 1) {
-            return this.db.get(clientId, (err, lock) => {
-                if(err === null)
-                    return lock === socket.id;
-                else return false;
-            });
-        }
-        return false;
+Client.prototype.hasLock = function(socket, callback) {
+    this.db.get(this.id, (err, lock) => {
+        if(err !== null) return callback(err, null);        
+        callback(null, lock === socket.id);
     });
+}
+
+Client.prototype.relinquishLock = function() {
+    this.db.del(this.id, (err, ok) => {
+        if(err) console.error(this.TAG, err);
+    })
 }
 
 Client.prototype.socList = function() {
