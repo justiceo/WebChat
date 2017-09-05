@@ -1,36 +1,30 @@
 var Client = require('./client');
+
 function ClientManager(db) {
     this.db                 = db;
     this.TAG                = "ClientManager: ";
-    this.clients            = [];
-    console.log(this.TAG, "initialized...");
-
-    // db constants
-    this.R_TOKENS   = "AuthTokens"; // list of tokens issued
-    this.R_CLIENTS  = "Clients";    // client ids and their info
-    this.R_CSOCKETS = "ClientSockets";  // client ids and their sockets
-
-
 }
 
 /** Creates a client if it doesn't exist 
  * @param {*} clientId
  * @param {*} socket
  */
-ClientManager.prototype.create = function(clientId, socket) {
-    let isMobile = clientId.endsWith("elibom");
-    // if this client currently exists
-    let client = this.getClientById(clientId); // todo: parse this result
-    if(client == null) {// there can only be one client with this id
-        client = new Client(clientId, this.makeToken(clientId), isMobile);
-        client.addSocket(socket);
-        this.clients.push(client);
-    }
-    else {// inform this socket that there's a new connectoin
-        client.handleNewSocket(socket);
-    }
-    
-    return client;
+ClientManager.prototype.create = function(clientId, socket, callback) {
+    this.db.exists(clientId, (err, exist) => { 
+        if(err) {
+            callback(err, null);
+            return;
+        }
+
+        if(exist === 1) {
+            // todo: check if authed too
+            callback("Other active session", true);
+        }
+        else{
+            this.db.set(clientId, socket.id);
+            callback(null, true);
+        }
+    });        
 }
 
 ClientManager.prototype.makeToken = function(tokenIdentifier) {
@@ -58,19 +52,31 @@ ClientManager.prototype.refresh = function(oldToken) {
 }
 
 ClientManager.prototype.getClientById = function(clientId) {
-    return this.db.hgetAll(this.R_CLIENTS, (err, clients) => {
+    return this.db.hgetall(this.R_CLIENTS, (err, clients) => {
         if(clients[clientId])
             return clients[clientId];
         return false;
     });
 }
 
-ClientManager.prototype.getClientByAuthToken = function(token) {
-    return token.substring(token.lastIndexOf('--'));
+ClientManager.prototype.extractClientId = function(authToken) {
+    return authToken.substring(authToken.lastIndexOf('--'));
+}
+
+ClientManager.prototype.extractToken = function(authToken) {
+    return authToken.substring(0, authToken.lastIndexOf('--'));
 }
 
 ClientManager.prototype.getClientBySocket = function(socket) {
-    return this.clients.find(c => c.hasSocket(socket));
+    return this.db.exists(socket.id, (err, hasSocket) => {
+        if(hasSocket === 1) {
+            return this.db.get(socket.id, (err2, authToken)=> {
+                return err === null ? 
+                    this.extractClientId(authToken) : null;
+            })
+        }
+        else return null;
+    });
 }
 
 ClientManager.prototype.authorize = function(webClient, phoneClient) {

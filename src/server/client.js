@@ -5,35 +5,39 @@
  * @param {*} socket 
  * @param {*} authToken 
  */
-function Client(clientId, authToken, isMobile) {
+function Client(clientId, db) {
     this.TAG            = "Client: ";
     this.id             = clientId;
-    this.sockets        = {};
-    this.authToken      = authToken;
-    this.activeSocketId = "";
-    this.isMobile       = isMobile;
-    this.roomId         = "";
-    this.roomToken      = "";
-    this.isAuthorized   = false; // different from isActive()
+    this.db             = db;
 }
 
-/** Disconnects the given the socket, and if no socket given, disconnect itself
+/** Relinquishes the client-lock on disconnect
  * @param {*} socket
  */
 Client.prototype.disconnect = function(socket) {
-    if(this.hasSocket(socket)) {
-        console.log(this.TAG, "disconnecting " + socket.id);
-        if(socket.id == this.activeSocketId)
-            this.activeSocketId = ""; 
-        socket.disconnect();
-        // delete this.sockets[socket.id]; // we don't really know if it's dead
-        // wait till disconnect emits "reason" which is dead
-        return;
-    }
+    // if socket has lock release
+    this.checkHasLock(socket).then(hasLock => {
+        console.log("client.js:20 - check has lock is a promise")
+        if(hasLock) {
+            this.relinquishLock();
+        }
+    });
+}
 
-    console.log("Info: Deactivating client " + this.id);
-    this.socList().forEach(s => s.disconnect());
-    this.activeSocketId = "";
+/**
+ * Returns true if the given socket has the lock on this client, false otherwise.
+ */ 
+Client.prototype.checkHasLock = function(socket) {
+    return this.db.exists(clientId, (err, res) => {
+        if(res === 1) {
+            return this.db.get(clientId, (err, lock) => {
+                if(err === null)
+                    return lock === socket.id;
+                else return false;
+            });
+        }
+        return false;
+    });
 }
 
 Client.prototype.socList = function() {
