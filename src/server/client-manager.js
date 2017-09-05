@@ -58,20 +58,29 @@ ClientManager.prototype.makeToken = function(tokenIdentifier) {
 }
 
 // returns a promise
-ClientManager.prototype.refresh = function(oldToken, callback) {
-    let clientId = this.extractClientId(oldToken);
-    console.log("clientId: ", clientId);
-    this.db.exists(clientId+"-token", (err, reply) => {
-        if(err) {
-            callback(err, null);
-            return;
-        }
+ClientManager.prototype.refresh = function(oldToken, socketId, callback) {
+    // check if this socket is active socket
 
-        if(reply === 1)
-            callback(null, this.makeToken(clientId));
-        else
-            callback("Invalid Token" + reply, null);
+    let clientId = this.extractClientId(oldToken);
+
+    this.hasLock(clientId, socketId, (err, hasIt) => {
+        if(!hasIt)
+            return callback(EVENTS.OTHER_SESSION, null);
+
+        this.db.exists(clientId+"-token", (err, tokenExist) => {
+            if(err) {
+                callback(err, null);
+                return;
+            }
+
+            if(tokenExist === 1)
+                callback(null, this.makeToken(clientId));
+            else
+                callback(EVENTS.REFRESH_FAIL, null);
+        });
     });
+
+    
 }
 
 ClientManager.prototype.disconnect = function(socket) {
@@ -82,10 +91,11 @@ ClientManager.prototype.disconnect = function(socket) {
         }
         
         if(!token) return;
-
         let client = this.extractClientId(token);
-        this.hasLock(client, socket, (err, hasLock) => {
-            if(hasLock) this.relinquishLock(client);        
+        console.log(this.TAG, "Disconnecting socket: ", socket.id, "on client: ", client);
+        this.hasLock(client, socket.id, (err, hasLock) => {
+            if(hasLock)
+                this.relinquishLock(client);                 
         });
     })
 }
@@ -93,14 +103,15 @@ ClientManager.prototype.disconnect = function(socket) {
 /**
  * Checks if socket has the lock of a client
  */
-ClientManager.prototype.hasLock = function(clientId, socket, callback) {
+ClientManager.prototype.hasLock = function(clientId, socketId, callback) {
     this.db.get(clientId, (err, lock) => {
         if(err !== null) return callback(err, null);        
-        callback(null, lock === socket.id);
+        callback(null, lock === socketId);
     });
 }
 
 ClientManager.prototype.relinquishLock = function(clientId) {
+    console.log(this.TAG, "Relinquishing lock on client: ", clientId);
     this.db.del(clientId, (err, ok) => {
         if(err) console.error(this.TAG, err);
     })

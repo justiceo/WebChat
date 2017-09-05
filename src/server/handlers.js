@@ -14,42 +14,48 @@ Handlers.prototype.isAuthorized = function (socket, data) {
     return client.authToken === token;
 }
 
-Handlers.prototype.onDisconnect = function onDisconnect(reason) {
+Handlers.prototype.onDisconnect = function onDisconnect(socket, reason) {
     // remove the socket from it's client
-    this.clientManager.disconnect(this.socket);
+    this.clientManager.disconnect(socket);
 }
 
-Handlers.prototype.onTokenRequest = function onTokenRequest(clientId) {
+Handlers.prototype.onTokenRequest = function onTokenRequest(socket, clientId) {
     if (!clientId) {
-        console.log('Error:', this.socketName, EVENTS.TOKEN_REQUEST + ' - null deviceId');
+        console.log('Error:', socket.name, EVENTS.TOKEN_REQUEST + ' - null deviceId');
         return; // don't generate tokens for nullable clients      
     }
-    console.log('Info:', this.socketName, EVENTS.TOKEN_REQUEST + ' - from: client#' + clientId.substring(0,6));
-    this.clientManager.create(clientId, this.socket, (err, token) => {
+    console.log('Info:', socket.name, EVENTS.TOKEN_REQUEST + ' - from: client#' + clientId.substring(0,6));
+    this.clientManager.create(clientId, socket, (err, token) => {
         // todo: handle error
         if(token) 
-            this.socket.emit(EVENTS.TOKEN, token);
+            socket.emit(EVENTS.TOKEN, token);
     });
 }
 
-Handlers.prototype.onTokenRefresh = function onTokenRefresh(oldToken) {
-    this.clientManager.refresh(oldToken, (err, token)=>{
-        if(err) {
+Handlers.prototype.onTokenRefresh = function onTokenRefresh(socket, oldToken) {
+    this.clientManager.refresh(oldToken, socket.id, (err, token)=>{
+        if(err == EVENTS.OTHER_SESSION) {
+            socket.emit(EVENTS.OTHER_SESSION);
+            return;
+        }
+        else if(err) {
             console.log(this.TAG, err);
-            this.socket.emit(EVENTS.REFRESH_FAIL);
+            socket.emit(EVENTS.REFRESH_FAIL);
+            return;
         }
+
         if(token) {
-            console.log("Info:",this.socketName,"- Updating token from->to: ", oldToken.substring(0,6), token.substring(0,6));
-            this.socket.emit(EVENTS.TOKEN, token);
+            console.log("Info:",socket.name,"- Updating token from->to: ", oldToken.substring(0,6), token.substring(0,6));
+            socket.emit(EVENTS.TOKEN, token);
         }
     });
 }
 
-Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
-    console.log("Info: ",this.socketName, EVENTS.TOKEN_VALIDATE + " for: " + data.message.substring(0,6))
-    if (!this.isAuthorized(this.socket, data)) {
-        console.error("Error: ", this.socketName, " - The request failed authorization")
-        this.socket.emit('authError', 'authToken necessary to make requests');
+Handlers.prototype.onTokenValidate = function onTokenValidate(socket, data) {
+    console.log("Info: ",socket.name, EVENTS.TOKEN_VALIDATE + " for: " + data.message.substring(0,6))
+    if (!this.isAuthorized(socket, data)) {
+        console.error("Error: ", socket.name, " - The request failed authorization")
+        socket.emit('authError', 'authToken necessary to make requests');
         return;
     }
 
@@ -57,13 +63,13 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     // find the browser associated with this code
     let browser = this.clientManager.getClientByAuthToken(qrcodeToken);
     if (!browser) {
-        console.log('Info:', this.socketName, "Browser with authToken not found for token: " + qrcodeToken.substring(0,6));
+        console.log('Info:', socket.name, "Browser with authToken not found for token: " + qrcodeToken.substring(0,6));
         return false;
     }
     else
-        console.log('Info:', this.socketName, "Found browser with token: ", qrcodeToken.substring(0,6));
+        console.log('Info:', socket.name, "Found browser with token: ", qrcodeToken.substring(0,6));
 
-    let mobile = this.clientManager.getClientBySocket(this.socket); // phone
+    let mobile = this.clientManager.getClientBySocket(socket); // phone
     if (!mobile.isMobile) {
         console.log("client trying to act as mobile: ", mobile.activeSocketId, mobile.id)
     }
@@ -71,40 +77,40 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(data) {
     // mark the browser as authorized
     this.clientManager.authorize(browser, mobile);
 
-    // send the browser the phone's this.socket.id (room) so it can join it.
-    this.socket.to(browser.activeSocketId).emit(EVENTS.ROOM_AUTHED, {
-        roomId: this.socket.id, // because this event should only be trigged by the phone
+    // send the browser the phone's socket.id (room) so it can join it.
+    socket.to(browser.activeSocketId).emit(EVENTS.ROOM_AUTHED, {
+        roomId: socket.id, // because this event should only be trigged by the phone
     });
 }
 
-Handlers.prototype.onTestAuth = function onTestAuth(data) {
-    if (!this.isAuthorized(this.socket, data)) {
-        this.socket.emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());
+Handlers.prototype.onTestAuth = function onTestAuth(socket, data) {
+    if (!this.isAuthorized(socket, data)) {
+        socket.emit(EVENTS.TEST_AUTH_FAIL, 'authToken necessary to make requests: ' + data.toString());
         return;
     }
-    this.socket.emit(EVENTS.TEST_AUTH_PASS, 'Your token is valid');
+    socket.emit(EVENTS.TEST_AUTH_PASS, 'Your token is valid');
 }
 
-Handlers.prototype.onError = function onError(error) {
+Handlers.prototype.onError = function onError(socket, error) {
     console.error(error);
 }
 
-Handlers.prototype.relay = function(event, args) {
-    console.log('Info:', this.socketName, event, ' - is being relayed')
-    let client = this.clientManager.getClientBySocket(this.socket);    
-    this.socket.to(client.roomId).emit(event, args);
+Handlers.prototype.relay = function(event, socket, args) {
+    console.log('Info:', socket.name, event, ' - is being relayed')
+    let client = this.clientManager.getClientBySocket(socket);    
+    socket.to(client.roomId).emit(event, args);
     // this is why clients should disconnect if they're not active
 }
 
 // NOTE: transpilers/minifiers can/will change functions names - which would break this code
-Handlers.prototype.handle = function (fn, args) {
-    console.log('Info:', this.socketName, '<-Event: ' + fn.name);
-    this[fn.name](args);
+Handlers.prototype.handle = function (fn, socket, args) {
+    console.log('Info:', socket.name, '<-Event: ' + fn.name);
+    this[fn.name](socket, args);
 }
 
-Handlers.prototype.unhandledEvent = function unhandledEvent(eventName) {    
+Handlers.prototype.unhandledEvent = function unhandledEvent(eventName, socket) {    
     let str = typeof(args) == 'object' || typeof(args) == 'undefined' ? '[object]' : args;
-    console.log('Info:', this.socketName, "<-Unhandled Event: " + eventName + ", ", str);
+    console.log('Info:', socket.name, "<-Unhandled Event: " + eventName + ", ", str);
 }
 
 Handlers.prototype.garnish = function (io) {
@@ -114,27 +120,26 @@ Handlers.prototype.garnish = function (io) {
             io.sockets.sockets.length, 
             Object.keys(io.sockets.connected).length);
             
-        this.socket = socket;
-        this.socketName = "soc#" + socket.id.substring(0,6);
-        this.socket.on(EVENTS.DISCONNECT,       res => {this.handle(this.onDisconnect, res)});
-        this.socket.on(EVENTS.DISCONNECTING,       res => {this.unhandledEvent(EVENTS.DISCONNECTING, res)});
-        this.socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, res)});
+        socket.name = "soc#" + socket.id.substring(0,6);
+        socket.on(EVENTS.DISCONNECT,       res => {this.handle(this.onDisconnect, socket, res)});
+        socket.on(EVENTS.DISCONNECTING,       res => {this.unhandledEvent(EVENTS.DISCONNECTING, socket, res)});
+        socket.on(EVENTS.ERROR,            res => {this.handle(this.onError, socket, res)});
 
-        this.socket.on(EVENTS.TOKEN_REQUEST, res => { this.handle(this.onTokenRequest, res) });
-        this.socket.on(EVENTS.TOKEN_REFRESH, res => { this.handle(this.onTokenRefresh, res) });
-        this.socket.on(EVENTS.TEST_AUTH, res => { this.handle(this.onTestAuth, res) });
-        this.socket.on(EVENTS.TOKEN_VALIDATE, res => { this.handle(this.onTokenValidate, res) });
+        socket.on(EVENTS.TOKEN_REQUEST, res => { this.handle(this.onTokenRequest, socket, res) });
+        socket.on(EVENTS.TOKEN_REFRESH, res => { this.handle(this.onTokenRefresh, socket, res) });
+        socket.on(EVENTS.TEST_AUTH, res => { this.handle(this.onTestAuth, socket, res) });
+        socket.on(EVENTS.TOKEN_VALIDATE, res => { this.handle(this.onTokenValidate, socket, res) });
 
         // Relay the message between clients
-        this.socket.on(EVENTS.CONV_REQUEST, res => { this.relay(EVENTS.CONV_REQUEST, res)});
-        this.socket.on(EVENTS.CONV_DATA, res => { this.relay(EVENTS.CONV_DATA, res)});
-        this.socket.on(EVENTS.MSG_RECEIVE, res => { this.relay(EVENTS.MSG_RECEIVE, res)});
-        this.socket.on(EVENTS.MSG_SENT, res => { this.relay(EVENTS.MSG_SENT, res)});
-        this.socket.on(EVENTS.MSG_DELIVERED, res => { this.relay(EVENTS.MSG_DELIVERED, res)});
-        this.socket.on(EVENTS.MSG_DELETE, res => { this.relay(EVENTS.MSG_DELETE, res)});
-        this.socket.on(EVENTS.CONTACT_REQUEST, res => { this.relay(EVENTS.CONTACT_REQUEST, res)});
-        this.socket.on(EVENTS.CONTACt_INFO, res => { this.relay(EVENTS.CONTACt_INFO, res)});
-        this.socket.on(EVENTS.SEND_MSG, res => { this.relay(EVENTS.SEND_MSG, res)});
+        socket.on(EVENTS.CONV_REQUEST, res => { this.relay(EVENTS.CONV_REQUEST, socket, res)});
+        socket.on(EVENTS.CONV_DATA, res => { this.relay(EVENTS.CONV_DATA, socket, res)});
+        socket.on(EVENTS.MSG_RECEIVE, res => { this.relay(EVENTS.MSG_RECEIVE, socket, res)});
+        socket.on(EVENTS.MSG_SENT, res => { this.relay(EVENTS.MSG_SENT, socket, res)});
+        socket.on(EVENTS.MSG_DELIVERED, res => { this.relay(EVENTS.MSG_DELIVERED, socket, res)});
+        socket.on(EVENTS.MSG_DELETE, res => { this.relay(EVENTS.MSG_DELETE, socket, res)});
+        socket.on(EVENTS.CONTACT_REQUEST, res => { this.relay(EVENTS.CONTACT_REQUEST, socket, res)});
+        socket.on(EVENTS.CONTACt_INFO, res => { this.relay(EVENTS.CONTACt_INFO, socket, res)});
+        socket.on(EVENTS.SEND_MSG, res => { this.relay(EVENTS.SEND_MSG, socket, res)});
 
     });
 };
