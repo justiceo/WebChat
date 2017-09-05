@@ -33,39 +33,18 @@ ClientManager.prototype.create = function(clientId, socket, callback) {
     });        
 }
 
-ClientManager.prototype.acquireLock = function(clientId, socket) {
-    let token = this.makeToken(clientId);
-    // give this socket the lock
-    this.db.set(clientId, socket.id);
-    this.db.expire(clientId, 500);
-    // save the socket's token
-    this.db.set(socket.id, token);
-    this.db.expire(socket.id, 500);
-    return token;
-}
-
-ClientManager.prototype.makeToken = function(tokenIdentifier) {
-    var token = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 100; i++)
-        token += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    token += Date.now() + "--" + tokenIdentifier;
-    this.db.set(tokenIdentifier+"-token", token);
-    //this.db.expire(tokenIdentifier+"-token", 500); // expires in 500 seconds, todo: find optimal time
-    return token;
-}
-
 // returns a promise
 ClientManager.prototype.refresh = function(oldToken, socketId, callback) {
     // check if this socket is active socket
 
     let clientId = this.extractClientId(oldToken);
 
-    this.hasLock(clientId, socketId, (err, hasIt) => {
-        if(!hasIt)
+    this.db.get(clientId, (err0, lock) => {
+        if(err0 !== null || !lock) return callback(EVENTS.REFRESH_FAIL, null);
+        if(lock !== socketId) {
+            console.log("lock: ", lock);
             return callback(EVENTS.OTHER_SESSION, null);
+        }
 
         this.db.exists(clientId+"-token", (err, tokenExist) => {
             if(err) {
@@ -98,6 +77,31 @@ ClientManager.prototype.disconnect = function(socket) {
                 this.relinquishLock(client);                 
         });
     })
+}
+
+
+ClientManager.prototype.acquireLock = function(clientId, socket) {
+    let token = this.makeToken(clientId);
+    // give this socket the lock
+    this.db.set(clientId, socket.id);
+    this.db.expire(clientId, 500);
+    // save the socket's token
+    this.db.set(socket.id, token);
+    this.db.expire(socket.id, 500);
+    return token;
+}
+
+ClientManager.prototype.makeToken = function(tokenIdentifier) {
+    var token = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 100; i++)
+        token += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    token += Date.now() + "--" + tokenIdentifier;
+    this.db.set(tokenIdentifier+"-token", token);
+    //this.db.expire(tokenIdentifier+"-token", 500); // expires in 500 seconds, todo: find optimal time
+    return token;
 }
 
 /**

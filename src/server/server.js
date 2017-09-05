@@ -13,13 +13,16 @@ let dbServer = new RedisServer(6379);
 let ClientManager = require('./client-manager');
 let Handlers = require('./handlers');
 
-let handlers = new Handlers(new ClientManager(dbClient));
-handlers.garnish(io);
+
 
 dbServer.open(err => {
     if (err === null) {
         dbClient.on('error', function (err) {
             console.log('Error ' + err)
+        });
+        dbClient.flushall(() => {
+let handlers = new Handlers(new ClientManager(dbClient));
+handlers.garnish(io);
         });
     }
 });
