@@ -49,34 +49,27 @@ Handlers.prototype.onTokenRefresh = function onTokenRefresh(socket, oldToken) {
 }
 
 Handlers.prototype.onTokenValidate = function onTokenValidate(socket, data) {
-    console.log("Info: ",socket.name, EVENTS.TOKEN_VALIDATE + " for: " + data.message.substring(0,6))
-    if (!this.isAuthorized(socket, data)) {
-        console.error("Error: ", socket.name, " - The request failed authorization")
-        socket.emit('authError', 'authToken necessary to make requests');
-        return;
+    console.log("Info: ",socket.name, EVENTS.TOKEN_VALIDATE + " for: " + data.message.substring(0,6));
+    let authToken = "";
+    try {
+        authToken = data.auth.authToken;
+    }catch(e) {
+        authToken = null;
     }
 
-    let qrcodeToken = data.message; // the qrcode is a browser's current authToken
-    // find the browser associated with this code
-    let browser = this.clientManager.getClientByAuthToken(qrcodeToken);
-    if (!browser) {
-        console.log('Info:', socket.name, "Browser with authToken not found for token: " + qrcodeToken.substring(0,6));
-        return false;
-    }
-    else
-        console.log('Info:', socket.name, "Found browser with token: ", qrcodeToken.substring(0,6));
-
-    let mobile = this.clientManager.getClientBySocket(socket); // phone
-    if (!mobile.isMobile) {
-        console.log("client trying to act as mobile: ", mobile.activeSocketId, mobile.id)
-    }
-
-    // mark the browser as authorized
-    this.clientManager.authorize(browser, mobile);
-
-    // send the browser the phone's socket.id (room) so it can join it.
-    socket.to(browser.activeSocketId).emit(EVENTS.ROOM_AUTHED, {
-        roomId: socket.id, // because this event should only be trigged by the phone
+    this.clientManager.isValidToken(socket, authToken, (err, valid) => {
+        if(valid) {
+            let mClientId = this.clientManager.extractClientId(authToken);
+            let qrcodeToken = data.message;
+            this.clientManager.pair(socket, mClientId, qrcodeToken, (err2, pairedClient) => {
+                if(err == INVALID_CLIENT) {
+                    this.socket.emit(EVENTS.INVALID_CLIENT);
+                }
+                if(pairedClient) {
+                    this.socket.to(pairedClient).emit(EVENTS.ROOM_AUTHED, "{roomId: hello-data}");
+                }
+            });
+        }
     });
 }
 

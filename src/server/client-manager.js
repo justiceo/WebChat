@@ -79,6 +79,18 @@ ClientManager.prototype.disconnect = function(socket) {
     })
 }
 
+ClientManager.prototype.makeToken = function(tokenIdentifier) {
+    var token = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 100; i++)
+        token += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    token += Date.now() + "--" + tokenIdentifier;
+    this.db.set(tokenIdentifier+"-token", token);
+    //this.db.expire(tokenIdentifier+"-token", 500); // expires in 500 seconds, todo: find optimal time
+    return token;
+}
 
 ClientManager.prototype.acquireLock = function(clientId, socket) {
     let token = this.makeToken(clientId);
@@ -93,19 +105,6 @@ ClientManager.prototype.acquireLock = function(clientId, socket) {
         this.db.set(socket.id, token);
         this.db.expire(socket.id, 500);
     });    
-    return token;
-}
-
-ClientManager.prototype.makeToken = function(tokenIdentifier) {
-    var token = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 100; i++)
-        token += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    token += Date.now() + "--" + tokenIdentifier;
-    this.db.set(tokenIdentifier+"-token", token);
-    //this.db.expire(tokenIdentifier+"-token", 500); // expires in 500 seconds, todo: find optimal time
     return token;
 }
 
@@ -132,6 +131,27 @@ ClientManager.prototype.extractClientId = function(authToken) {
 
 ClientManager.prototype.extractToken = function(authToken) {
     return authToken.substring(0, authToken.lastIndexOf('--'));
+}
+
+ClientManager.prototype.isValidToken = function(socket, token, callback) {
+    if(!token){
+        callback(null, false);
+    }
+
+    this.db.get(socket.id, (err, savedToken) => {
+        if(err)
+            return callback(err, null);
+        else
+            return callback(null, savedToken === token);
+    })
+}
+
+ClientManager.prototype.pair = function(mSocket, mClientId, qrcode, callback) {
+    let client = this.extractClientId(qrcode);
+    this.db.set("authed-"+mClientId, client, (err, ok) => {
+        callback(err, err === null ? client : null);
+    });
+
 }
 
 ClientManager.prototype.authorize = function(webClient, phoneClient) {
