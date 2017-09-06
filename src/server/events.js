@@ -36,4 +36,6 @@ module.exports = {
     CONTACT_REQUEST: "contactRequest",
     CONTACt_INFO: "contactInfo",
     SEND_MSG: "sendMSG",
+
+    AUTH_ERROR: "authError",
 }

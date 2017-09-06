@@ -78,6 +78,8 @@ export class AuthCtrl {
         this.socket.on(EVENTS.ROOM_AUTHED,      res => {this.handle(this.onRoomAuthed, res)});
         this.socket.on(EVENTS.OTHER_SESSION,    res => {this.handle(this.onOtherActiveSession, res)});
 
+        this.socket.on(EVENTS.AUTH_ERROR,       res => {this.unhandledEvent(EVENTS.AUTH_ERROR, res)});
+
         // test auth
         this.socket.on(EVENTS.TEST_AUTH_PASS, mesage => console.log(mesage));
         this.socket.on(EVENTS.TEST_AUTH_FAIL, mesage => console.error(mesage));

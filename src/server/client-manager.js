@@ -133,16 +133,10 @@ ClientManager.prototype.extractToken = function(authToken) {
     return authToken.substring(0, authToken.lastIndexOf('--'));
 }
 
-ClientManager.prototype.isValidToken = function(socket, token, callback) {
-    if(!token){
-        callback(null, false);
-    }
-
-    this.db.get(socket.id, (err, savedToken) => {
-        if(err)
-            return callback(err, null);
-        else
-            return callback(null, savedToken === token);
+ClientManager.prototype.isValidToken = function(socket, authToken, callback) {    
+    this.db.get(socket.id, (err, savedToken) => {  
+        console.log("saved:", savedToken, "\nauth:", authToken);      
+        callback(err, authToken && savedToken === authToken);
     })
 }
 

@@ -53,22 +53,32 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(socket, data) {
     let authToken = "";
     try {
         authToken = data.auth.authToken;
+        console.log("authToke after try: ", authToken, JSON.stringify(data));
     }catch(e) {
         authToken = null;
+        socket.emit(EVENTS.AUTH_ERROR);
     }
 
     this.clientManager.isValidToken(socket, authToken, (err, valid) => {
         if(valid) {
+            console.log("tokenValidate: auth is okay");
             let mClientId = this.clientManager.extractClientId(authToken);
             let qrcodeToken = data.message;
             this.clientManager.pair(socket, mClientId, qrcodeToken, (err2, pairedClient) => {
-                if(err == INVALID_CLIENT) {
-                    this.socket.emit(EVENTS.INVALID_CLIENT);
+                if(err) {
+                    return socket.emit(EVENTS.AUTH_ERROR);
                 }
+
+                console.log("no error during pairing");
                 if(pairedClient) {
-                    this.socket.to(pairedClient).emit(EVENTS.ROOM_AUTHED, "{roomId: hello-data}");
+                    console.log("Info: ", this.TAG, "Pairing ", mClientId, "with", pairedClient);
+                    socket.to(pairedClient).emit(EVENTS.ROOM_AUTHED, "{roomId: hello-data}");
                 }
             });
+        }
+        else {
+            console.log("invalid auth key");
+            socket.emit(EVENTS.AUTH_ERROR);
         }
     });
 }
