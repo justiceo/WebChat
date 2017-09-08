@@ -141,11 +141,16 @@ ClientManager.prototype.isValidToken = function(socket, authToken, callback) {
 }
 
 ClientManager.prototype.pair = function(mSocket, mClientId, qrcode, callback) {
-    let client = this.extractClientId(qrcode);
-    this.db.set("authed-"+mClientId, client, (err, ok) => {
-        callback(err, err === null ? client : null);
-    });
+    let clientId = this.extractClientId(qrcode);
+    this.db.get(clientId, (err1, activeSocket) => {
+            if(err1 !== null)
+                callback(err1, null, null);
 
+            this.db.set("authed-"+mClientId, clientId, (err2, ok) => {
+                console.log(this.TAG, "setting authed successfully");
+                callback(err2, clientId, activeSocket);
+            });            
+    });
 }
 
 ClientManager.prototype.authorize = function(webClient, phoneClient) {

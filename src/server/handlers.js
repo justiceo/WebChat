@@ -64,15 +64,16 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(socket, data) {
             console.log("tokenValidate: auth is okay");
             let mClientId = this.clientManager.extractClientId(authToken);
             let qrcodeToken = data.message;
-            this.clientManager.pair(socket, mClientId, qrcodeToken, (err2, pairedClient) => {
+            this.clientManager.pair(socket, mClientId, qrcodeToken, (err2, pairedClient, pairedSocket) => {
                 if(err) {
                     return socket.emit(EVENTS.AUTH_ERROR);
                 }
 
                 console.log("no error during pairing");
                 if(pairedClient) {
-                    console.log("Info: ", this.TAG, "Pairing ", mClientId, "with", pairedClient);
-                    socket.to(pairedClient).emit(EVENTS.ROOM_AUTHED, "{roomId: hello-data}");
+                    console.log("Info: ", this.TAG, "Pairing ", mClientId, "with", pairedClient, "on socket:", pairedSocket);
+                    let payload = {hostId: mClientId};
+                    socket.to(pairedSocket).emit(EVENTS.ROOM_AUTHED, payload);
                 }
             });
         }
@@ -95,11 +96,26 @@ Handlers.prototype.onError = function onError(socket, error) {
     console.error(error);
 }
 
-Handlers.prototype.relay = function(event, socket, args) {
-    console.log('Info:', socket.name, event, ' - is being relayed')
-    let client = this.clientManager.getClientBySocket(socket);    
-    socket.to(client.roomId).emit(event, args);
-    // this is why clients should disconnect if they're not active
+Handlers.prototype.relayToHost = function(event, socket, args) {
+    let hostId = args.hostId;
+    this.clientManager.db.get(hostId, (err, hostSocket) => {
+        if(err) {
+            console.error(this.TAG, "Error relaying data:- host not found");
+            return;
+        }
+        socket.to(hostSocket).emit(event, args);
+    });
+}
+
+Handlers.prototype.relayToClient = function(event, socket, args) {
+    let clientId = this.clientManager.extractClientId(args.auth.authToken);
+    this.clientManager.db.get(clientId, (err, clientSocket) => {
+        if(err) {
+            console.error(this.TAG, "Error relaying data:- client not found");
+            return;
+        }
+        socket.to(clientSocket).emit(event, args);
+    });
 }
 
 // NOTE: transpilers/minifiers can/will change functions names - which would break this code
@@ -131,15 +147,15 @@ Handlers.prototype.garnish = function (io) {
         socket.on(EVENTS.TOKEN_VALIDATE, res => { this.handle(this.onTokenValidate, socket, res) });
 
         // Relay the message between clients
-        socket.on(EVENTS.CONV_REQUEST, res => { this.relay(EVENTS.CONV_REQUEST, socket, res)});
-        socket.on(EVENTS.CONV_DATA, res => { this.relay(EVENTS.CONV_DATA, socket, res)});
-        socket.on(EVENTS.MSG_RECEIVE, res => { this.relay(EVENTS.MSG_RECEIVE, socket, res)});
-        socket.on(EVENTS.MSG_SENT, res => { this.relay(EVENTS.MSG_SENT, socket, res)});
-        socket.on(EVENTS.MSG_DELIVERED, res => { this.relay(EVENTS.MSG_DELIVERED, socket, res)});
-        socket.on(EVENTS.MSG_DELETE, res => { this.relay(EVENTS.MSG_DELETE, socket, res)});
-        socket.on(EVENTS.CONTACT_REQUEST, res => { this.relay(EVENTS.CONTACT_REQUEST, socket, res)});
-        socket.on(EVENTS.CONTACt_INFO, res => { this.relay(EVENTS.CONTACt_INFO, socket, res)});
-        socket.on(EVENTS.SEND_MSG, res => { this.relay(EVENTS.SEND_MSG, socket, res)});
+        socket.on(EVENTS.CONV_REQUEST, res => { this.relayToHost(EVENTS.CONV_REQUEST, socket, res)});
+        socket.on(EVENTS.CONV_DATA, res => { this.relayToClient(EVENTS.CONV_DATA, socket, res)});
+        socket.on(EVENTS.SEND_MSG, res => { this.relayToHost(EVENTS.SEND_MSG, socket, res)});
+        socket.on(EVENTS.MSG_RECEIVE, res => { this.relayToClient(EVENTS.MSG_RECEIVE, socket, res)});
+        socket.on(EVENTS.MSG_SENT, res => { this.relayToClient(EVENTS.MSG_SENT, socket, res)});
+        socket.on(EVENTS.MSG_DELIVERED, res => { this.relayToClient(EVENTS.MSG_DELIVERED, socket, res)});
+        socket.on(EVENTS.MSG_DELETE, res => { this.relayToHost(EVENTS.MSG_DELETE, socket, res)});
+        socket.on(EVENTS.CONTACT_REQUEST, res => { this.relayToHost(EVENTS.CONTACT_REQUEST, socket, res)});
+        socket.on(EVENTS.CONTACt_INFO, res => { this.relayToClient(EVENTS.CONTACt_INFO, socket, res)});
 
     });
 };
