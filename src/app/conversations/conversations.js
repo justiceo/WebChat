@@ -126,7 +126,7 @@ export class ConversationsCtrl {
   }
 
   registerListeners() {
-    this.socket.emit(EVENTS.CONV_REQUEST, this.sign(""));
+    this.trigger(EVENTS.CONV_REQUEST, this.sign(""));
     this.socket.on(EVENTS.CONV_DATA, res => { this.handle(this.noop, res) });
     this.socket.on(EVENTS.MSG_RECEIVE, res => { this.handle(this.noop, res) });
     this.socket.on(EVENTS.MSG_SENT, res => { this.handle(this.noop, res) });
@@ -138,8 +138,15 @@ export class ConversationsCtrl {
   sign(message) {
     return {
       auth: { authToken: this.cache('authToken') },
+      hostId: this.cache('hostId'),
       message: message
     }
+  }
+
+  trigger(event, args) {
+    let str = typeof(args) == 'object' ? '[object]' : args;
+    console.log("->Triggering: " + event + ", ", str);
+    this.socket.emit(event, args);
   }
 
   handle(fn, args) {
