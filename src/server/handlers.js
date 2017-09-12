@@ -72,8 +72,7 @@ Handlers.prototype.onTokenValidate = function onTokenValidate(socket, data) {
                 console.log("no error during pairing");
                 if(pairedClient) {
                     console.log("Info: ", this.TAG, "Pairing ", mClientId, "with", pairedClient, "on socket:", pairedSocket);
-                    let payload = {hostId: mClientId};
-                    socket.to(pairedSocket).emit(EVENTS.ROOM_AUTHED, payload);
+                    socket.to(pairedSocket).emit(EVENTS.ROOM_AUTHED, mClientId);
                 }
             });
         }
