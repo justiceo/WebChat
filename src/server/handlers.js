@@ -96,6 +96,8 @@ Handlers.prototype.onError = function onError(socket, error) {
 }
 
 Handlers.prototype.relayToHost = function(event, socket, args) {
+    let str = typeof(args) == 'object' || typeof(args) == 'undefined' ? '[object]' : args;
+    console.log('Info:', socket.name, '<-RelayToHost:', event, str);
     let hostId = args.hostId;
     this.clientManager.db.get(hostId, (err, hostSocket) => {
         if(err) {
@@ -103,17 +105,21 @@ Handlers.prototype.relayToHost = function(event, socket, args) {
             return;
         }
         socket.to(hostSocket).emit(event, args);
+        console.log('Info:', socket.name, 'Relaying to host on', hostSocket);
     });
 }
 
 Handlers.prototype.relayToClient = function(event, socket, args) {
-    let clientId = this.clientManager.extractClientId(args.auth.authToken);
+    let str = typeof(args) == 'object' || typeof(args) == 'undefined' ? '[object]' : args;
+    console.log('Info:', socket.name, '<-RelayToClient:', event, str);
+    let clientId = args.clientId;
     this.clientManager.db.get(clientId, (err, clientSocket) => {
         if(err) {
             console.error(this.TAG, "Error relaying data:- client not found");
             return;
         }
         socket.to(clientSocket).emit(event, args);
+        console.log('Info:', socket.name, 'Relaying to client on', clientSocket);
     });
 }
 

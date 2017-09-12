@@ -2,9 +2,10 @@
 import EVENTS       from '../../server/events';
 
 export class SimulatorCtrl {
-    constructor($scope, SocketService) {
+    constructor($scope, $window, SocketService) {
         console.log("started simulator");
         this.$scope = $scope;
+        this.storage = $window.sessionStorage;
         if(!SocketService.io) {
             console.error("SimulCtrl: socket.io not loaded");
         }
@@ -15,45 +16,50 @@ export class SimulatorCtrl {
 
     init(socket) {
         this.socket = socket;
+        
+        // register handlers
         socket.on('connect', (data) => {
             console.log("emulator: connected to server");
             // request token
             socket.emit(EVENTS.TOKEN_REQUEST, "web-emulator");
+        });
+        
+        socket.on(EVENTS.TOKEN, (authToken) => {                
+            console.log("emulator: recieved token", authToken)
+            this.authToken = authToken;           
+            this.$scope.$apply();
+        });
 
-            // receive token, wait a moment and send validation request
-            socket.on(EVENTS.TOKEN, (authToken) => {                
-                console.log("emulator: recieved token", authToken)
-                this.authToken = authToken;  
-                console.log("authtoken set to: ", this.authToken); 
-                console.log("this is:", this);            
-                this.$scope.$apply();
-
-                socket.on(EVENTS.CONV_REQUEST, (req) => {
-                    socket.emit(EVENTS.CONV_DATA, {
-                        auth: { authToken: authToken },
-                        message: [
-                            {
-                                "text": "hello world",
-                                "sender": "Nelson Mandela"
-                            }
-                        ]
-                    })
-                })
-            });
-
+        socket.on(EVENTS.CONV_REQUEST, (req) => {
+            console.log("recieved conv request", req);
+            socket.emit(EVENTS.CONV_DATA, this.sign("hello world"))
         });
     }
 
     sign(message) {
+        console.log("clientid:", this.cache('clientId'));
         return {
             auth: { 'authToken': "" + this.authToken },
+            clientId: this.cache("clientId"),
             message: message
         }
     }
 
     submitCode() {
         console.log("submitting ", this.qrcode, this.authToken);
+        let clientId = this.extractClientId(this.qrcode);
+        this.cache('clientId', clientId);
         this.socket.emit(EVENTS.TOKEN_VALIDATE, this.sign(this.qrcode));
+    }
+    cache(key,value) {
+      if(value !== undefined)
+          this.storage.setItem(key, JSON.stringify(value));
+      else
+          return JSON.parse(this.storage.getItem(key));
+    }
+
+    extractClientId(authToken) {
+        return authToken.substring(authToken.lastIndexOf('--') + 2);
     }
 }
 
