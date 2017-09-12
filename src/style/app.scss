@@ -1,29 +1,14 @@
 
 @import '_bootstrap-custom';
-@import '../../node_modules/animate.css/animate.min.css';
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css';
 
 
 /** Utils **/
-
-.no-padding {
-  padding-left: 0;
-  padding-right: 0;
-}
-.no-border {
-  border: none;
-}
-
-.primary-btn {
-  @extend .btn-primary;
-  @extend .btn-lg;
-  border-radius: 30px;
-  padding: 10px 50px;  
-}
-
 i.icons {
   font-size: 120%;
   line-height: 1.6em;
 }
+
 .btn-icon {
     border: none;
     color: $brand-primary;
@@ -183,7 +168,7 @@ body {
     .wrapper { padding: 50px; }
 
     img.logo {
-      width: 200px;
+      width: 100px;
     }
 
     .conviction {
