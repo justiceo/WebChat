@@ -16,6 +16,10 @@ export class AuthCtrl {
             console.error("AuthCtrl: socket.io not loaded");
             this.state = 'isErrored';
         }
+        else if(this.cache("hostId")) {
+            this.authed = true;
+            this.state = EVENTS.ROOM_AUTHED;
+        }
         else{
             this.init(SocketService.io);
         }
@@ -51,13 +55,13 @@ export class AuthCtrl {
     init(socket) {
         this.socket = socket;
         this.registerListeners();
-        new Fingerprint2().get((result, components) => {
+        new Fingerprint2().get((deviceFingerPrint, components) => {
             this.state = 'loadedQRCode';
-            this.$window.deviceId = result;
+            this.cache("deviceId", deviceFingerPrint);
             // using volatile means the connection doesn't have to succeed
             // to prevent spamming the server with stale requests on-resume
             // problem is how do we then resume?
-            this.trigger(EVENTS.TOKEN_REQUEST, result);
+            this.trigger(EVENTS.TOKEN_REQUEST, deviceFingerPrint);
         })
         
     }
@@ -111,15 +115,16 @@ export class AuthCtrl {
                 if(this.state != EVENTS.ROOM_AUTHED && this.state != 'isErrored')
                     this.trigger(EVENTS.TOKEN_REFRESH, token); 
             }, 15000);
-        }); 
+        });
+        this.cache('authToken', token); 
     }
 
     onRefreshFail() {
-        this.trigger(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
+        this.trigger(EVENTS.TOKEN_REQUEST, this.cache("deviceId"));
     }
 
     onRoomAuthed(data) {
-        this.cache('roomInfo', data);
+        this.cache('hostId', data);
         this.authed = true;
         this.state = EVENTS.ROOM_AUTHED;
     }
@@ -133,7 +138,7 @@ export class AuthCtrl {
         console.log("active here");
         this.socket.disconnect();
         this.socket.connect();
-        this.trigger(EVENTS.TOKEN_REQUEST, this.$window.deviceId);
+        this.trigger(EVENTS.TOKEN_REQUEST, this.cache("deviceId"));
     }
     reload() {        
         window.location.reload();
@@ -166,7 +171,10 @@ export class AuthCtrl {
 
     sign(message) {
         return {
-            auth: { authToken: this.cache('authToken') },
+            auth: { 
+                authToken: this.cache('authToken'),
+            },
+            hostId: this.cache('hostId'),
             message: message
         }
     }
