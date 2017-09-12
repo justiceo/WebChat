@@ -11,8 +11,11 @@ export class AuthCtrl {
         this.storage = $window.sessionStorage;
         this.inactive = false;
         this.loadingQRCode = true;
-        
-        if(!SocketService.io) {
+        this.socket = SocketService.io;
+    }
+
+    $onInit() {
+        if(!this.socket) {
             console.error("AuthCtrl: socket.io not loaded");
             this.state = 'isErrored';
         }
@@ -21,8 +24,9 @@ export class AuthCtrl {
             this.state = EVENTS.ROOM_AUTHED;
         }
         else{
-            this.init(SocketService.io);
-        }
+            this.init(this.socket);
+        }     
+        
 
         var options = {
             strings: [ "",  
@@ -42,13 +46,12 @@ export class AuthCtrl {
             "What if your SMS app was ^200 . ^200 . ^200 . ^500 truly <b>magical</b>?",
             ],
             typeSpeed: 40,
-            startDelay: 20,
+            startDelay: 2000,
             backDelay: 2000,
             smartBackspace: true,
             showCursor: false,
         }
-
-        var typed = new Typed(".conviction", options);
+        let typed = new Typed(".conviction", options);
     }
             
 
