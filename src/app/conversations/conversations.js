@@ -121,8 +121,8 @@ export class ConversationsCtrl {
     convo.isActive = true;
   }
 
-  noop() {
-    console.log("noop")
+  noop(args) {
+    console.log("noop:", args);
   }
 
   registerListeners() {
