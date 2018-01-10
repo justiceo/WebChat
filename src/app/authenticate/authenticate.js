@@ -25,16 +25,16 @@ export class AuthCtrl {
         }
         else{
             this.init(this.socket);
-        }     
-        
+        }
+
 
         var options = {
-            strings: [ "",  
+            strings: [ "",
             'What if your SMS app was... ^300 a little <b>magical</b>? ^500In a good sense :)',
             "What if your SMS app could send <b>encryped</b> messages? ^2000 hmm",
             "What if your SMS app could be used on the <b>browser</b>? ^500... ^500You could look more serious in the office :) ^500",
             "What if your SMS app could send super-loooong messages without breaking it up? ^500Like 1/4, ^200 2/4 ^500 somehow 4/4 comes before 3/4",
-            "What if your SMS app could send messages that <b>auto-deletes</b> itself? ^1000Like seriously?! ^500 Yep! ^100", 
+            "What if your SMS app could send messages that <b>auto-deletes</b> itself? ^1000Like seriously?! ^500 Yep! ^100",
             'What if your SMS app could auto-magically archive spam, marketers and verification codes (after you\'ve seen them)? ^1500You\'ll have a beautiful inbox',
             'What if your SMS app has a <b>night mode</b> that is both intelligent and customizeable? ^1000',
             'What if your SMS app makes <b>Multi-sim</b> texting a bliss?',
@@ -53,7 +53,7 @@ export class AuthCtrl {
         }
         let typed = new Typed(".conviction", options);
     }
-            
+
 
     init(socket) {
         this.socket = socket;
@@ -66,7 +66,7 @@ export class AuthCtrl {
             // problem is how do we then resume?
             this.trigger(EVENTS.TOKEN_REQUEST, deviceFingerPrint);
         })
-        
+
     }
 
     registerListeners() {
@@ -81,7 +81,7 @@ export class AuthCtrl {
         this.socket.on(EVENTS.RECONNECTING,     res => {this.unhandledEvent(EVENTS.RECONNECTING, res)});
 
         this.socket.on(EVENTS.TOKEN,            res => {this.handle(this.onToken, res)});
-        this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});        
+        this.socket.on(EVENTS.REFRESH_FAIL,     res => {this.handle(this.onRefreshFail, res)});
         this.socket.on(EVENTS.ROOM_AUTHED,      res => {this.handle(this.onRoomAuthed, res)});
         this.socket.on(EVENTS.OTHER_SESSION,    res => {this.handle(this.onOtherActiveSession, res)});
 
@@ -100,7 +100,7 @@ export class AuthCtrl {
     onDisconnect(reason) {
         this.unregisterListeners();
     }
-    
+
     onError(error) {
         console.error(error);
     }
@@ -116,10 +116,11 @@ export class AuthCtrl {
             // refresh the code every 8 secs after qrcode is actually displayed
             this.$timeout(() => {
                 if(this.state != EVENTS.ROOM_AUTHED && this.state != 'isErrored')
-                    this.trigger(EVENTS.TOKEN_REFRESH, token); 
+                    this.trigger(EVENTS.TOKEN_REFRESH, token);
             }, 15000);
         });
-        this.cache('authToken', token); 
+        this.debugToken = token;
+        this.cache('authToken', token);
     }
 
     onRefreshFail() {
@@ -143,7 +144,7 @@ export class AuthCtrl {
         this.socket.connect();
         this.trigger(EVENTS.TOKEN_REQUEST, this.cache("deviceId"));
     }
-    reload() {        
+    reload() {
         window.location.reload();
     }
 
@@ -174,7 +175,7 @@ export class AuthCtrl {
 
     sign(message) {
         return {
-            auth: { 
+            auth: {
                 authToken: this.cache('authToken'),
             },
             hostId: this.cache('hostId'),

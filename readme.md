@@ -2,6 +2,13 @@
 
 A web interface for Wisper SMS
 
+#### installing
+You would need the redis binary (in addition to the npm ones)
+```
+sudo apt-get install redis-server
+sudo systemctl enable redis-server.service # enable on system boot
+```
+
 #### deploying with pm2
 NODE_ENV=production pm2 start server.js --name="webSMS" --watch
 
@@ -19,9 +26,7 @@ NODE_ENV=production pm2 start server.js --name="webSMS" --watch
 ### todo
 ---------
 * write the code on paper - spending too much time looking at the screen bro
-* prep lesson - it will take real time!!! filled with assignments too
-* take a break from it to work on kasoma and wassets tomorrow
-* write script to deploy server.js to cloud
+* bug - phone simulator can re-activate new clients with same old token
 * flesh out phone-simulator and use for testing as it's faster than app
 * confirm that phone id isn't 0000s when on server
 * only dismiss scanner view after a second trial, or make authtokens last longer
