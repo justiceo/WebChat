@@ -1,8 +1,0 @@
-version: '2.1'
-
-services:
-  websms:
-    image: websms
-    build: .
-    ports:
-      - 4000:4000
