@@ -1,6 +1,5 @@
 
-<div class="bounds" style="height: calc(100vh - 20px)">
-
+<div class="container-fluid p-0" style="height:100vh">
     <div style="background: brown"
          fxLayout="row"
          fxFlexFill >
@@ -11,7 +10,6 @@
           <div fxFlex="60px" style="background: blue">some child
           </div>
           <div fxFlex="100" style="background: lightgreen">
-            some other content
             <app-threads></app-threads>
           </div>
         </div>
@@ -19,10 +17,11 @@
           fxLayout="column">
             <div fxFlex="60px" style="background: red">some child</div>
             <div fxFlex="100" style="background: lightred">
-              some other content
               <app-thread></app-thread>
             </div>
-            <div fxFlex="80px" style="background: red">some child</div>
+            <div fxFlex="80px" style="background: red">
+              <app-rich-content></app-rich-content>
+            </div>
         </div>
     </div>
   </div>
