@@ -1,27 +1,6 @@
-
-<div class="container-fluid p-0" style="height:100vh">
-    <div style="background: brown"
-         fxLayout="row"
-         fxFlexFill >
-        <div fxFlex="35"
-          fxLayout="column">
-          <div fxFlex="60px" style="background: green">some child
-          </div>
-          <div fxFlex="60px" style="background: blue">some child
-          </div>
-          <div fxFlex="100" style="background: lightgreen">
-            <app-threads></app-threads>
-          </div>
-        </div>
-        <div fxFlex="150"
-          fxLayout="column">
-            <div fxFlex="60px" style="background: red">some child</div>
-            <div fxFlex="100" style="background: lightred">
-              <app-thread></app-thread>
-            </div>
-            <div fxFlex="80px" style="background: red">
-              <app-rich-content></app-rich-content>
-            </div>
-        </div>
-    </div>
+<div fxLayoutAlign="center" fxLayout style="height: 100vh">
+  <div fxFlexAlign="center" style="width: 100vw; max-width: 1400px; height:100vh; max-height:900px">
+    <app-threads fxFlex="30" fxLayout="column"></app-threads>
+    <app-thread fxFlex="70" fxLayout="column"></app-thread>
   </div>
+</div>
