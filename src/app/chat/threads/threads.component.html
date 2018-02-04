@@ -1,5 +1,32 @@
-<div fxFlex="60px" style="background: green">some child
+<div fxFlex="60px" style="background: green">
+  Header here
 </div>
-<div fxFlex="60px" style="background: blue">some child
+<div fxFlex="60px" fxLayoutAlign="stretch">
+  <input type="search" class="form-control" placeholder="Search" />
 </div>
-<div fxFlex="100" style="background: lightgreen">messages</div>
+<div fxFlex="100" style="overflow: scroll">
+  <div class="list-group">
+    <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="list-group-item list-group-item-action p-0">
+      <div fxFlex="100px" fxLayoutAlign="center center" style="background: red">
+        <img class="img-circle" [src]="thread.avatarUrl" width="80px" alt="" />
+      </div>
+      <div fxFlex="calc(100% - 100px)" style="background: blue">
+        <div fxLayoutAlign="space-between">
+          <span>{{ thread.name }}</span>
+          <span>{{ thread.time }}</span>
+        </div>
+        <div fxLayoutAlign="space-between" style="background: cyan">
+          <span style="min-width:0;">
+            <div
+            style="display:inline-block;
+            width:100%;
+            text-overflow:
+            ellipsis; overflow: hidden;
+            white-space:nowrap;">{{ thread.body }}</div>
+          </span>
+          <span class="badge badge-pill badge-primary">2</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
