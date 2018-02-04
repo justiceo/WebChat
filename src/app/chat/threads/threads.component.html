@@ -1,21 +1,21 @@
-<div fxFlex="60px" style="background: green">
+<div class="header" fxFlex="60px">
   Header here
 </div>
-<div fxFlex="60px" fxLayoutAlign="stretch">
+<div class="search" fxFlex="60px" fxLayoutAlign="center center">
   <input type="search" class="form-control" placeholder="Search" />
 </div>
 <div fxFlex="100" style="overflow: scroll">
   <div class="list-group">
     <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="list-group-item list-group-item-action p-0">
-      <div fxFlex="100px" fxLayoutAlign="center center" style="background: red">
+      <div fxFlex="100px" fxLayoutAlign="center center">
         <img class="img-circle" [src]="thread.avatarUrl" width="80px" alt="" />
       </div>
-      <div fxFlex="calc(100% - 100px)" style="background: blue">
+      <div fxFlex="calc(100% - 100px)">
         <div fxLayoutAlign="space-between">
           <span>{{ thread.name }}</span>
           <span>{{ thread.time }}</span>
         </div>
-        <div fxLayoutAlign="space-between" style="background: cyan">
+        <div fxLayoutAlign="space-between">
           <span style="min-width:0;">
             <div
             style="display:inline-block;
