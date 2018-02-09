@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileSettingsComponent implements OnInit {
 
+  avatarUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHWAoQ916iRw6xL3xgw8ebhq_XYl6yhiFeq1DMQuQRqLmOR7vv2g";
+  name = "John Doe";
+
   constructor() { }
 
   ngOnInit() {
