@@ -4,13 +4,13 @@
 <div class="search" fxFlex="60px" fxLayoutAlign="center center">
   <input type="search" class="form-control" placeholder="Search" />
 </div>
-<div fxFlex="100" style="overflow: scroll">
-  <div class="list-group">
-    <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="list-group-item list-group-item-action p-0">
-      <div fxFlex="100px" fxLayoutAlign="center center">
-        <img class="img-circle" [src]="thread.avatarUrl" width="80px" alt="" />
+<div class="threads-list-wrapper " fxFlex="100">
+  <div class="threads-list">
+    <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item">
+      <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
+        <img class="img-circle" [src]="thread.avatarUrl" width="50px" alt="" />
       </div>
-      <div fxFlex="calc(100% - 100px)">
+      <div class="meta" fxFlex="calc(100% - 80px)">
         <div fxLayoutAlign="space-between">
           <span>{{ thread.name }}</span>
           <span>{{ thread.time }}</span>

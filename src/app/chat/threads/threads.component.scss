@@ -1,6 +1,10 @@
 .img-circle {
   border-radius: 50%;
 }
+.avatar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .header {
   background-color: #eee;
 }
@@ -8,4 +12,19 @@
   background-color: rgb(251, 251, 251);
   padding-left: 10px;
   padding-right: 10px;
+}
+.threads-list-wrapper {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.threads-list {
+  background: #fff;
+  .thread-item {
+    border-bottom: 1px solid #f0f0f0;
+    &:hover {
+      background: #eee;
+    }
+    .meta {
+    }
+  }
 }
