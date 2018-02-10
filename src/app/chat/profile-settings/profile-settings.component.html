@@ -1,22 +1,20 @@
 <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
   <img class="img-circle" [src]="avatarUrl" width="50px" alt="" />
 </div>
-<div>
-  <ul class="nav">
-    <a class="nav-link">Hello
+<ul class="nav">
+  <a class="nav-link">
+    <i class="icons icon-speech" aria-hidden="true"></i>
+  </a>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <i class="icons icon-options-vertical" aria-hidden="true"></i>
     </a>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Separated link</a>
-      </div>
-    </li>
-  </ul>
-</div>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">New group</a>
+      <a class="dropdown-item" href="#">Profile</a>
+      <a class="dropdown-item" href="#">Archived</a>
+      <a class="dropdown-item" href="#">Settings</a>
+      <a class="dropdown-item" href="#">Sign out</a>
+    </div>
+  </li>
+</ul>

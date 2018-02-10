@@ -1,4 +1,32 @@
 <!-- fxLayout = column -->
-<div fxFlex="60px" style="background: red">contact info here</div>
+<div fxFlex="60px" fxLayoutAlign="space-between center" style="background: #eee">
+  <div fxLayoutAlign="center center">
+    <img class="img-circle" [src]="avatarUrl" width="50px" alt="" />
+    <div fxLayout="column">
+      <span>John Doe</span>
+      <span>Last seen today</span>
+    </div>
+  </div>
+  <ul class="nav">
+    <a class="nav-link">
+      <i class="icons icon-magnifier" aria-hidden="true"></i>
+    </a>
+    <a class="nav-link">
+      <i class="icons icon-paper-clip" aria-hidden="true"></i>
+    </a>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="icons icon-options-vertical" aria-hidden="true"></i>
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">New group</a>
+        <a class="dropdown-item" href="#">Profile</a>
+        <a class="dropdown-item" href="#">Archived</a>
+        <a class="dropdown-item" href="#">Settings</a>
+        <a class="dropdown-item" href="#">Sign out</a>
+      </div>
+    </li>
+  </ul>
+</div>
 <app-messages fxFlex="100" style="background: green"></app-messages>
 <app-rich-content fxFlex="80px" style="background: red"></app-rich-content>
