@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessageComponent implements OnInit {
 
+  avatarUrl = "https://randomuser.me/api/portraits/men/43.jpg";
   constructor() { }
 
   ngOnInit() {
