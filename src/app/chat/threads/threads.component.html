@@ -6,14 +6,14 @@
   <div class="threads-list">
     <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item">
       <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
-        <img class="img-circle" [src]="thread.avatarUrl" width="50px" alt="" />
+        <img class="rounded-circle" [src]="thread.avatarUrl" width="50px" alt="" />
       </div>
       <div class="meta" fxFlex="calc(100% - 80px)">
         <div fxLayoutAlign="space-between">
           <span>{{ thread.name }}</span>
           <span>{{ thread.time }}</span>
         </div>
-        <div fxLayoutAlign="space-between">
+        <div fxLayoutAlign="space-between center">
           <span style="min-width:0;">
             <div style="display:inline-block;
             width:100%;
