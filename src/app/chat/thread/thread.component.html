@@ -1,7 +1,7 @@
 <!-- fxLayout = column -->
 <div class="px-2" fxFlex="60px" fxLayoutAlign="space-between center" style="background: #eee; border-left: 1px solid #aaa">
-  <div fxLayoutAlign="center center">
-    <img class="img-circle" [src]="avatarUrl" width="50px" alt="" />
+  <div fxLayoutAlign="start center">
+    <img class="rounded-circle" width="50px" [src]="avatarUrl" alt="" />
     <div fxLayout="column">
       <span>John Doe</span>
       <span>Last seen today</span>
@@ -29,4 +29,4 @@
   </ul>
 </div>
 <app-messages fxFlex="100" style="overflow-y: scroll"></app-messages>
-<app-rich-content fxFlex="80px" fxLayoutAlign="stretch center" style="background: red"></app-rich-content>
+<app-rich-content fxFlex="80px" fxLayoutAlign="stretch center"></app-rich-content>
