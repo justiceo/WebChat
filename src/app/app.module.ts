@@ -7,6 +7,7 @@ import { ChatModule } from './chat/chat.module';
 
 import { AppComponent } from './app.component';
 import { DataService } from './data.service';
+import { HttpHandlerService } from './http_handler.service';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { DataService } from './data.service';
     HttpClientModule,
     ChatModule,
   ],
-  providers: [DataService],
+  providers: [DataService, HttpHandlerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
