@@ -6,7 +6,7 @@ import { DataService } from './data.service';
 import { HttpHandlerService } from './http_handler.service';
 import { SmsMessage } from './message';
 
-fdescribe('DataService', () => {
+describe('DataService', () => {
   let httpHandlerService: HttpHandlerService;
   let dataService: DataService;
   let mockBackend: MockBackend;
