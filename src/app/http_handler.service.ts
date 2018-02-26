@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 /**
  * Http handler service that provides wrapper for ajax calls to server
@@ -17,23 +18,25 @@ export class HttpHandlerService {
     return window.location.origin + url;
   }
 
-  get(url: string): Observable<string> {
-    const cached = this.cache(url);
+  get(url: string): Observable<any> {
+    const cached = this.getCacheItem(url);
     if (cached) {
-      return cached;
+      return Observable.of(cached);
     } else {
       return this.http.get(url).map((res) => {
-        this.cache(url, res.text());
+        this.setCacheItem(url, res.text());
         return res.text();
       });
     }
   }
 
-  cache(key: string, value?: {}): Observable<string> {
-    if (!value) {
-      return JSON.parse(this.storage.getItem(key) || 'null');
-    }
-    this.storage.setItem(key, JSON.stringify(value));
-    return this.cache(key);
+  getCacheItem(key: string): any {
+    return JSON.parse(this.storage.getItem(key));
+  }
+
+  setCacheItem(key: string, value: any): string {
+    let strVal = JSON.stringify(value);
+    this.storage.setItem(key, strVal);
+    return strVal;
   }
 }

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 import { ChatModule } from './chat/chat.module';
 
@@ -17,7 +17,7 @@ import { HttpHandlerService } from './http_handler.service';
   imports: [
     BrowserModule,
     FlexLayoutModule,
-    HttpClientModule,
+    HttpModule,
     ChatModule,
   ],
   providers: [DataService, HttpHandlerService],

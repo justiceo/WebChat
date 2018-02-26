@@ -7,7 +7,7 @@ import { HttpHandlerService } from './http_handler.service';
 
 const makeObserver = () => jasmine.createSpyObj('observer', ['error']);
 
-describe('Tests for HttpHandlerService', () => {
+describe('HttpHandlerService', () => {
   let httpHandlerService: HttpHandlerService;
   let mockBackend: MockBackend;
   let lastConnection: MockConnection;
@@ -37,11 +37,11 @@ describe('Tests for HttpHandlerService', () => {
     const value = '{"key": "value"}';
 
     // assert key-value doesn't previously exist
-    expect(httpHandlerService.cache(key)).toEqual(null);
+    expect(httpHandlerService.getCacheItem(key)).toEqual(null);
 
     // insert and test
-    httpHandlerService.cache(key, value);
-    expect(httpHandlerService.cache(key)).toEqual(value);
+    httpHandlerService.setCacheItem(key, value);
+    expect(httpHandlerService.getCacheItem(key)).toEqual(value);
   });
 
   it('should be able to make http requests', fakeAsync(() => {

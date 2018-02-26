@@ -11,13 +11,15 @@ export class ThreadsComponent implements OnInit {
   threads = [];
   constructor(private dataService: DataService) {
     this.dataService.getRandomUsers().subscribe(data => {
-      for (let user of data['results']) {
+      data = JSON.parse(data);
+      let results: Array<any> = data["results"];
+      results.forEach(u => {
         this.threads.push({
-          'name': this.toTitleCase(user['name']['first']) + ' ' + this.toTitleCase(user['name']['last']),
-          'avatarUrl': user['picture']['large'],
-          'body': user['cell'],
+          'name': this.toTitleCase(u['name']['first']) + ' ' + this.toTitleCase(u['name']['last']),
+          'avatarUrl': u['picture']['large'],
+          'body': u['cell'],
         });
-      }
+      })
     });
   }
 
