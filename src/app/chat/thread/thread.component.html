@@ -28,5 +28,11 @@
     </li>
   </ul>
 </div>
-<app-messages fxFlex="100" style="overflow-y: scroll"></app-messages>
+<div fxFlex="100" style="overflow-y: scroll">
+  <ul style="background: #ddd" class="list-unstyled px-2">
+    <li *ngFor="let message of messages" class="mt-1">
+      <app-message fxLayoutAlign="start end"></app-message>
+    </li>
+  </ul>
+</div>
 <app-rich-content fxFlex="80px" fxLayoutAlign="stretch center"></app-rich-content>

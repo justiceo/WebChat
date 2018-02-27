@@ -47,6 +47,10 @@ describe('DataService', () => {
     });
   }));
 
+  // TODO: test messages should be in chronological order
+
+  // TODO: multiple calls should return same list
+
   describe('chooseAny', () => {
     it('should return lower bound', inject([DataService], (service: DataService) => {
       spyOn(Math, 'random').and.returnValue(0);
