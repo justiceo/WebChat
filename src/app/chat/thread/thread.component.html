@@ -30,8 +30,13 @@
 </div>
 <div fxFlex="100" style="overflow-y: scroll">
   <ul style="background: #ddd" class="list-unstyled px-2">
-    <li *ngFor="let message of messages" class="mt-1">
-      <app-message fxLayoutAlign="start end"></app-message>
+    <li *ngFor="let message of messages; let i = index" class="mt-1">
+      <div fxLayoutAlign="start end">
+        <div fxLayoutAlign="start center">
+          <img class="rounded-circle" width="30px" [src]="avatarUrl" alt="" />
+        </div>
+        <div class="p-1 mx-1" style="background: white; border-radius: 8px"> {{i}} text message here</div>
+      </div>
     </li>
   </ul>
 </div>

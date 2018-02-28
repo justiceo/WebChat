@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/expand';
+import { from } from 'rxjs/observable/from';
+import { expand } from 'rxjs/operators';
 
 import { HttpHandlerService } from './http_handler.service';
 import { SmsMessage, SmsContentType } from './message';
@@ -9,11 +13,24 @@ import { SmsMessage, SmsContentType } from './message';
 export class DataService {
 
   quotes: Array<string> = [];
+  users: Array<any> = [];
 
-  constructor(private http: HttpHandlerService) { }
+  constructor(private http: HttpHandlerService) {
+  }
+
+  ready(): Observable<boolean> {
+    this.loadQuotes().subscribe(qs => {
+      this.quotes.push(...qs);
+    });
+
+    return Observable.of(true)
+  }
 
   loadQuotes(): Observable<Array<string>> {
-    return this.http.get('https://talaikis.com/api/quotes/').map(data => data.map(q => q['quote']));
+    return this.http.get('https://talaikis.com/api/quotes/').map(data => {
+      let d = JSON.parse(data);
+      return d.map(q => q['quote'])
+    });
   }
 
   getRandomUsers(): Observable<any> {
@@ -27,18 +44,27 @@ export class DataService {
       return Observable.of(cached);
     }
 
-    let mCount = this.randomInt(1, 100);
     let mList: Array<SmsMessage> = [];
-    let lastTimeStamp = Date.now();
-    for (let i = 0; i < mCount; i++) {
-      let m = new SmsMessage();
-      m.contentType = this.randomContentType();
-      m.content = this.randomContent(m.contentType);
-      m.userID = this.randomUserID();
-      lastTimeStamp = this.getTimeBefore(lastTimeStamp);
-      m.timestamp = lastTimeStamp;
-      mList.push(m);
-    }
+    this.loadQuotes().subscribe(qs => {
+      this.quotes.push(...qs);
+
+      this.getRandomUsers().subscribe(u => {
+        u = JSON.parse(u)
+        this.users.push(...u);
+
+        let mCount = this.randomInt(1, 100);
+        let lastTimeStamp = Date.now();
+        for (let i = 0; i < mCount; i++) {
+          let m = new SmsMessage();
+          m.contentType = this.randomContentType();
+          m.content = this.randomContent(m.contentType);
+          m.userID = this.randomUserID();
+          lastTimeStamp = this.getTimeBefore(lastTimeStamp);
+          m.timestamp = lastTimeStamp;
+          mList.push(m);
+        }
+      })
+    });
 
     return Observable.of(mList);
   }

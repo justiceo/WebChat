@@ -24,7 +24,7 @@ export class HttpHandlerService {
       return Observable.of(cached);
     } else {
       return this.http.get(url).map((res) => {
-        this.setCacheItem(url, res.text());
+        this.setCacheItem(url, res.json());
         return res.text();
       });
     }
