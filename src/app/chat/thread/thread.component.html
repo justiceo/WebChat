@@ -30,12 +30,12 @@
 </div>
 <div fxFlex="100" style="overflow-y: scroll">
   <ul style="background: #ddd" class="list-unstyled px-2">
-    <li *ngFor="let message of messages; let i = index" class="mt-1">
+    <li *ngFor="let message of messages | async" class="mt-1">
       <div fxLayoutAlign="start end">
         <div fxLayoutAlign="start center">
           <img class="rounded-circle" width="30px" [src]="avatarUrl" alt="" />
         </div>
-        <div class="p-1 mx-1" style="background: white; border-radius: 8px"> {{i}} text message here</div>
+        <div class="p-1 mx-1" style="background: white; border-radius: 8px"> {{ message.content }}</div>
       </div>
     </li>
   </ul>

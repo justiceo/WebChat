@@ -1,72 +1,59 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/expand';
-import { from } from 'rxjs/observable/from';
-import { expand } from 'rxjs/operators';
+import 'rxjs/add/operator/mergeMap';
 
-import { HttpHandlerService } from './http_handler.service';
-import { SmsMessage, SmsContentType } from './message';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {from} from 'rxjs/observable/from';
+import {zip} from 'rxjs/observable/zip';
+import {expand} from 'rxjs/operators';
+
+import {Contact} from './contact';
+import {HttpHandlerService} from './http_handler.service';
+import {SmsContentType, SmsMessage} from './message';
 
 
 @Injectable()
 export class DataService {
+  quotes: string[] = [];
+  users: Contact[] = [];
 
-  quotes: Array<string> = [];
-  users: Array<any> = [];
+  constructor(private http: HttpHandlerService) {}
 
-  constructor(private http: HttpHandlerService) {
+  getQuotes(): Observable<string> {
+    return this.http.get('https://talaikis.com/api/quotes/')
+        .flatMap(x => x)
+        .map(x => x['quote']);
   }
 
-  ready(): Observable<boolean> {
-    this.loadQuotes().subscribe(qs => {
-      this.quotes.push(...qs);
+  getRandomUsers(): Observable<Contact> {
+    const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
+    return this.http
+        .get('https://randomuser.me/api/?inc=name,cell,picture&results=20')
+        .map(x => x['results'])
+        .flatMap(x => x)
+        .map(x => {
+          const contact = new Contact();
+          contact.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
+          contact.avatarUrl = x['picture']['large'];
+          contact.userID = x['cell'];
+          return contact;
+        });
+  }
+
+  getMessages(threadID: string): Observable<SmsMessage> {
+    const messages = zip(this.getQuotes(), this.getRandomUsers());
+    let lastTimeStamp = Date.now();
+    return messages.map(val => {
+      const [quote, user] = val;
+      const m = new SmsMessage();
+      m.contentType = SmsContentType.PlainText;
+      m.content = quote;
+      m.userID = user.userID;
+      lastTimeStamp = this.getTimeBefore(lastTimeStamp);
+      m.timestamp = lastTimeStamp;
+      return m;
     });
-
-    return Observable.of(true)
-  }
-
-  loadQuotes(): Observable<Array<string>> {
-    return this.http.get('https://talaikis.com/api/quotes/').map(data => {
-      let d = JSON.parse(data);
-      return d.map(q => q['quote'])
-    });
-  }
-
-  getRandomUsers(): Observable<any> {
-    return this.http.get("https://randomuser.me/api/?inc=name,cell,picture&results=20");
-  }
-
-  getMessages(threadID: string): Observable<Array<SmsMessage>> {
-
-    let cached: Array<SmsMessage> = this.http.getCacheItem(threadID);
-    if (cached) {
-      return Observable.of(cached);
-    }
-
-    let mList: Array<SmsMessage> = [];
-    this.loadQuotes().subscribe(qs => {
-      this.quotes.push(...qs);
-
-      this.getRandomUsers().subscribe(u => {
-        u = JSON.parse(u)
-        this.users.push(...u);
-
-        let mCount = this.randomInt(1, 100);
-        let lastTimeStamp = Date.now();
-        for (let i = 0; i < mCount; i++) {
-          let m = new SmsMessage();
-          m.contentType = this.randomContentType();
-          m.content = this.randomContent(m.contentType);
-          m.userID = this.randomUserID();
-          lastTimeStamp = this.getTimeBefore(lastTimeStamp);
-          m.timestamp = lastTimeStamp;
-          mList.push(m);
-        }
-      })
-    });
-
-    return Observable.of(mList);
   }
 
   // Returns a random integer between min (included) and max (included)
@@ -74,27 +61,35 @@ export class DataService {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  chooseAny<E>(arr: Array<E>): E {
-    if (!arr || arr.length == 0) {
-      throw 'cannot choose from null or empty array';
+  chooseAny<E>(arr: E[]): E {
+    if (!arr || arr.length === 0) {
+      throw new Error('cannot choose from null or empty array');
     }
     return arr[this.randomInt(0, arr.length - 1)];
   }
 
   randomContentType(): SmsContentType {
-    return this.chooseAny([SmsContentType.PlainText, SmsContentType.EmojiText, SmsContentType.Image, SmsContentType.Video]);
+    return this.chooseAny([
+      SmsContentType.PlainText, SmsContentType.EmojiText, SmsContentType.Image,
+      SmsContentType.Video
+    ]);
   }
 
-  randomContent(type: SmsContentType): any {
+  randomContent(type: SmsContentType): string {
     switch (type) {
       case SmsContentType.PlainText: {
         return this.chooseAny(this.quotes);
       }
       case SmsContentType.Image: {
-        return this.chooseAny(['https://picsum.photos/200/300/?random', 'https://picsum.photos/200/150/?random', 'https://picsum.photos/g/300/300/?random', 'https://picsum.photos/1600/900/?random'])
+        return this.chooseAny([
+          'https://picsum.photos/200/300/?random',
+          'https://picsum.photos/200/150/?random',
+          'https://picsum.photos/g/300/300/?random',
+          'https://picsum.photos/1600/900/?random'
+        ])
       }
       case SmsContentType.EmojiText: {
-        return this.chooseAny(this.quotes) + ":)  :D";
+        return this.chooseAny(this.quotes) + ':)  :D';
       }
       default:
         return this.chooseAny(this.quotes);
@@ -102,7 +97,7 @@ export class DataService {
   }
 
   randomUserID(): string {
-    return this.chooseAny(["my_id", "other_contact_id"]);
+    return this.chooseAny(['my_id', 'other_contact_id']);
   }
 
   getTimeBefore(timestamp: number): number {

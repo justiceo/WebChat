@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
+
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 
 /**
  * Http handler service that provides wrapper for ajax calls to server
@@ -12,7 +13,7 @@ import 'rxjs/add/observable/of';
 export class HttpHandlerService {
   storage: Storage = window.sessionStorage;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {}
 
   host(url?: string): string {
     return window.location.origin + url;
@@ -25,7 +26,7 @@ export class HttpHandlerService {
     } else {
       return this.http.get(url).map((res) => {
         this.setCacheItem(url, res.json());
-        return res.text();
+        return res.json();
       });
     }
   }
@@ -35,7 +36,7 @@ export class HttpHandlerService {
   }
 
   setCacheItem(key: string, value: any): string {
-    let strVal = JSON.stringify(value);
+    const strVal = JSON.stringify(value);
     this.storage.setItem(key, strVal);
     return strVal;
   }

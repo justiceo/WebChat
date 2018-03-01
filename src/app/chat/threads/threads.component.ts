@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../data.service';
+import {Component, OnInit} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {bufferTime} from 'rxjs/operators';
+
+import {Contact} from '../../contact';
+import {DataService} from '../../data.service';
 
 @Component({
   selector: 'app-threads',
@@ -7,26 +11,10 @@ import { DataService } from '../../data.service';
   styleUrls: ['./threads.component.scss']
 })
 export class ThreadsComponent implements OnInit {
-
-  threads = [];
+  threads: Observable<Contact[]>;
   constructor(private dataService: DataService) {
-    this.dataService.getRandomUsers().subscribe(data => {
-      data = JSON.parse(data);
-      let results: Array<any> = data["results"];
-      results.forEach(u => {
-        this.threads.push({
-          'name': this.toTitleCase(u['name']['first']) + ' ' + this.toTitleCase(u['name']['last']),
-          'avatarUrl': u['picture']['large'],
-          'body': u['cell'],
-        });
-      })
-    });
+    this.threads = dataService.getRandomUsers().pipe(bufferTime(100));
   }
 
-  ngOnInit() {
-  }
-
-  toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-  }
+  ngOnInit() {}
 }
