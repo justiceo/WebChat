@@ -20,13 +20,19 @@ export class HttpHandlerService {
   }
 
   get(url: string): Observable<any> {
+    return this.http.get(url).map((res) => {
+      return res.json();
+    });
+  }
+
+  getAndCache(url: string): Observable<any> {
     const cached = this.getCacheItem(url);
     if (cached) {
       return Observable.of(cached);
     } else {
-      return this.http.get(url).map((res) => {
-        this.setCacheItem(url, res.json());
-        return res.json();
+      return this.get(url).map((json) => {
+        this.setCacheItem(url, json);
+        return json;
       });
     }
   }

@@ -8,36 +8,37 @@ import {from} from 'rxjs/observable/from';
 import {zip} from 'rxjs/observable/zip';
 import {expand} from 'rxjs/operators';
 
-import {Contact} from './contact';
 import {HttpHandlerService} from './http_handler.service';
 import {SmsContentType, SmsMessage} from './message';
+import {Thread} from './thread';
 
 
 @Injectable()
 export class DataService {
   quotes: string[] = [];
-  users: Contact[] = [];
+  users: Thread[] = [];
 
   constructor(private http: HttpHandlerService) {}
 
   getQuotes(): Observable<string> {
-    return this.http.get('https://talaikis.com/api/quotes/')
+    return this.http.getAndCache('https://talaikis.com/api/quotes/')
         .flatMap(x => x)
         .map(x => x['quote']);
   }
 
-  getRandomUsers(): Observable<Contact> {
+  getRandomUsers(): Observable<Thread> {
     const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
     return this.http
-        .get('https://randomuser.me/api/?inc=name,cell,picture&results=20')
+        .getAndCache(
+            'https://randomuser.me/api/?inc=name,cell,picture&results=20')
         .map(x => x['results'])
         .flatMap(x => x)
         .map(x => {
-          const contact = new Contact();
-          contact.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
-          contact.avatarUrl = x['picture']['large'];
-          contact.userID = x['cell'];
-          return contact;
+          const thread = new Thread();
+          thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
+          thread.avatar = x['picture']['large'];
+          thread.id = x['cell'];
+          return thread;
         });
   }
 
@@ -45,11 +46,11 @@ export class DataService {
     const messages = zip(this.getQuotes(), this.getRandomUsers());
     let lastTimeStamp = Date.now();
     return messages.map(val => {
-      const [quote, user] = val;
+      const [quote, thread] = val;
       const m = new SmsMessage();
       m.contentType = SmsContentType.PlainText;
       m.content = quote;
-      m.userID = user.userID;
+      m.userID = thread.id;
       lastTimeStamp = this.getTimeBefore(lastTimeStamp);
       m.timestamp = lastTimeStamp;
       return m;
@@ -97,7 +98,7 @@ export class DataService {
   }
 
   randomUserID(): string {
-    return this.chooseAny(['my_id', 'other_contact_id']);
+    return this.chooseAny(['my_id', 'other_thread_id']);
   }
 
   getTimeBefore(timestamp: number): number {

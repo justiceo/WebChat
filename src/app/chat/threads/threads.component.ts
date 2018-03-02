@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {bufferTime} from 'rxjs/operators';
+import {bufferCount} from 'rxjs/operators';
 
-import {Contact} from '../../contact';
+import {Thread} from '../../thread';
 import {DataService} from '../../data.service';
 
 @Component({
@@ -11,9 +11,9 @@ import {DataService} from '../../data.service';
   styleUrls: ['./threads.component.scss']
 })
 export class ThreadsComponent implements OnInit {
-  threads: Observable<Contact[]>;
+  threads: Observable<Thread[]>;
   constructor(private dataService: DataService) {
-    this.threads = dataService.getRandomUsers().pipe(bufferTime(100));
+    this.threads = dataService.getRandomUsers().pipe(bufferCount(100));
   }
 
   ngOnInit() {}
