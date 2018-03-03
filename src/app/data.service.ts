@@ -1,6 +1,11 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/expand';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/windowCount';
+import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/skipWhile';
+import 'rxjs/add/operator/concatMap';
 
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
@@ -40,6 +45,41 @@ export class DataService {
           thread.id = x['cell'];
           return thread;
         });
+  }
+
+  /**
+   * TBD: Phase two requirement
+   */
+  getGroups(): Observable<Thread> {
+    const groups = this.getRandomUsers().windowCount(10).map(win => {
+      const gt = new Thread();
+      gt.userIds = [];
+      const mapped = win.concatMap((out, e) => {
+        gt.name += ', ' + out.name;
+        gt.id += ' ' + out.id;
+        gt.userIds.push(out.id);
+        out.name = name;
+        out = gt;
+        return Observable.of(out);
+      });
+      /*
+      const groupSize = this.randomInt(2, 10);
+      const groupThread2 = new Thread();
+      groupThread.userIds = [];
+      console.log("creating gthread from win: ", win);
+      for (let i = 0; i < groupSize; i++) {
+        const t: Thread = win[i];
+        if(!t) {
+          continue;
+        }
+        groupThread.name += ', ' + t.name;
+        groupThread.id += t.id;
+        groupThread.userIds.push(t.id);
+      }
+      return groupThread;*/
+    });
+
+    return null;
   }
 
   getMessages(threadID: string): Observable<SmsMessage> {
@@ -87,7 +127,7 @@ export class DataService {
           'https://picsum.photos/200/150/?random',
           'https://picsum.photos/g/300/300/?random',
           'https://picsum.photos/1600/900/?random'
-        ])
+        ]);
       }
       case SmsContentType.EmojiText: {
         return this.chooseAny(this.quotes) + ':)  :D';
