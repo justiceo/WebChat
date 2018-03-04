@@ -1,5 +1,5 @@
 <!-- fxLayout = column -->
-<div class="px-2" fxFlex="60px" fxLayoutAlign="space-between center" style="background: #eee; border-left: 1px solid #aaa">
+<div class="px-2" fxFlex="60px" fxLayoutAlign="space-between center" style="border-left: 1px solid #aaa">
   <div fxLayoutAlign="start center">
     <img class="rounded-circle" width="50px" [src]="avatarUrl" alt="" />
     <div fxLayout="column">
@@ -35,13 +35,13 @@
   </ul>
 </div>
 <div fxFlex="100" style="overflow-y: scroll">
-  <ul style="background: #ddd" class="list-unstyled px-2">
-    <li *ngFor="let message of messages | async" class="mt-1 message" [ngClass]="{'mine': message.userID != 'me', 'local-last': message.isLocalLast}">
+  <ul class="list-unstyled px-2">
+    <li *ngFor="let message of messages | async" class="mt-1 message" [ngClass]="{'out': message.userID === 'me', 'in': message.userID !== 'me', 'local-last': message.isLocalLast}">
       <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} end">
         <div fxLayoutAlign="start center">
-          <img [style.visibility]="message.isLocalLast && message.userID != 'me' ? 'visible' : 'hidden'" class="rounded-circle" width="30px" [src]="avatarUrl" alt="" />
+          <img class="rounded-circle avatar" width="30px" [src]="avatarUrl" alt="" />
         </div>
-        <div class="p-1 mx-1" style="background: white; border-radius: 8px; max-width: 450px"> {{ message.content }}</div>
+        <div class="content">{{ message.content }}</div>
       </div>
     </li>
   </ul>

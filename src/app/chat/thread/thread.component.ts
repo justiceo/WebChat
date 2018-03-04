@@ -8,6 +8,7 @@ import {SmsContentType, SmsMessage} from '../../message';
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
+  styleUrls: ['./thread.component.scss'],
 })
 export class ThreadComponent implements OnInit {
   messages: Observable<SmsMessage[]>;

@@ -1,0 +1,35 @@
+
+
+.message {
+    font-family: 'Open Sans', sans-serif;
+    min-width: 100px;
+    font-size: 13.6px;
+
+    img.avatar {
+        visibility: hidden;
+    }
+
+    .content {
+        border-radius: 7.5px;
+        max-width: 450px;
+        background: white;
+        padding: 6px 7px 8px 9px;
+    }
+
+    &.out {
+        img.avatar {
+            visibility: hidden !important;
+        }
+        .content {
+            // left arrow: background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAmCAMAAADp2asXAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACoUExURUxpcaG3kg8PD1JdSXeHbLPKoCo1KgAAAAAAAA4ODr7Xq7HJoFZkTi8zKgwMDKK4kZ+1kC03LXuJbr7WqwAAAL/XrFpkUgAAAHuMb7LJoHKBZae9lQAAAJ2zjsfZtwAAACwxJp2yjqW8lVVqVbLLoQ8PDyk0KVJaSbHHnr3Vqp2yjXWEarPLobbOpLrTp73Wqr3XqrPMobnSp7fPpLfQo7fPpb/Yq7bPpKsjaEcAAAAsdFJOUwDFEVqN6DABAhL96l42FMbBM5H9Bf1jA5XldugMmHwJLr7PDMwQMVfj/L+JZBaDmAAAAIpJREFUKM/tzTcSwkAQRNHG7grvvfdGuxL+/jeDTASfgCLlh/OqaxQmrSZLJb1BeB0bhstwxHBbTBniAf84pwIEVywLodCRIYh6LUMLX61IAC5XF8GpXRJC3OgaAl8LRAvXzwuhmZEhiLLW0MLP04LCx24mhP0WHry6Hy0OdFjzXZsPd9mv4d/vPQGQ9iBRfDf7rQAAAABJRU5ErkJggg==);
+            background: #dcf8c6;
+            border-top-right-radius: 0px;
+        }
+    }
+
+    &.local-last {
+        img.avatar {
+            visibility: visible;
+        }
+    }
+}
