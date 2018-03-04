@@ -1,9 +1,27 @@
+.thread-header {
+    background: #eeeeee;
+}
 
+.thread-footer {
+    background: #F4F1EF;
+
+    input {
+        border: none;
+        font-size: 15px;
+        line-height: 20px;
+        border-radius: 5px;
+        padding: 10px 16px 10px 12px;
+        &::placeholder {         
+            color: #a4a4a4;
+        }
+    }
+}
 
 .message {
     font-family: 'Open Sans', sans-serif;
     min-width: 100px;
     font-size: 13.6px;
+    margin-top: 2px;
 
     img.avatar {
         visibility: hidden;
@@ -22,9 +40,13 @@
         }
         .content {
             // left arrow: background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAmCAMAAADp2asXAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACoUExURUxpcaG3kg8PD1JdSXeHbLPKoCo1KgAAAAAAAA4ODr7Xq7HJoFZkTi8zKgwMDKK4kZ+1kC03LXuJbr7WqwAAAL/XrFpkUgAAAHuMb7LJoHKBZae9lQAAAJ2zjsfZtwAAACwxJp2yjqW8lVVqVbLLoQ8PDyk0KVJaSbHHnr3Vqp2yjXWEarPLobbOpLrTp73Wqr3XqrPMobnSp7fPpLfQo7fPpb/Yq7bPpKsjaEcAAAAsdFJOUwDFEVqN6DABAhL96l42FMbBM5H9Bf1jA5XldugMmHwJLr7PDMwQMVfj/L+JZBaDmAAAAIpJREFUKM/tzTcSwkAQRNHG7grvvfdGuxL+/jeDTASfgCLlh/OqaxQmrSZLJb1BeB0bhstwxHBbTBniAf84pwIEVywLodCRIYh6LUMLX61IAC5XF8GpXRJC3OgaAl8LRAvXzwuhmZEhiLLW0MLP04LCx24mhP0WHry6Hy0OdFjzXZsPd9mv4d/vPQGQ9iBRfDf7rQAAAABJRU5ErkJggg==);
-            background: #dcf8c6;
-            border-top-right-radius: 0px;
+            // border-top-right-radius: 0px;
+            background: #dcf8c6;           
         }
+    }
+
+    &.out + &.in, &.in + &.out {
+        margin-top: 12px;
     }
 
     &.local-last {
