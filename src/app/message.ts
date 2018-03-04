@@ -1,4 +1,4 @@
-/** 
+/**
  * An enum of different types of content that can be contained in sms.
  */
 export enum SmsContentType {
@@ -17,4 +17,5 @@ export class SmsMessage {
     contentType: SmsContentType;
     content: any;
     timestamp: number;
+    isLocalLast: boolean;
 }

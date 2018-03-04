@@ -6,6 +6,7 @@ import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/operator/concatMap';
+import 'rxjs/add/operator/pairwise';
 
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
@@ -85,17 +86,27 @@ export class DataService {
   getMessages(threadID: string): Observable<SmsMessage> {
     const messages = zip(this.getQuotes(), this.getRandomUsers());
     let lastTimeStamp = Date.now();
-    return messages.map(val => {
-      const quote = val[0];
-      const thread: any = val[1];
-      const m = new SmsMessage();
-      m.contentType = SmsContentType.PlainText;
-      m.content = quote;
-      m.userID = this.chooseAny([thread.id.toString(), "me"]);
-      lastTimeStamp = this.getTimeBefore(lastTimeStamp);
-      m.timestamp = lastTimeStamp;
-      return m;
-    });
+    return messages
+        .map(val => {
+          const quote = val[0];
+          const thread: any = val[1];
+          const m = new SmsMessage();
+          m.contentType = SmsContentType.PlainText;
+          m.content = quote;
+          m.userID = this.chooseAny(['other', 'me']);
+          lastTimeStamp = this.getTimeBefore(lastTimeStamp);
+          m.timestamp = lastTimeStamp;
+          return m;
+        })
+        .pairwise()
+        .flatMap((x: SmsMessage[]) => {
+          if (x.length === 1) {
+            x[0].isLocalLast = true;
+            return Observable.of(x[0]);
+          }
+          if (x[0].userID !== x[1].userID) x[0].isLocalLast = true;
+          return Observable.of(x[0]);
+        });
   }
 
   // Returns a random integer between min (included) and max (included)

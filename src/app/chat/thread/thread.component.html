@@ -33,7 +33,7 @@
     <li *ngFor="let message of messages | async" class="mt-1">
       <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} end">
         <div fxLayoutAlign="start center">
-          <img [hidden]="message.userID == 'me'" class="rounded-circle" width="30px" [src]="avatarUrl" alt="" />
+          <img [style.visibility]="message.isLocalLast && message.userID != 'me' ? 'visible' : 'hidden'" class="rounded-circle" width="30px" [src]="avatarUrl" alt="" />
         </div>
         <div class="p-1 mx-1" style="background: white; border-radius: 8px; max-width: 450px"> {{ message.content }}</div>
       </div>
