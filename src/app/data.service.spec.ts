@@ -41,9 +41,9 @@ describe('DataService', () => {
 
   it('should return messages list', inject([DataService], (service: DataService) => {
     spyOn(Math, 'random').and.returnValue(0.50);
-    service.getMessages('thread-id-here').subscribe(messages => {
-      expect(messages).toBeTruthy();
-      expect(messages.length).toBe(51);
+    service.getMessages('thread-id-here').subscribe(message => {
+      expect(message).toBeTruthy();
+      expect(message.content).toBeTruthy();
     });
   }));
 

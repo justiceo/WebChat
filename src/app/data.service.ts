@@ -86,11 +86,12 @@ export class DataService {
     const messages = zip(this.getQuotes(), this.getRandomUsers());
     let lastTimeStamp = Date.now();
     return messages.map(val => {
-      const [quote, thread] = val;
+      const quote = val[0];
+      const thread: any = val[1];
       const m = new SmsMessage();
       m.contentType = SmsContentType.PlainText;
       m.content = quote;
-      m.userID = thread.id;
+      m.userID = this.chooseAny([thread.id.toString(), "me"]);
       lastTimeStamp = this.getTimeBefore(lastTimeStamp);
       m.timestamp = lastTimeStamp;
       return m;
