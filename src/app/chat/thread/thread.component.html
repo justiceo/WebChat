@@ -37,10 +37,8 @@
 <div fxFlex="100" style="overflow-y: scroll">
   <ul class="list-unstyled px-2">
     <li *ngFor="let message of messages | async" class="message" [ngClass]="{'out': message.userID === 'me', 'in': message.userID !== 'me', 'local-last': message.isLocalLast}">
-      <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} end">
-        <div fxLayoutAlign="start center">
-          <img class="rounded-circle avatar" width="30px" [src]="avatarUrl" alt="" />
-        </div>
+      <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} top">
+        <span class="arrow" fxFlexOrder="{{ message.userID != 'me' ? '0' : '1' }}"></span>
         <div class="content">{{ message.content }}</div>
       </div>
     </li>
