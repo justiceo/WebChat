@@ -8,15 +8,15 @@ import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/pairwise';
 
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {from} from 'rxjs/observable/from';
-import {zip} from 'rxjs/observable/zip';
-import {expand} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs/observable/from';
+import { zip } from 'rxjs/observable/zip';
+import { expand } from 'rxjs/operators';
 
-import {HttpHandlerService} from './http_handler.service';
-import {SmsContentType, SmsMessage} from './message';
-import {Thread} from './thread';
+import { HttpHandlerService } from './http_handler.service';
+import { SmsContentType, SmsMessage } from './message';
+import { Thread } from './thread';
 
 
 @Injectable()
@@ -24,28 +24,28 @@ export class DataService {
   quotes: string[] = [];
   users: Thread[] = [];
 
-  constructor(private http: HttpHandlerService) {}
+  constructor(private http: HttpHandlerService) { }
 
   getQuotes(): Observable<string> {
     return this.http.getAndCache('https://talaikis.com/api/quotes/')
-        .flatMap(x => x)
-        .map(x => x['quote']);
+      .flatMap(x => x)
+      .map(x => x['quote']);
   }
 
   getRandomUsers(): Observable<Thread> {
     const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
     return this.http
-        .getAndCache(
-            'https://randomuser.me/api/?inc=name,cell,picture&results=20')
-        .map(x => x['results'])
-        .flatMap(x => x)
-        .map(x => {
-          const thread = new Thread();
-          thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
-          thread.avatar = x['picture']['large'];
-          thread.id = x['cell'];
-          return thread;
-        });
+      .getAndCache(
+        'https://randomuser.me/api/?inc=name,cell,picture&results=20')
+      .map(x => x['results'])
+      .flatMap(x => x)
+      .map(x => {
+        const thread = new Thread();
+        thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
+        thread.avatar = x['picture']['large'];
+        thread.id = x['cell'];
+        return thread;
+      });
   }
 
   /**
@@ -87,26 +87,35 @@ export class DataService {
     const messages = zip(this.getQuotes(), this.getRandomUsers());
     let lastTimeStamp = Date.now();
     return messages
-        .map(val => {
-          const quote = val[0];
-          const thread: any = val[1];
-          const m = new SmsMessage();
-          m.contentType = SmsContentType.PlainText;
-          m.content = quote;
-          m.userID = this.chooseAny(['other', 'me']);
-          lastTimeStamp = this.getTimeBefore(lastTimeStamp);
-          m.timestamp = lastTimeStamp;
-          return m;
-        })
-        .pairwise()
-        .flatMap((x: SmsMessage[]) => {
-          if (x.length === 1) {
-            x[0].isLocalLast = true;
-            return Observable.of(x[0]);
-          }
-          if (x[0].userID !== x[1].userID) x[0].isLocalLast = true;
-          return Observable.of(x[0]);
-        });
+      .map(val => {
+        const quote = val[0];
+        const thread: any = val[1];
+        const m = new SmsMessage();
+        m.contentType = SmsContentType.PlainText;
+        m.content = quote;
+        m.userID = this.chooseAny(['other', 'me']);
+        lastTimeStamp = this.getTimeBefore(lastTimeStamp);
+        m.timestamp = lastTimeStamp;
+        return m;
+      })
+      .pairwise()
+      .flatMap((pair: SmsMessage[]) => {
+        if (pair.length === 1) {
+          pair[0].isLocalLast = true;
+          pair[0].isNewDay = true;
+          return Observable.of(pair[0]);
+        }
+
+        const prev = pair[0];
+        const next = pair[1];
+        if (prev.userID !== next.userID) {
+          prev.isLocalLast = true;
+        }
+        if (new Date(prev.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
+          next.isNewDay = true;
+        }
+        return Observable.of(prev);
+      });
   }
 
   // Returns a random integer between min (included) and max (included)
@@ -154,6 +163,6 @@ export class DataService {
   }
 
   getTimeBefore(timestamp: number): number {
-    return timestamp - this.randomInt(0, 5000000);
+    return timestamp - this.randomInt(0, 50000000);
   }
 }

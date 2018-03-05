@@ -32,6 +32,13 @@
         max-width: 450px;
         background: white;
         padding: 6px 7px 8px 9px;
+        .timestamp {
+            float: right;
+            margin-top: 10px;
+            margin-bottom: -5px;
+            font-size: 80%;
+            color: rgba(0, 0, 0, 0.45);
+        }
     }
 
     .arrow {

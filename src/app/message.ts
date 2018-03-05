@@ -18,4 +18,5 @@ export class SmsMessage {
     content: any;
     timestamp: number;
     isLocalLast: boolean;
+    isNewDay: boolean;
 }
