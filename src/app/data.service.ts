@@ -7,6 +7,7 @@ import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/pairwise';
+import 'rxjs/add/operator/takeWhile';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -85,7 +86,8 @@ export class DataService {
 
   getMessages(threadID: string): Observable<SmsMessage> {
     const messages = zip(this.getQuotes(), this.getRandomUsers());
-    let lastTimeStamp = Date.now();
+    const day = 86400000;
+    let lastTimeStamp = Date.now() - day * 3;
     return messages
       .map(val => {
         const quote = val[0];
@@ -94,10 +96,11 @@ export class DataService {
         m.contentType = SmsContentType.PlainText;
         m.content = quote;
         m.userID = this.chooseAny(['other', 'me']);
-        lastTimeStamp = this.getTimeBefore(lastTimeStamp);
+        lastTimeStamp = this.getTimeAfter(lastTimeStamp);
         m.timestamp = lastTimeStamp;
         return m;
       })
+      .takeWhile(m =>  m.timestamp < Date.now())
       .pairwise()
       .flatMap((pair: SmsMessage[]) => {
         if (pair.length === 1) {
@@ -164,5 +167,11 @@ export class DataService {
 
   getTimeBefore(timestamp: number): number {
     return timestamp - this.randomInt(0, 50000000);
+  }
+
+
+  // a day is about 86400000 milliseconds
+  getTimeAfter(timestamp: number): number {
+    return timestamp + this.randomInt(0, 50000000);
   }
 }
