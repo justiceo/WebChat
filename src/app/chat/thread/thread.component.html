@@ -43,7 +43,7 @@
 <div fxFlex="100" style="overflow-y: scroll">
   <ul class="list-unstyled px-2">
     <li fxLayout="column" *ngFor="let message of messages | async" class="message" [ngClass]="{'out': message.userID === 'me', 'in': message.userID !== 'me', 'local-last': message.isLocalLast}">
-      <div fxFlexAlign="center" class="day-sep" *ngIf="message.isNewDay">{{ message.timestamp | date:'short' }}</div>
+      <div fxFlexAlign="center" class="day-sep" *ngIf="message.isNewDay">{{ message.timestamp | timesince }}</div>
       <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} top">
         <span class="arrow" fxFlexOrder="{{ message.userID != 'me' ? '0' : '1' }}"></span>
         <div class="content">
