@@ -70,13 +70,13 @@
         }
     }
 
-    &.out + &.in, &.in + &.out { 
+    &.out + &.in, &.in + &.out, &.out.new-day, &.in.new-day { 
         margin-top: 12px;
         .arrow {
             visibility: visible;
         }
     }
-    &.out + &.in {
+    &.out + &.in, &.in.new-day {
         .content { border-top-left-radius: 0; }
         .arrow {
             &::after {
@@ -86,7 +86,7 @@
         }
     }
 
-    &.in + &.out {        
+    &.in + &.out, &.out.new-day {        
         .content { border-top-right-radius: 0; }
         .arrow {
             &::after {
