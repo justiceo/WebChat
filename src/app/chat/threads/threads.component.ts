@@ -11,9 +11,9 @@ import {DataService} from '../../data.service';
   styleUrls: ['./threads.component.scss']
 })
 export class ThreadsComponent implements OnInit {
-  threads: Observable<Thread[]>;
+  threads: Thread[];
   constructor(private dataService: DataService) {
-    this.threads = dataService.getRandomUsers().pipe(bufferCount(100));
+    this.threads = dataService.getThreads();
   }
 
   ngOnInit() {}

@@ -11,10 +11,10 @@ import {SmsContentType, SmsMessage} from '../../message';
   styleUrls: ['./thread.component.scss'],
 })
 export class ThreadComponent implements OnInit {
-  messages: Observable<SmsMessage[]>;
+  messages: SmsMessage[];
   avatarUrl = 'https://randomuser.me/api/portraits/men/41.jpg';
   constructor(private dataService: DataService) {
-    this.messages = dataService.getMessages('thread_id').pipe(bufferTime(100));
+    this.messages = dataService.getMessages('a-thread');
   }
 
   ngOnInit() {}

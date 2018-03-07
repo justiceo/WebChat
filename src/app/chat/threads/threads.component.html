@@ -4,7 +4,7 @@
 </div>
 <div class="threads-list-wrapper " fxFlex="100">
   <div class="threads-list">
-    <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads | async" class="thread-item">
+    <a fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item">
       <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
         <img class="rounded-circle w-75" [src]="thread.avatar" alt="" />
       </div>

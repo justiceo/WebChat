@@ -30,7 +30,7 @@ export class AutoGenRepository implements SmsRepository {
         const messages = zip(this.getQuotes(), this.getRandomUsers());
         const day = 86400000;
         let lastTimeStamp = Date.now() - day * 3;
-        messages
+        const msub = messages
             .map(val => {
                 const quote = val[0];
                 const thread: any = val[1];
@@ -40,6 +40,7 @@ export class AutoGenRepository implements SmsRepository {
                 m.userID = this.chooseAny(['other', 'me']);
                 lastTimeStamp = this.getTimeAfter(lastTimeStamp);
                 m.timestamp = lastTimeStamp;
+                m.threadID = 'a-thread';
                 return m;
             })
             .takeWhile(m => m.timestamp < Date.now())
@@ -61,6 +62,11 @@ export class AutoGenRepository implements SmsRepository {
                 }
                 return Observable.of(prev);
             });
+
+        this.smsRepo = { 'a-thread': [] };
+        msub.subscribe(m => this.smsRepo[m.threadID].push(m));
+        this.threadRepo = { 'a-thread': Thread.make('a-thread', 'thread name', ['other']) };
+
     }
 
     getQuotes(): Observable<string> {

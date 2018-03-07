@@ -18,160 +18,23 @@ import { expand } from 'rxjs/operators';
 import { HttpHandlerService } from './http_handler.service';
 import { SmsContentType, SmsMessage } from './message';
 import { Thread } from './thread';
+import { SmsRepository, HardCodedSmsRepository } from './sms-repository';
+import { AutoGenRepository } from './autogen-repository';
 
 
 @Injectable()
 export class DataService {
-  quotes: string[] = [];
-  users: Thread[] = [];
+  repo: SmsRepository;
 
-  constructor(private http: HttpHandlerService) { }
-
-  getQuotes(): Observable<string> {
-    return this.http.getAndCache('https://talaikis.com/api/quotes/')
-      .flatMap(x => x)
-      .map(x => x['quote']);
+  constructor(private http: HttpHandlerService) {
+    this.repo = new AutoGenRepository(http);
   }
 
-  getRandomUsers(): Observable<Thread> {
-    const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
-    return this.http
-      .getAndCache(
-        'https://randomuser.me/api/?inc=name,cell,picture&results=20')
-      .map(x => x['results'])
-      .flatMap(x => x)
-      .map(x => {
-        const thread = new Thread();
-        thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
-        thread.avatar = x['picture']['large'];
-        thread.id = x['cell'];
-        return thread;
-      });
+  getThreads(): Thread[] {
+    return this.repo.getThreads();
   }
 
-  /**
-   * TBD: Phase two requirement
-   */
-  getGroups(): Observable<Thread> {
-    const groups = this.getRandomUsers().windowCount(10).map(win => {
-      const gt = new Thread();
-      gt.userIds = [];
-      const mapped = win.concatMap((out, e) => {
-        gt.name += ', ' + out.name;
-        gt.id += ' ' + out.id;
-        gt.userIds.push(out.id);
-        out.name = name;
-        out = gt;
-        return Observable.of(out);
-      });
-      /*
-      const groupSize = this.randomInt(2, 10);
-      const groupThread2 = new Thread();
-      groupThread.userIds = [];
-      console.log("creating gthread from win: ", win);
-      for (let i = 0; i < groupSize; i++) {
-        const t: Thread = win[i];
-        if(!t) {
-          continue;
-        }
-        groupThread.name += ', ' + t.name;
-        groupThread.id += t.id;
-        groupThread.userIds.push(t.id);
-      }
-      return groupThread;*/
-    });
-
-    return null;
-  }
-
-  getMessages(threadID: string): Observable<SmsMessage> {
-    const messages = zip(this.getQuotes(), this.getRandomUsers());
-    const day = 86400000;
-    let lastTimeStamp = Date.now() - day * 3;
-    return messages
-      .map(val => {
-        const quote = val[0];
-        const thread: any = val[1];
-        const m = new SmsMessage();
-        m.contentType = SmsContentType.PlainText;
-        m.content = quote;
-        m.userID = this.chooseAny(['other', 'me']);
-        lastTimeStamp = this.getTimeAfter(lastTimeStamp);
-        m.timestamp = lastTimeStamp;
-        return m;
-      })
-      .takeWhile(m =>  m.timestamp < Date.now())
-      .pairwise()
-      .flatMap((pair: SmsMessage[]) => {
-        if (pair.length === 1) {
-          pair[0].isLocalLast = true;
-          pair[0].isNewDay = true;
-          return Observable.of(pair[0]);
-        }
-
-        const prev = pair[0];
-        const next = pair[1];
-        if (prev.userID !== next.userID) {
-          prev.isLocalLast = true;
-        }
-        if (new Date(prev.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
-          next.isNewDay = true;
-        }
-        return Observable.of(prev);
-      });
-  }
-
-  // Returns a random integer between min (included) and max (included)
-  randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
-  chooseAny<E>(arr: E[]): E {
-    if (!arr || arr.length === 0) {
-      throw new Error('cannot choose from null or empty array');
-    }
-    return arr[this.randomInt(0, arr.length - 1)];
-  }
-
-  randomContentType(): SmsContentType {
-    return this.chooseAny([
-      SmsContentType.PlainText, SmsContentType.EmojiText, SmsContentType.Image,
-      SmsContentType.Video
-    ]);
-  }
-
-  randomContent(type: SmsContentType): string {
-    switch (type) {
-      case SmsContentType.PlainText: {
-        return this.chooseAny(this.quotes);
-      }
-      case SmsContentType.Image: {
-        return this.chooseAny([
-          'https://picsum.photos/200/300/?random',
-          'https://picsum.photos/200/150/?random',
-          'https://picsum.photos/g/300/300/?random',
-          'https://picsum.photos/1600/900/?random'
-        ]);
-      }
-      case SmsContentType.EmojiText: {
-        return this.chooseAny(this.quotes) + ':)  :D';
-      }
-      default:
-        return this.chooseAny(this.quotes);
-    }
-  }
-
-  randomUserID(): string {
-    return this.chooseAny(['my_id', 'other_thread_id']);
-  }
-
-  getTimeBefore(timestamp: number): number {
-    return timestamp - this.randomInt(0, 50000000);
-  }
-
-
-  // a day is about 86400000 milliseconds
-  getTimeAfter(timestamp: number): number {
-    return timestamp + this.randomInt(0, 50000000);
+  getMessages(threadID: string): SmsMessage[] {
+    return this.repo.getMessages(threadID);
   }
 }
