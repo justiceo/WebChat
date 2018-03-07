@@ -1,10 +1,10 @@
 <!-- fxLayout = column -->
-<div class="px-2 thread-header" fxFlex="60px" fxLayoutAlign="space-between center" style="border-left: 1px solid #aaa">
+<div class="thread-header" fxFlex="60px" fxLayoutAlign="space-between center">
   <div fxLayoutAlign="start center">
-    <img class="rounded-circle" width="50px" [src]="avatarUrl" alt="" />
-    <div fxLayout="column">
+    <img [src]="avatarUrl" alt="" />
+    <div fxLayout="column" fxLayoutAlign="center start">
       <span>John Doe</span>
-      <span>Last seen today</span>
+      <span class="last-online">Last seen today</span>
     </div>
   </div>
   <ul class="nav">
@@ -40,7 +40,7 @@
     </li>
   </ul>
 </div>
-<div fxFlex="100" style="overflow-y: scroll">
+<div class="message-list" fxFlex="100">
   <ul class="list-unstyled px-2">
     <li fxLayout="column" *ngFor="let message of messages" class="message" [ngClass]="{'out': message.userID === 'me', 'in': message.userID !== 'me', 'local-last': message.isLocalLast, 'new-day': message.isNewDay}">
       <div fxFlexAlign="center" class="day-sep" *ngIf="message.isNewDay">{{ message.timestamp | timesince }}</div>

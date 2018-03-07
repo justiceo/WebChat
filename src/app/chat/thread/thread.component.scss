@@ -1,5 +1,19 @@
 .thread-header {
     background: #eeeeee;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+    line-height: 21px;
+
+    img {
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+    .last-online {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.6);
+        line-height: 20px;
+    }
 }
 
 .thread-footer {
@@ -15,6 +29,11 @@
             color: #a4a4a4;
         }
     }
+}
+
+.message-list {
+    overflow-y: scroll;
+    padding: 10px 40px;
 }
 
 .message {
@@ -46,6 +65,8 @@
         max-width: 450px;
         background: white;
         padding: 6px 7px 8px 9px;
+        box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+
         .timestamp {
             float: right;
             margin-top: 10px;
