@@ -1,5 +1,5 @@
 <div fxLayoutAlign="start center">
-  <img class="rounded-circle w-25" [src]="avatarUrl" alt="" />
+  <img [src]="avatarUrl" alt="" />
 </div>
 <ul class="nav">
   <a class="nav-link" tabindex="2"  (click)="isFocused2 = !isFocused2" (blur)="isFocused2 = false" [ngClass]="{'focus': isFocused2}">

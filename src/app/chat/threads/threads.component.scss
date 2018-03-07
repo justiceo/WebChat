@@ -9,9 +9,28 @@
   background-color: #eee;
 }
 .search {
-  background-color: rgb(251, 251, 251);
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px;
+  background: #fafafa;
+
+  .form-control {
+    background-color: white;
+    border: 0px solid #f6f6f6;
+    border-radius: 5px;
+    height: 34px;
+    font-size: 16px;
+
+    &:focus, &:hover {
+      outline: none;
+      outline-color: transparent;
+      // box-shadow: none;
+    }
+
+    &::placeholder {
+      color: #aaa;
+      font-weight: lighter;
+    }
+  }
+  
 }
 .threads-list-wrapper {
   overflow-y: scroll;
