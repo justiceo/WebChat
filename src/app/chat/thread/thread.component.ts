@@ -15,6 +15,10 @@ export class ThreadComponent implements OnInit {
   messages: SmsMessage[];
   _thread: Thread;
 
+  get thread() {
+    return this._thread;
+  }
+
   @Input()
   set thread(t: Thread) {
     if (!t) { return; }
@@ -22,7 +26,6 @@ export class ThreadComponent implements OnInit {
     this.messages = this.dataService.getMessages(t.id);
   }
 
-  avatarUrl = 'https://randomuser.me/api/portraits/men/41.jpg';
   constructor(private dataService: DataService) {
     if (this._thread) {
       this.messages = dataService.getMessages(this._thread.id);

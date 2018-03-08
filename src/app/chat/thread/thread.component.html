@@ -1,10 +1,10 @@
 <!-- fxLayout = column -->
 <div class="thread-header" fxFlex="60px" fxLayoutAlign="space-between center">
   <div fxLayoutAlign="start center">
-    <img [src]="avatarUrl" alt="" />
+    <img [src]="_thread.avatar" alt="" />
     <div fxLayout="column" fxLayoutAlign="center start">
-      <span>John Doe</span>
-      <span class="status">Last seen today</span>
+      <span>{{ _thread.name }}</span>
+      <span class="status">{{ _thread.timestamp | date }}</span>
     </div>
   </div>
   <ul class="nav">
