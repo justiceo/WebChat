@@ -17,6 +17,7 @@ export class ThreadComponent implements OnInit {
 
   @Input()
   set thread(t: Thread) {
+    if (!t) { return; }
     this._thread = t;
     this.messages = this.dataService.getMessages(t.id);
   }

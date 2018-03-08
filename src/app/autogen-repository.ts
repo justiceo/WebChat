@@ -22,25 +22,46 @@ import { SmsRepository, SmsRepo, ThreadRepo } from './sms-repository';
 
 
 export class AutoGenRepository implements SmsRepository {
-    smsRepo: SmsRepo;
-    threadRepo: ThreadRepo;
+    smsRepo: SmsRepo = {};
+    threadRepo: ThreadRepo = {};
 
     constructor(private http: HttpHandlerService) {
-        // TODO(justiceo): initialize repo
-        const messages = zip(this.getQuotes(), this.getRandomUsers());
+        this.getRandomUsers().subscribe((t: Thread) => {
+            this.threadRepo[t.id] = t;
+            this.genMessages(t.id, t.userIds).subscribe(m => {
+                if (!this.smsRepo[m.threadID]) {
+                    this.smsRepo[m.threadID] = [];
+                }
+                console.log('thread and user: ', m.threadID, m.userID);
+                this.smsRepo[m.threadID].push(m);
+
+                // set message to last
+                t.timestamp = m.timestamp;
+                t.snippet = m.content;
+                t.unreadCount = this.chooseAny([0, 1, 2, 5, 8]);
+                t.isUnread = t.unreadCount !== 0;
+            });
+        });
+    }
+
+    getQuotes(): Observable<string> {
+        return this.http.getAndCache('https://talaikis.com/api/quotes/')
+            .flatMap(x => x)
+            .map(x => x['quote']);
+    }
+
+    genMessages(threadID: string, userIDs: string[]): Observable<SmsMessage> {
         const day = 86400000;
         let lastTimeStamp = Date.now() - day * 3;
-        const msub = messages
-            .map(val => {
-                const quote = val[0];
-                const thread: any = val[1];
+        return this.getQuotes()
+            .map(quote => {
                 const m = new SmsMessage();
                 m.contentType = SmsContentType.PlainText;
                 m.content = quote;
-                m.userID = this.chooseAny(['other', 'me']);
+                m.userID = this.chooseAny([...userIDs, 'me']);
                 lastTimeStamp = this.getTimeAfter(lastTimeStamp);
                 m.timestamp = lastTimeStamp;
-                m.threadID = 'a-thread';
+                m.threadID = threadID;
                 return m;
             })
             .takeWhile(m => m.timestamp < Date.now())
@@ -52,27 +73,16 @@ export class AutoGenRepository implements SmsRepository {
                     return Observable.of(pair[0]);
                 }
 
-                const prev = pair[0];
+                const curr = pair[0];
                 const next = pair[1];
-                if (prev.userID !== next.userID) {
-                    prev.isLocalLast = true;
+                if (curr.userID !== next.userID) {
+                    curr.isLocalLast = true;
                 }
-                if (new Date(prev.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
+                if (new Date(curr.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
                     next.isNewDay = true;
                 }
-                return Observable.of(prev);
+                return Observable.of(curr);
             });
-
-        this.smsRepo = { 'a-thread': [] };
-        msub.subscribe(m => this.smsRepo[m.threadID].push(m));
-        this.threadRepo = { 'a-thread': Thread.make('a-thread', 'thread name', ['other']) };
-
-    }
-
-    getQuotes(): Observable<string> {
-        return this.http.getAndCache('https://talaikis.com/api/quotes/')
-            .flatMap(x => x)
-            .map(x => x['quote']);
     }
 
 
@@ -106,6 +116,7 @@ export class AutoGenRepository implements SmsRepository {
                 thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
                 thread.avatar = x['picture']['large'];
                 thread.id = x['cell'];
+                thread.userIds = [thread.id];
                 return thread;
             });
     }
@@ -117,9 +128,5 @@ export class AutoGenRepository implements SmsRepository {
 
     getThreads(): Thread[] {
         return Object.values(this.threadRepo);
-    }
-
-    getThreadById(id: string): Thread {
-        return this.threadRepo[id];
     }
 }
