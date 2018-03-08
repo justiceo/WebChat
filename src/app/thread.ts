@@ -6,6 +6,7 @@ export class Thread {
   snippet: string;
   userIds: string[];
   isUnread: boolean;
+  unreadCount: number;
 
   static make(id: string, name: string, userIds: string[]): Thread {
     const t = new Thread();
@@ -15,6 +16,7 @@ export class Thread {
     t.avatar = 'https://randomuser.me/api/portraits/men/41.jpg';
     t.snippet = 'some snippet';
     t.timestamp = Date.now() - 50000000;
+    t.unreadCount = 4;
     return t;
   }
 }

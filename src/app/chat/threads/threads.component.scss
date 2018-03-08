@@ -39,9 +39,22 @@
 .threads-list {
   background: #fff;
   .thread-item {
-    border-bottom: 1px solid #f0f0f0;
+    line-height: 20px;
+    
     &:hover {
       background: #eee;
+    }
+
+    img {
+      border-radius: 50%;
+      width: 50px;
+    }
+
+    .meta {
+      border-bottom: 1px solid #f0f0f0;
+      padding-top: 15px;
+      padding-bottom: 10px;
+      padding-right: 20px;
     }
   }
 }

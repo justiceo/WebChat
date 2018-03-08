@@ -6,12 +6,12 @@
   <div class="threads-list">
     <a (click)="changeThread(thread)" fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item">
       <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
-        <img class="rounded-circle w-75" [src]="thread.avatar" alt="" />
+        <img [src]="thread.avatar" alt="" />
       </div>
-      <div class="meta" fxFlex="calc(100% - 80px)">
-        <div fxLayoutAlign="space-between">
+      <div fxFlexAlign="center" class="meta" fxFlex="calc(100% - 80px)">
+        <div fxLayoutAlign="space-between center">
           <span>{{ thread.name }}</span>
-          <span>9:02pm{{ thread.time }}</span>
+          <span>{{ thread.timestamp | date:'shortTime' }}</span>
         </div>
         <div fxLayoutAlign="space-between center">
           <span style="min-width:0;">
@@ -19,9 +19,9 @@
             width:100%;
             text-overflow:
             ellipsis; overflow: hidden;
-            white-space:nowrap;">{{ thread.body }}</div>
+            white-space:nowrap;">{{ thread.snippet }}</div>
           </span>
-          <span class="badge badge-pill badge-primary">2</span>
+          <span class="badge badge-pill badge-primary">{{ thread.unreadCount }}</span>
         </div>
       </div>
     </a>
