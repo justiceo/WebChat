@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {bufferTime} from 'rxjs/operators';
+import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { bufferTime } from 'rxjs/operators';
 
-import {DataService} from '../../data.service';
-import {SmsContentType, SmsMessage} from '../../message';
+import { DataService } from '../../data.service';
+import { SmsContentType, SmsMessage } from '../../message';
+import { Thread } from '../../thread';
 
 @Component({
   selector: 'app-thread',
@@ -12,10 +13,20 @@ import {SmsContentType, SmsMessage} from '../../message';
 })
 export class ThreadComponent implements OnInit {
   messages: SmsMessage[];
-  avatarUrl = 'https://randomuser.me/api/portraits/men/41.jpg';
-  constructor(private dataService: DataService) {
-    this.messages = dataService.getMessages('a-thread');
+  _thread: Thread;
+
+  @Input()
+  set thread(t: Thread) {
+    this._thread = t;
+    this.messages = this.dataService.getMessages(t.id);
   }
 
-  ngOnInit() {}
+  avatarUrl = 'https://randomuser.me/api/portraits/men/41.jpg';
+  constructor(private dataService: DataService) {
+    if (this._thread) {
+      this.messages = dataService.getMessages(this._thread.id);
+    }
+  }
+
+  ngOnInit() { }
 }
