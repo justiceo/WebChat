@@ -14,6 +14,9 @@ export class ThreadsListComponent implements OnInit {
   threads: Thread[];
   @Input() current: Thread;
   @Output() threadChange = new EventEmitter<Thread>();
+
+  avatarUrl = 'https://randomuser.me/api/portraits/men/43.jpg';
+  name = 'John Doe';
   constructor(private dataService: DataService) {
     this.threads = dataService.getThreads();
     this.current = this.threads[0];
