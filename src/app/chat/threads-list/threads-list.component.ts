@@ -6,11 +6,11 @@ import {Thread} from '../../thread';
 import {DataService} from '../../data.service';
 
 @Component({
-  selector: 'app-threads',
-  templateUrl: './threads.component.html',
-  styleUrls: ['./threads.component.scss']
+  selector: 'app-threads-list',
+  templateUrl: './threads-list.component.html',
+  styleUrls: ['./threads-list.component.scss']
 })
-export class ThreadsComponent implements OnInit {
+export class ThreadsListComponent implements OnInit {
   threads: Thread[];
   @Input() current: Thread;
   @Output() threadChange = new EventEmitter<Thread>();
