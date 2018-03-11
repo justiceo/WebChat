@@ -16,14 +16,14 @@ import { zip } from 'rxjs/observable/zip';
 import { expand } from 'rxjs/operators';
 
 import { HttpHandlerService } from './http_handler.service';
-import { SmsContentType, SmsMessage } from './message';
+import { MessageContentType, Message } from './message';
 import { Thread } from './thread';
-import { SmsRepository, SmsRepo, ThreadRepo } from './sms-repository';
+import { MessageRepository, IdToMessages, IdToThread } from './sms-repository';
 
 
-export class AutoGenRepository implements SmsRepository {
-    smsRepo: SmsRepo = {};
-    threadRepo: ThreadRepo = {};
+export class AutoGenRepository implements MessageRepository {
+    smsRepo: IdToMessages = {};
+    threadRepo: IdToThread = {};
 
     constructor(private http: HttpHandlerService) {
         this.getRandomUsers().subscribe((t: Thread) => {
@@ -49,13 +49,13 @@ export class AutoGenRepository implements SmsRepository {
             .map(x => x['quote']);
     }
 
-    genMessages(threadID: string, userIDs: string[]): Observable<SmsMessage> {
+    genMessages(threadID: string, userIDs: string[]): Observable<Message> {
         const day = 86400000;
         let lastTimeStamp = Date.now() - day * 3;
         return this.getQuotes()
             .map(quote => {
-                const m = new SmsMessage();
-                m.contentType = SmsContentType.PlainText;
+                const m = new Message();
+                m.contentType = MessageContentType.PlainText;
                 m.content = quote;
                 m.userID = this.chooseAny([...userIDs, 'me']);
                 lastTimeStamp = this.getTimeAfter(lastTimeStamp);
@@ -65,7 +65,7 @@ export class AutoGenRepository implements SmsRepository {
             })
             .takeWhile(m => m.timestamp < Date.now())
             .pairwise()
-            .flatMap((pair: SmsMessage[]) => {
+            .flatMap((pair: Message[]) => {
                 if (pair.length === 1) {
                     pair[0].isLocalLast = true;
                     pair[0].isNewDay = true;
@@ -121,7 +121,7 @@ export class AutoGenRepository implements SmsRepository {
     }
 
 
-    getMessages(threadID: string): SmsMessage[] {
+    getMessages(threadID: string): Message[] {
         return this.smsRepo[threadID];
     }
 

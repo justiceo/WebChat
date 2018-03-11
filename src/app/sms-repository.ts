@@ -1,41 +1,41 @@
-import { SmsMessage } from './message';
+import { Message } from './message';
 import { Thread } from './thread';
 
-export interface SmsRepository {
-    getMessages(id: string): SmsMessage[];
+export interface MessageRepository {
+    getMessages(id: string): Message[];
     getThreads(): Thread[];
 }
 
-export interface SmsRepo {
-    [index: string]: SmsMessage[];
+export interface IdToMessages {
+    [index: string]: Message[];
 }
-export interface ThreadRepo {
+export interface IdToThread {
     [index: string]: Thread;
 }
 
-export class HardCodedSmsRepository implements SmsRepository {
-    smsRepo: SmsRepo;
-    threadRepo: ThreadRepo;
+export class HardCodedSmsRepository implements MessageRepository {
+    idToMessages: IdToMessages;
+    idToThread: IdToThread;
 
     constructor() {
-        const m1 = SmsMessage.make('a-thread', 'other-user', 'hello world text');
-        const m2 = SmsMessage.make('b-thread', 'another-user', 'another world text');
+        const m1 = Message.make('a-thread', 'other-user', 'hello world text');
+        const m2 = Message.make('b-thread', 'another-user', 'another world text');
 
         const t1 = Thread.make('a-thread', 'john t', ['other-user']);
         const t2 = Thread.make('b-thread', 'thread 2', ['another-user']);
-        this.smsRepo = { 'a-thread': [m1], 'b-thread': [m2] };
-        this.threadRepo = { 'a-thread': t1, 'b-thread': t2 };
+        this.idToMessages = { 'a-thread': [m1], 'b-thread': [m2] };
+        this.idToThread = { 'a-thread': t1, 'b-thread': t2 };
     }
 
-    getMessages(threadID: string): SmsMessage[] {
-        return this.smsRepo[threadID];
+    getMessages(threadID: string): Message[] {
+        return this.idToMessages[threadID];
     }
 
     getThreads(): Thread[] {
-        return Object.values(this.threadRepo);
+        return Object.values(this.idToThread);
     }
 
     getThreadById(id: string): Thread {
-        return this.threadRepo[id];
+        return this.idToThread[id];
     }
 }

@@ -4,7 +4,7 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 
 import { DataService } from './data.service';
 import { HttpHandlerService } from './http_handler.service';
-import { SmsMessage } from './message';
+import { Message } from './message';
 
 describe('DataService', () => {
   let httpHandlerService: HttpHandlerService;
@@ -50,30 +50,4 @@ describe('DataService', () => {
   // TODO: test messages should be in chronological order
 
   // TODO: multiple calls should return same list
-
-  describe('chooseAny', () => {
-    it('should return lower bound', inject([DataService], (service: DataService) => {
-      spyOn(Math, 'random').and.returnValue(0);
-      const testArr = ['a', 'b', 'c', 'd'];
-      const choosen: string = service.chooseAny(testArr);
-      expect(choosen).toBe(testArr[0]);
-    }));
-
-    it('should return upper bound', inject([DataService], (service: DataService) => {
-      spyOn(Math, 'random').and.returnValue(0.9);
-      const testArr = ['a', 'b', 'c', 'd'];
-      const choosen: string = service.chooseAny(testArr);
-      expect(choosen).toBe(testArr[3]);
-    }));
-
-    it('should return only item', inject([DataService], (service: DataService) => {
-      const testArr = ['a'];
-      const choosen: string = service.chooseAny(testArr);
-      expect(choosen).toBe(testArr[0]);
-    }));
-
-    it('should fail on empty list', inject([DataService], (service: DataService) => {
-      expect(() => service.chooseAny([])).toThrow();
-    }));
-  });
 });

@@ -16,15 +16,15 @@ import { zip } from 'rxjs/observable/zip';
 import { expand } from 'rxjs/operators';
 
 import { HttpHandlerService } from './http_handler.service';
-import { SmsContentType, SmsMessage } from './message';
+import { MessageContentType, Message } from './message';
 import { Thread } from './thread';
-import { SmsRepository, HardCodedSmsRepository } from './sms-repository';
+import { MessageRepository, HardCodedSmsRepository } from './sms-repository';
 import { AutoGenRepository } from './autogen-repository';
 
 
 @Injectable()
 export class DataService {
-  repo: SmsRepository;
+  repo: MessageRepository;
 
   constructor(private http: HttpHandlerService) {
     this.repo = new AutoGenRepository(http);
@@ -34,7 +34,7 @@ export class DataService {
     return this.repo.getThreads();
   }
 
-  getMessages(threadID: string): SmsMessage[] {
+  getMessages(threadID: string): Message[] {
     return this.repo.getMessages(threadID);
   }
 }

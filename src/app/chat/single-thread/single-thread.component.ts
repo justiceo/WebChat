@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { bufferTime } from 'rxjs/operators';
 
 import { DataService } from '../../data.service';
-import { SmsContentType, SmsMessage } from '../../message';
+import { MessageContentType, Message } from '../../message';
 import { Thread } from '../../thread';
 
 @Component({
@@ -12,7 +12,7 @@ import { Thread } from '../../thread';
   styleUrls: ['./single-thread.component.scss'],
 })
 export class SingleThreadComponent implements OnInit {
-  messages: SmsMessage[];
+  messages: Message[];
   _thread: Thread;
 
   get thread() {
