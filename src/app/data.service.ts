@@ -18,7 +18,7 @@ import { expand } from 'rxjs/operators';
 import { HttpHandlerService } from './http_handler.service';
 import { MessageContentType, Message } from './message';
 import { Thread } from './thread';
-import { MessageRepository, HardCodedSmsRepository } from './sms-repository';
+import { MessageRepository, HardCodedSmsRepository } from './message-repository';
 import { AutoGenRepository } from './autogen-repository';
 
 

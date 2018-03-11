@@ -18,7 +18,7 @@ import { expand } from 'rxjs/operators';
 import { HttpHandlerService } from './http_handler.service';
 import { MessageContentType, Message } from './message';
 import { Thread } from './thread';
-import { MessageRepository, IdToMessages, IdToThread } from './sms-repository';
+import { MessageRepository, IdToMessages, IdToThread } from './message-repository';
 
 
 export class AutoGenRepository implements MessageRepository {
