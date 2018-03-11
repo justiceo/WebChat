@@ -7,11 +7,11 @@ import { SmsContentType, SmsMessage } from '../../message';
 import { Thread } from '../../thread';
 
 @Component({
-  selector: 'app-thread',
-  templateUrl: './thread.component.html',
-  styleUrls: ['./thread.component.scss'],
+  selector: 'app-single-thread',
+  templateUrl: './single-thread.component.html',
+  styleUrls: ['./single-thread.component.scss'],
 })
-export class ThreadComponent implements OnInit {
+export class SingleThreadComponent implements OnInit {
   messages: SmsMessage[];
   _thread: Thread;
 

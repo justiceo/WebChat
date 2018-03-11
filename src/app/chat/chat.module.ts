@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { ThreadComponent } from './thread/thread.component';
+import { SingleThreadComponent } from './single-thread/single-thread.component';
 import { ThreadsListComponent } from './threads-list/threads-list.component';
 import { ChatComponent } from './chat.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
@@ -14,7 +14,7 @@ import { TimeSince } from '../timesince.pipe';
     CommonModule,
     FlexLayoutModule,
   ],
-  declarations: [ThreadComponent, ThreadsListComponent, ChatComponent, ProfileSettingsComponent, ContactInfoComponent, TimeSince],
-  exports: [ ThreadComponent, ThreadsListComponent, ChatComponent, ProfileSettingsComponent, ContactInfoComponent, TimeSince],
+  declarations: [SingleThreadComponent, ThreadsListComponent, ChatComponent, ProfileSettingsComponent, ContactInfoComponent, TimeSince],
+  exports: [ SingleThreadComponent, ThreadsListComponent, ChatComponent, ProfileSettingsComponent, ContactInfoComponent, TimeSince],
 })
 export class ChatModule { }

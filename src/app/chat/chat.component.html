@@ -1,6 +1,6 @@
 <div class="wrapper" fxLayoutAlign="center center">
   <div class="center-box">
     <app-threads-list (threadChange)="currThread = $event" fxFlex="30" fxLayout="column"></app-threads-list>
-    <app-thread [(thread)]="currThread" fxFlex="70" fxLayout="column"></app-thread>
+    <app-single-thread [(thread)]="currThread" fxFlex="70" fxLayout="column"></app-single-thread>
   </div>
 </div>
