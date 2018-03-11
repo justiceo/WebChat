@@ -32,7 +32,6 @@ export class AutoGenRepository implements SmsRepository {
                 if (!this.smsRepo[m.threadID]) {
                     this.smsRepo[m.threadID] = [];
                 }
-                console.log('thread and user: ', m.threadID, m.userID);
                 this.smsRepo[m.threadID].push(m);
 
                 // set message to last

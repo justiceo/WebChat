@@ -1,9 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {bufferCount} from 'rxjs/operators';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { bufferCount } from 'rxjs/operators';
 
-import {Thread} from '../../thread';
-import {DataService} from '../../data.service';
+import { Thread } from '../../thread';
+import { DataService } from '../../data.service';
 
 @Component({
   selector: 'app-threads-list',

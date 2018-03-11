@@ -65,7 +65,7 @@ describe('HttpHandlerService', () => {
   it('should be able to return duplicate request from cache', () => {
     const originalCacheValue = 'original cache value';
     const url = '/some/endpoint';
-    let objToStore: any = { data: originalCacheValue };
+    const objToStore: any = { data: originalCacheValue };
 
     mockBackend.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(new ResponseOptions({

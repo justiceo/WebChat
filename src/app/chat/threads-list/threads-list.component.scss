@@ -1,103 +1,93 @@
 .img-circle {
-  border-radius: 50%;
-}
-.avatar {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.header {
-  background-color: #eee;
-}
-.search {
-  padding: 10px;
-  background: #fafafa;
-
-  .form-control {
-    background-color: white;
-    border: 0px solid #f6f6f6;
-    border-radius: 5px;
-    height: 34px;
-    font-size: 16px;
-
-    &:focus, &:hover {
-      outline: none;
-      outline-color: transparent;
-      // box-shadow: none;
-    }
-
-    &::placeholder {
-      color: #aaa;
-      font-weight: lighter;
-    }
-  }
-  
-}
-.threads-list-wrapper {
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-.threads-list {
-  background: #fff;
-  .thread-item {
-    line-height: 20px;
-    
-    &:hover {
-      background: #eee;
-    }
-
-    img {
-      border-radius: 50%;
-      width: 50px;
-    }
-
-    .meta {
-      border-bottom: 1px solid #f0f0f0;
-      padding-top: 15px;
-      padding-bottom: 10px;
-      padding-right: 20px;
-
-      .timestamp {
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.4);
-      }
-
-      .snippet {
-        font-size: 14px;
-        color: rgba(0, 0, 0, 0.6);
-      }
-
-      .unreadCount {
-        background: #09d261;
-        color: white;
-      }
-    }
-  }
-}
-.profile-settings {
-  background: #eee;
-
-  img {
-    width: 40px;
     border-radius: 50%;
-    margin-left: 5px;
-  }
+}
 
-  a.nav-link {
-      padding: 8px;   
-      padding-bottom: 0;
-      border-radius: 50%;
+.avatar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
-      &:hover, &:focus {
-          outline: none;
-          transition: background-color 0.18s ease; 
-      }
+.header {
+    background-color: #eee;
+}
 
-      // you can also use :focus, this is extreme.
-      &.focus {
-          background-color: rgba(0,0,0,0.1);
-          border-radius: 50%;
-      }
+.search {
+    padding: 10px;
+    background: #fafafa;
+    .form-control {
+        background-color: white;
+        border: 0px solid #f6f6f6;
+        border-radius: 5px;
+        height: 34px;
+        font-size: 16px;
+        &:focus,
+        &:hover {
+            outline: none;
+            outline-color: transparent; // box-shadow: none;
+        }
+        &::placeholder {
+            color: #aaa;
+            font-weight: lighter;
+        }
+    }
+}
 
-      
-  }
+.threads-list-wrapper {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.threads-list {
+    background: #fff;
+    .thread-item {
+        line-height: 20px;
+        &:hover {
+            background: #eee;
+        }
+        img {
+            border-radius: 50%;
+            width: 50px;
+        }
+        .meta {
+            border-bottom: 1px solid #f0f0f0;
+            padding-top: 15px;
+            padding-bottom: 10px;
+            padding-right: 20px;
+            .timestamp {
+                font-size: 12px;
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .snippet {
+                font-size: 14px;
+                color: rgba(0, 0, 0, 0.6);
+            }
+            .unreadCount {
+                background: #09d261;
+                color: white;
+            }
+        }
+    }
+}
+
+.profile-settings {
+    background: #eee;
+    img {
+        width: 40px;
+        border-radius: 50%;
+        margin-left: 5px;
+    }
+    a.nav-link {
+        padding: 8px;
+        padding-bottom: 0;
+        border-radius: 50%;
+        &:hover,
+        &:focus {
+            outline: none;
+            transition: background-color 0.18s ease;
+        } // you can also use :focus, this is extreme.
+        &.focus {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+        }
+    }
 }

@@ -3,7 +3,6 @@
     border-left: 1px solid #e0e0e0;
     padding: 20px;
     line-height: 21px;
-
     img {
         width: 40px;
         border-radius: 50%;
@@ -18,14 +17,13 @@
 
 .thread-footer {
     background: #F4F1EF;
-
     input {
         border: none;
         font-size: 15px;
         line-height: 20px;
         border-radius: 5px;
         padding: 10px 16px 10px 12px;
-        &::placeholder {         
+        &::placeholder {
             color: #a4a4a4;
         }
     }
@@ -41,32 +39,28 @@
     min-width: 100px;
     font-size: 13.6px;
     margin-top: 2px;
-
     .day-sep {
         font-size: 12.5px;
         line-height: 21px;
         border-radius: 7.5px;
-        color: rgba(69,90,100,0.95);
-        text-shadow: 0 1px 0 rgba(255,255,255,0.4);
-        background-color: rgba(225,245,254,0.92);
+        color: rgba(69, 90, 100, 0.95);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+        background-color: rgba(225, 245, 254, 0.92);
         padding: 5px 12px 6px 12px;
-        box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
         width: auto;
         margin-bottom: 16px;
         margin-top: 16px;
     }
-
     img.avatar {
         visibility: hidden;
     }
-
     .content {
         border-radius: 7.5px;
         max-width: 450px;
         background: white;
         padding: 6px 7px 8px 9px;
-        box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
         .timestamp {
             float: right;
             margin-top: 10px;
@@ -76,30 +70,33 @@
             color: rgba(0, 0, 0, 0.45);
         }
     }
-
     .arrow {
         width: 8px;
         margin-top: -3px;
         visibility: hidden;
     }
-
     &.out {
         img.avatar {
             visibility: hidden !important;
         }
-        .content {            
-            background: #dcf8c6;           
+        .content {
+            background: #dcf8c6;
         }
     }
-
-    &.out + &.in, &.in + &.out, &.out.new-day, &.in.new-day { 
+    &.out+&.in,
+    &.in+&.out,
+    &.out.new-day,
+    &.in.new-day {
         margin-top: 12px;
         .arrow {
             visibility: visible;
         }
     }
-    &.out + &.in, &.in.new-day {
-        .content { border-top-left-radius: 0; }
+    &.out+&.in,
+    &.in.new-day {
+        .content {
+            border-top-left-radius: 0;
+        }
         .arrow {
             &::after {
                 content: "◥";
@@ -107,9 +104,11 @@
             }
         }
     }
-
-    &.in + &.out, &.out.new-day {        
-        .content { border-top-right-radius: 0; }
+    &.in+&.out,
+    &.out.new-day {
+        .content {
+            border-top-right-radius: 0;
+        }
         .arrow {
             &::after {
                 content: "◤";
@@ -117,7 +116,6 @@
             }
         }
     }
-
     &.local-last {
         img.avatar {
             visibility: visible;

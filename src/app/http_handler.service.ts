@@ -1,9 +1,9 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Http handler service that provides wrapper for ajax calls to server
@@ -13,7 +13,7 @@ import {Observable} from 'rxjs/Observable';
 export class HttpHandlerService {
   storage: Storage = window.sessionStorage;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http) { }
 
   host(url?: string): string {
     return window.location.origin + url;
