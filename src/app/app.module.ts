@@ -8,11 +8,13 @@ import { CacheService } from './cache.service';
 import { ChatModule } from './chat/chat.module';
 import { DataService } from './data.service';
 import { HttpHandlerService } from './http_handler.service';
+import { AuthComponent } from './auth/auth.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,

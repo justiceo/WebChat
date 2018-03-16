@@ -1,0 +1,15 @@
+.wrapper {
+    height: 100vh;
+    background: #d8d8d8;
+    background: linear-gradient(to bottom, #009688, #009688 23%, #d8d8d8 13%);
+    .center-box {
+        width: 100vw;
+        max-width: 1200px;
+        height: 100vh;
+        max-height: 65vh;
+        border-radius: 3px;
+        overflow: hidden;
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+        background: white;
+    }
+}
