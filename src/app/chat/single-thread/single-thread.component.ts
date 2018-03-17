@@ -7,7 +7,7 @@ import { MessageContentType, Message } from '../../message';
 import { Thread } from '../../thread';
 
 @Component({
-  selector: 'app-single-thread',
+  selector: 'wc-single-thread',
   templateUrl: './single-thread.component.html',
   styleUrls: ['./single-thread.component.scss'],
 })

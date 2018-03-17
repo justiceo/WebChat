@@ -6,7 +6,7 @@ import { Thread } from '../../thread';
 import { DataService } from '../../data.service';
 
 @Component({
-  selector: 'app-threads-list',
+  selector: 'wc-threads-list',
   templateUrl: './threads-list.component.html',
   styleUrls: ['./threads-list.component.scss']
 })

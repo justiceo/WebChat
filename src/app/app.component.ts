@@ -1,12 +1,13 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  template: `<app-chat *ngIf="isAuthed"></app-chat>
-  <app-auth *ngIf="!isAuthed"></app-auth>`,
+  selector: 'wc-root',
+  template: `<wc-chat *ngIf="isAuthed"></wc-chat>
+  <wc-auth *ngIf="!isAuthed"></wc-auth>`,
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
+  isAuthed = true;
   title = 'app';
 }
