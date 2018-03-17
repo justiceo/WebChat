@@ -1,6 +1,6 @@
 <div class="wrapper" fxLayoutAlign="center center">
   <div class="center-box">
-    <wc-threads-list (threadChange)="currThread = $event" fxFlex="30" fxLayout="column"></wc-threads-list>
-    <wc-single-thread [(thread)]="currThread" fxFlex="70" fxLayout="column"></wc-single-thread>
+    <wc-threads-list class="threads-list" (threadChange)="currThread = $event" fxFlex="30" fxLayout="column"></wc-threads-list>
+    <wc-single-thread class="single-thread" [(thread)]="currThread" fxFlex="70" fxLayout="column"></wc-single-thread>
   </div>
 </div>
