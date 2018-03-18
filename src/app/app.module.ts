@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { QRCodeModule } from 'angular2-qrcode';
 
 import { AppComponent } from './app.component';
 import { CacheService } from './cache.service';
@@ -19,6 +20,7 @@ import { AuthComponent } from './auth/auth.component';
   imports: [
     BrowserModule,
     FlexLayoutModule,
+    QRCodeModule,
     HttpModule,
     ChatModule,
   ],
