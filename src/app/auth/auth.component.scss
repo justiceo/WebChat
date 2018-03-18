@@ -43,5 +43,13 @@
             font-size: 14px;
             text-decoration: none;
         }
+        .qrcode {
+            margin-left: 60px;
+            color: #929fa6;
+            font-size: 14px;
+            label {
+                padding-left: 5px;
+            }
+        }
     }
 }

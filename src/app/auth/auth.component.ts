@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
+  qrcode = 'so my dear, this is an intentionally long text for use in generating qr code for authentication in the auth component.';
   constructor() { }
 
   ngOnInit() {

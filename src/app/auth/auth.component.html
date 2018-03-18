@@ -10,7 +10,7 @@
   </div>
   <div class="center-box" fxLayout>
     <div class="how-to" fxLayout="column" fxLayoutAlign="space-between start">
-      <p class="head">To use WhatsApp Clone on your computer:</p>
+      <p class="head">To use WhatsApp on your computer:</p>
       <ol>
         <li>Open WhatsApp Clone on your phone</li>
         <li>Tap
@@ -24,8 +24,14 @@
         <a href="#">Need help to get started?</a>
       </p>
     </div>
-    <div class="qrcode">
-      <qr-code [value]="qrcode" [size]="250"></qr-code>
+    <div class="qrcode" fxLayout="column" fxLayoutAlign="space-between center">
+      <div class="timeout-wrapper">
+        <qr-code [value]="qrcode" [size]="300"></qr-code>
+      </div>
+      <p>
+        <input type="checkbox" checked="checked">
+        <label>Keep me signed in</label>
+      </p>
     </div>
   </div>
 </div>
