@@ -34,3 +34,5 @@ export class SingleThreadComponent implements OnInit {
 
   ngOnInit() { }
 }
+
+// scroll to bottom of div: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
