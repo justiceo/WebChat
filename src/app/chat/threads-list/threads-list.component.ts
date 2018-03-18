@@ -23,6 +23,7 @@ export class ThreadsListComponent implements OnInit {
   }
 
   changeThread(t: Thread) {
+    this.current = t;
     this.threadChange.emit(t);
   }
 
