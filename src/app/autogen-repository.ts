@@ -37,7 +37,7 @@ export class AutoGenRepository implements MessageRepository {
                 // set message to last
                 t.timestamp = m.timestamp;
                 t.snippet = m.content;
-                t.unreadCount = this.chooseAny([0, 1, 2, 5, 8]);
+                t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
                 t.isUnread = t.unreadCount !== 0;
             });
         });
