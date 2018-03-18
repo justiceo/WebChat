@@ -1,15 +1,47 @@
 .wrapper {
     height: 100vh;
     background: #d8d8d8;
-    background: linear-gradient(to bottom, #009688, #009688 23%, #d8d8d8 13%);
+    background: linear-gradient(to bottom, #59BBA6, #59BBA6 23%, #d8d8d8 13%);
+    .brand {
+        width: 98vw;
+        max-width: 1100px;
+        padding: 40px 20px 60px;
+        .txt {
+            color: white;
+            text-transform: uppercase;
+            font-weight: 900;
+            font-size: 14px;
+            margin-left: 14px;
+        }
+    }
     .center-box {
-        width: 100vw;
-        max-width: 1200px;
-        height: 100vh;
-        max-height: 65vh;
+        width: 90vw;
+        max-width: 910px;
+        height: 90vh;
+        max-height: 440px;
         border-radius: 3px;
         overflow: hidden;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 17px 50px 0 rgba(0, 0, 0, 0.19), 0 12px 15px 0 rgba(0, 0, 0, 0.24);
         background: white;
+        padding: 40px;
+        .head {
+            font-weight: 300;
+            line-height: normal;
+            font-size: 28px;
+            color: #55636B;
+        }
+        ol {
+            padding-bottom: 24px;
+            li {
+                line-height: 28px;
+                font-size: 18px;
+                padding-bottom: 24px;
+            }
+        }
+        a {
+            color: #009688;
+            font-size: 14px;
+            text-decoration: none;
+        }
     }
 }
