@@ -40,6 +40,13 @@
 .threads-list {
     background: #fff;
     .thread-item {
+        &.unread .meta .snippet, &.unread .meta .name{
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.8);
+        }
+        &.unread .meta .timestamp {
+            color: rgba(0, 0, 0, 0.8);
+        }
         line-height: 20px;
         &:hover {
             background: #eee;

@@ -42,13 +42,14 @@
 </div>
 <div class="threads-list-wrapper " fxFlex="100">
   <div class="threads-list">
-    <a (click)="changeThread(thread)" fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item">
+    <a (click)="changeThread(thread)" fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item"
+      [ngClass]="{'unread': thread.isUnread}">
       <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
         <img [src]="thread.avatar" alt="" />
       </div>
       <div fxFlexAlign="center" class="meta" fxFlex="calc(100% - 80px)">
         <div fxLayoutAlign="space-between center">
-          <span>{{ thread.name }}</span>
+          <span class="name">{{ thread.name }}</span>
           <span class="timestamp">{{ thread.timestamp | date:'shortTime' }}</span>
         </div>
         <div fxLayoutAlign="space-between center">
