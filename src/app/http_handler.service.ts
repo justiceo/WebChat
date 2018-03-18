@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import {CacheService} from './cache.service';
+
 /**
  * Http handler service that provides wrapper for ajax calls to server
  * with a cache layer
  */
 @Injectable()
 export class HttpHandlerService {
-  storage: Storage = window.sessionStorage;
-
-  constructor(private http: Http) { }
+  constructor(private http: Http, private cache: CacheService) { }
 
   host(url?: string): string {
     return window.location.origin + url;
@@ -26,24 +26,14 @@ export class HttpHandlerService {
   }
 
   getAndCache(url: string): Observable<any> {
-    const cached = this.getCacheItem(url);
+    const cached = this.cache.get(url);
     if (cached) {
       return Observable.of(cached);
     } else {
       return this.get(url).map((json) => {
-        this.setCacheItem(url, json);
+        this.cache.set(url, json);
         return json;
       });
     }
-  }
-
-  getCacheItem(key: string): any {
-    return JSON.parse(this.storage.getItem(key));
-  }
-
-  setCacheItem(key: string, value: any): string {
-    const strVal = JSON.stringify(value);
-    this.storage.setItem(key, strVal);
-    return strVal;
   }
 }
