@@ -1,6 +1,10 @@
 // Put Global CSS here. All others will be scoped to the component level
 body {
     font-family: 'Roboto', sans-serif;
+    color: #4b4b4b;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern";
+    user-select: none;
     .dropdown-toggle::after {
         display: none; // hide bootstrap dropdown arrow
     }
