@@ -19,7 +19,8 @@ export class ThreadsListComponent implements OnInit {
   name = 'John Doe';
   constructor(private dataService: DataService) {
     this.threads = dataService.getThreads();
-    this.current = this.threads[0];
+    // this.current = this.threads[0]; // uncomment to use first thread as default
+    this.current = new Thread();
   }
 
   changeThread(t: Thread) {
@@ -28,6 +29,6 @@ export class ThreadsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.threadChange.emit(this.current);
+    // this.threadChange.emit(this.current);
   }
 }
