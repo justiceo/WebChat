@@ -32,6 +32,25 @@
     }
 }
 
+.notification {
+    padding: 20px 15px;
+    background: #9de1fe;
+    .icon {
+        margin-right: 10px;
+    }
+    .message {
+        color: #333;
+        font-size: 15px;
+        line-height: 19px;
+        font-family: 'Roboto', sans-serif;
+        span {
+            text-decoration: underline;
+            font-size: 14px;
+            color: #667;
+        }
+    }
+}
+
 .threads-list-wrapper {
     overflow-y: scroll;
     overflow-x: hidden;
