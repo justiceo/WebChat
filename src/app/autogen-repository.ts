@@ -130,6 +130,7 @@ export class AutoGenRepository implements MessageRepository {
                 // for merging avatars, see https://stackoverflow.com/a/15620872
                 thread.id = x.id + y.id;
                 thread.userIds = [x.id, y.id];
+                thread.isGroup = true;
                 pair.push(thread);
                 return pair;
             });

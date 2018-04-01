@@ -61,6 +61,12 @@
         background: white;
         padding: 6px 7px 8px 9px;
         box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        .sender-name {
+            font-size: 12.5px;
+            font-family: 'Open-sans', sans-serif;
+            font-weight: 600;
+            color: pink;
+        }
         .timestamp {
             float: right;
             margin-top: 10px;

@@ -47,6 +47,7 @@
         <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} top">
           <span class="arrow" fxFlexOrder="{{ message.userID != 'me' ? '0' : '1' }}"></span>
           <div class="content">
+            <div class="sender-name" *ngIf="_thread.isGroup && message.userID != 'me'">{{ message.userID }}</div>
             {{ message.content }}
             <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
           </div>
