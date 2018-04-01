@@ -38,7 +38,6 @@ export class AutoGenRepository implements MessageRepository {
                 t.timestamp = m.timestamp;
                 t.snippet = m.content;
                 t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
-                t.isUnread = t.unreadCount !== 0;
             });
         });
     }
@@ -117,6 +116,22 @@ export class AutoGenRepository implements MessageRepository {
                 thread.id = x['cell'];
                 thread.userIds = [thread.id];
                 return thread;
+            }).pairwise()
+            .flatMap((pair: Thread[]) => {
+                const prob = this.randomInt(0, 100);
+                if (pair.length < 2 || prob < 75) {
+                    return pair;
+                }
+                const x = pair[0];
+                const y = pair[1];
+                const thread = new Thread();
+                thread.name = x.name + ', ' + y.name;
+                thread.avatar = 'https://image.freepik.com/free-icon/group_318-27951.jpg';
+                // for merging avatars, see https://stackoverflow.com/a/15620872
+                thread.id = x.id + y.id;
+                thread.userIds = [x.id, y.id];
+                pair.push(thread);
+                return pair;
             });
     }
 

@@ -5,8 +5,8 @@ export class Thread {
   timestamp: number;
   snippet: string;
   userIds: string[];
-  isUnread: boolean;
   unreadCount: number;
+  isGroup: boolean;
 
   static make(id: string, name: string, userIds: string[]): Thread {
     const t = new Thread();
