@@ -4,15 +4,14 @@ export class Thread {
   avatar: string;
   timestamp: number;
   snippet: string;
-  userIds: string[];
+  userIDs: string[];
   unreadCount: number;
-  isGroup: boolean;
 
-  static make(id: string, name: string, userIds: string[]): Thread {
+  static make(id: string, name: string, userIDs: string[]): Thread {
     const t = new Thread();
     t.id = id;
     t.name = name;
-    t.userIds = userIds;
+    t.userIDs = userIDs;
     t.avatar = 'https://randomuser.me/api/portraits/men/41.jpg';
     t.snippet = 'some snippet';
     t.timestamp = Date.now() - 50000000;

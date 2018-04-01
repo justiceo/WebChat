@@ -28,7 +28,7 @@ export class AutoGenRepository implements MessageRepository {
     constructor(private http: HttpHandlerService) {
         this.getRandomUsers().subscribe((t: Thread) => {
             this.threadRepo[t.id] = t;
-            this.genMessages(t.id, t.userIds).subscribe(m => {
+            this.genMessages(t.id, t.userIDs).subscribe(m => {
                 if (!this.smsRepo[m.threadID]) {
                     this.smsRepo[m.threadID] = [];
                 }
@@ -114,7 +114,7 @@ export class AutoGenRepository implements MessageRepository {
                 thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
                 thread.avatar = x['picture']['large'];
                 thread.id = x['cell'];
-                thread.userIds = [thread.id];
+                thread.userIDs = [thread.id];
                 return thread;
             }).pairwise()
             .flatMap((pair: Thread[]) => {
@@ -129,8 +129,7 @@ export class AutoGenRepository implements MessageRepository {
                 thread.avatar = 'https://image.freepik.com/free-icon/group_318-27951.jpg';
                 // for merging avatars, see https://stackoverflow.com/a/15620872
                 thread.id = x.id + y.id;
-                thread.userIds = [x.id, y.id];
-                thread.isGroup = true;
+                thread.userIDs = [x.id, y.id];
                 pair.push(thread);
                 return pair;
             });
