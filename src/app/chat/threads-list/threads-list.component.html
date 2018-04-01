@@ -37,6 +37,9 @@
     </li>
   </ul>
 </div>
+<div *ngIf="notification" class="notification bg-info" fxFlex="80px" fxLayoutAlign="center center">
+  <div>{{ notification }}</div>
+</div>
 <div class="search" fxFlex="60px" fxLayoutAlign="center center">
   <input type="search" class="form-control" placeholder="Search or start new chat" />
 </div>

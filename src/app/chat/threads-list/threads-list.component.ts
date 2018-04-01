@@ -17,6 +17,15 @@ export class ThreadsListComponent implements OnInit {
 
   avatarUrl = 'https://randomuser.me/api/portraits/men/43.jpg';
   name = 'John Doe';
+  notification = 'Get notification content';
+  /*
+  enum Nots {
+    NotConnected,
+    NoInternet,
+    LowBattery,
+    GetNotifications
+  }*/
+
   constructor(private dataService: DataService) {
     this.threads = dataService.getThreads();
     // this.current = this.threads[0]; // uncomment to use first thread as default
