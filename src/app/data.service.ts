@@ -34,6 +34,10 @@ export class DataService {
     return this.repo.getThreads();
   }
 
+  getThreadInfo(id: string): Thread {
+    return this.repo.getThreadInfo(id);
+  }
+
   getMessages(threadID: string): Message[] {
     return this.repo.getMessages(threadID);
   }

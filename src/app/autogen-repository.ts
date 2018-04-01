@@ -144,4 +144,8 @@ export class AutoGenRepository implements MessageRepository {
     getThreads(): Thread[] {
         return Object.values(this.threadRepo);
     }
+
+    getThreadInfo(id: string): Thread {
+        return this.threadRepo[id];
+    }
 }

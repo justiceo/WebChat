@@ -4,6 +4,7 @@ import { Thread } from './thread';
 export interface MessageRepository {
     getMessages(id: string): Message[];
     getThreads(): Thread[];
+    getThreadInfo(id: string): Thread;
 }
 
 export interface IdToMessages {
@@ -35,7 +36,7 @@ export class HardCodedSmsRepository implements MessageRepository {
         return Object.values(this.idToThread);
     }
 
-    getThreadById(id: string): Thread {
+    getThreadInfo(id: string): Thread {
         return this.idToThread[id];
     }
 }
