@@ -19,3 +19,8 @@ A clone of WhatsApp Web using the base of WebChat.
 ## Proposed Features
 * Send and receive messages (real & automated)
 * Send different kinds of content as message (images, videos, plain text, emoji)
+* Group messaging
+* Documentation
+* Unit testing
+* Notifications (new message, battery status, title bar, enable notifications)
+* Cherry picking into v2
