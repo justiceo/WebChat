@@ -1,7 +1,7 @@
 import { Message } from './message';
 import { Thread } from './thread';
 
-export interface MessageRepository {
+export interface Repository {
     getMessages(id: string): Message[];
     getThreads(): Thread[];
     getThreadInfo(id: string): Thread;
@@ -14,7 +14,7 @@ export interface IdToThread {
     [index: string]: Thread;
 }
 
-export class HardCodedSmsRepository implements MessageRepository {
+export class HardCodedSmsRepository implements Repository {
     idToMessages: IdToMessages;
     idToThread: IdToThread;
 

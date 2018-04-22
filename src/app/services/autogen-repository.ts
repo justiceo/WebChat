@@ -18,10 +18,10 @@ import { expand } from 'rxjs/operators';
 import { HttpHandlerService } from './http_handler.service';
 import { MessageContentType, Message } from '../model/message';
 import { Thread } from '../model/thread';
-import { MessageRepository, IdToMessages, IdToThread } from '../model/message-repository';
+import { Repository, IdToMessages, IdToThread } from '../model/repository';
 
 
-export class AutoGenRepository implements MessageRepository {
+export class AutoGenRepository implements Repository {
     smsRepo: IdToMessages = {};
     threadRepo: IdToThread = {};
 

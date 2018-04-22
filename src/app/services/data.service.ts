@@ -18,13 +18,13 @@ import { expand } from 'rxjs/operators';
 import { HttpHandlerService } from './http_handler.service';
 import { MessageContentType, Message } from '../model/message';
 import { Thread } from '../model/thread';
-import { MessageRepository, HardCodedSmsRepository } from '../model/message-repository';
+import { Repository, HardCodedSmsRepository } from '../model/repository';
 import { AutoGenRepository } from './autogen-repository';
 
 
 @Injectable()
 export class DataService {
-  repo: MessageRepository;
+  repo: Repository;
 
   constructor(private http: HttpHandlerService) {
     this.repo = new AutoGenRepository(http);
