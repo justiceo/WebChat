@@ -4,6 +4,7 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 
 import { DataService } from './data.service';
 import { HttpHandlerService } from './http_handler.service';
+import { CacheService } from './cache.service';
 import { Message } from './message';
 
 describe('DataService', () => {
@@ -19,7 +20,8 @@ describe('DataService', () => {
 
     mockBackend = new MockBackend();
     const fakeHttp = new Http(mockBackend, new BaseRequestOptions());
-    httpHandlerService = new HttpHandlerService(fakeHttp);
+    const cache = new CacheService();
+    httpHandlerService = new HttpHandlerService(fakeHttp, cache);
     mockBackend.connections.subscribe(
       (connection: MockConnection) => lastConnection = connection);
 
