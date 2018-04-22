@@ -34,19 +34,6 @@ describe('HttpHandlerService', () => {
     window.sessionStorage.clear();
   });
 
-  it('should be able to cache objects', () => {
-    const key = 'key of object in string';
-    const value = '{"key": "value"}';
-
-    /*
-    // assert key-value doesn't previously exist
-    expect(httpHandlerService.getCacheItem(key)).toEqual(null);
-
-    // insert and test
-    httpHandlerService.setCacheItem(key, value);
-    expect(httpHandlerService.getCacheItem(key)).toEqual(value);*/
-  });
-
   it('should be able to make http requests', fakeAsync(() => {
     const url = '/sample/endpoint';
     const expectedUrl = 'api/locations/sample/endpoint';

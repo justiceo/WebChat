@@ -39,20 +39,6 @@ describe('DataService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should return messages list', inject([DataService], (service: DataService) => {
-    spyOn(Math, 'random').and.returnValue(0.50);
-    /*
-    service.getMessages('thread-id-here').subscribe(message => {
-      expect(message).toBeTruthy();
-      expect(message.content).toBeTruthy();
-    });
-    */
-  }));
-
-  // TODO: test messages should be in chronological order
-
-  // TODO: multiple calls should return same list
-
   describe('chooseAny', () => {
     it('should return lower bound', inject([DataService], (service: DataService) => {
       spyOn(Math, 'random').and.returnValue(0);
