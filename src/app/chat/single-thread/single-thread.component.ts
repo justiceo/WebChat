@@ -27,9 +27,6 @@ export class SingleThreadComponent implements OnInit {
   }
 
   constructor(private dataService: DataService) {
-    if (this._thread) {
-      this.messages = dataService.getMessages(this._thread.id);
-    }
   }
 
   ngOnInit() { }

@@ -29,9 +29,7 @@ export class AutoGenRepository implements MessageRepository {
         this.getRandomUsers().subscribe((t: Thread) => {
             this.threadRepo[t.id] = t;
             this.genMessages(t.id, t.userIDs).subscribe(m => {
-                if (!this.smsRepo[m.threadID]) {
-                    this.smsRepo[m.threadID] = [];
-                }
+                this.smsRepo[m.threadID] = this.smsRepo[m.threadID] || [];
                 this.smsRepo[m.threadID].push(m);
 
                 // set message to last
@@ -40,6 +38,18 @@ export class AutoGenRepository implements MessageRepository {
                 t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
             });
         });
+    }
+
+    getMessages(threadID: string): Message[] {
+        return this.smsRepo[threadID];
+    }
+
+    getThreads(): Thread[] {
+        return Object.values(this.threadRepo);
+    }
+
+    getThreadInfo(id: string): Thread {
+        return this.threadRepo[id];
     }
 
     getQuotes(): Observable<string> {
@@ -83,25 +93,6 @@ export class AutoGenRepository implements MessageRepository {
             });
     }
 
-
-    // Returns a random integer between min (included) and max (included)
-    randomInt(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
-
-    chooseAny<E>(arr: E[]): E {
-        if (!arr || arr.length === 0) {
-            throw new Error('cannot choose from null or empty array');
-        }
-        return arr[this.randomInt(0, arr.length - 1)];
-    }
-
-
-    // a day is about 86400000 milliseconds
-    getTimeAfter(timestamp: number): number {
-        return timestamp + this.randomInt(0, 50000000);
-    }
-
     getRandomUsers(): Observable<Thread> {
         const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
         return this.http
@@ -135,16 +126,20 @@ export class AutoGenRepository implements MessageRepository {
             });
     }
 
-
-    getMessages(threadID: string): Message[] {
-        return this.smsRepo[threadID];
+    // Returns a random integer between min (included) and max (included)
+    randomInt(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    getThreads(): Thread[] {
-        return Object.values(this.threadRepo);
+    chooseAny<E>(arr: E[]): E {
+        if (!arr || arr.length === 0) {
+            throw new Error('cannot choose from null or empty array');
+        }
+        return arr[this.randomInt(0, arr.length - 1)];
     }
 
-    getThreadInfo(id: string): Thread {
-        return this.threadRepo[id];
+    // a day is about 86400000 milliseconds
+    getTimeAfter(timestamp: number): number {
+        return timestamp + this.randomInt(0, 50000000);
     }
 }
