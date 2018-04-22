@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { bufferTime } from 'rxjs/operators';
 
-import { DataService } from '../../data.service';
-import { MessageContentType, Message } from '../../message';
-import { Thread } from '../../thread';
+import { DataService } from '../../services/data.service';
+import { MessageContentType, Message } from '../../model/message';
+import { Thread } from '../../model/thread';
 
 @Component({
   selector: 'wc-single-thread',

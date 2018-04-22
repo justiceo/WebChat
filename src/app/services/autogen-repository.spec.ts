@@ -4,7 +4,8 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 
 import { AutoGenRepository } from './autogen-repository';
 import { HttpHandlerService } from './http_handler.service';
-import { Message } from './message';
+import { Message } from '../model/message';
+import { CacheService } from './cache.service';
 
 describe('AutoGenRepository', () => {
   let httpHandlerService: HttpHandlerService;
@@ -16,7 +17,8 @@ describe('AutoGenRepository', () => {
 
     mockBackend = new MockBackend();
     const fakeHttp = new Http(mockBackend, new BaseRequestOptions());
-    httpHandlerService = new HttpHandlerService(fakeHttp);
+    const cache = new CacheService();
+    httpHandlerService = new HttpHandlerService(fakeHttp, cache);
     mockBackend.connections.subscribe(
       (connection: MockConnection) => lastConnection = connection);
 

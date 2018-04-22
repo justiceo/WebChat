@@ -5,7 +5,7 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 import { DataService } from './data.service';
 import { HttpHandlerService } from './http_handler.service';
 import { CacheService } from './cache.service';
-import { Message } from './message';
+import { Message } from '../model/message';
 
 describe('DataService', () => {
   let httpHandlerService: HttpHandlerService;

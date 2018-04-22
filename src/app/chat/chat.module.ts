@@ -5,7 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SingleThreadComponent } from './single-thread/single-thread.component';
 import { ThreadsListComponent } from './threads-list/threads-list.component';
 import { ChatComponent } from './chat.component';
-import { TimeSince } from '../timesince.pipe';
+import { TimeSince } from '../pipes/timesince.pipe';
 
 @NgModule({
   imports: [

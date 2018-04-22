@@ -16,9 +16,9 @@ import { zip } from 'rxjs/observable/zip';
 import { expand } from 'rxjs/operators';
 
 import { HttpHandlerService } from './http_handler.service';
-import { MessageContentType, Message } from './message';
-import { Thread } from './thread';
-import { MessageRepository, HardCodedSmsRepository } from './message-repository';
+import { MessageContentType, Message } from '../model/message';
+import { Thread } from '../model/thread';
+import { MessageRepository, HardCodedSmsRepository } from '../model/message-repository';
 import { AutoGenRepository } from './autogen-repository';
 
 

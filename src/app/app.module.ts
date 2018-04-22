@@ -5,10 +5,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { QRCodeModule } from 'angular2-qrcode';
 
 import { AppComponent } from './app.component';
-import { CacheService } from './cache.service';
+import { CacheService } from './services/cache.service';
 import { ChatModule } from './chat/chat.module';
-import { DataService } from './data.service';
-import { HttpHandlerService } from './http_handler.service';
+import { DataService } from './services/data.service';
+import { HttpHandlerService } from './services/http_handler.service';
 import { AuthComponent } from './auth/auth.component';
 
 
