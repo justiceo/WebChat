@@ -1,22 +1,32 @@
 .wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background: #d8d8d8;
+  background: linear-gradient(to bottom, #009688, #009688 13%, #d8d8d8 13%);
+  .center-box {
+    width: 100vw;
+    max-width: 1400px;
+    background: white;
     height: 100vh;
-    background: #d8d8d8;
-    background: linear-gradient(to bottom, #009688, #009688 13%, #d8d8d8 13%);
-    .center-box {
-        width: 100vw;
-        max-width: 1400px;
-        background: white;
-        height: 100vh;
-        max-height: 95vh;
-        border-radius: 3px;
-        overflow: hidden;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-        .single-thread {
-            min-width: 500px;
-            background-image: linear-gradient(to bottom, rgba(229, 221, 213, 0.92) 0%, rgba(229, 221, 213, 0.92) 100%), url("https://web.whatsapp.com/img/8a055527b27b887521a9f084497d8879.png");
-        }
-        .threads-list {
-            min-width: 350px;
-        }
+    max-height: 95vh;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    .single-thread {
+      min-width: 500px;
+      background-image: linear-gradient(
+          to bottom,
+          rgba(229, 221, 213, 0.92) 0%,
+          rgba(229, 221, 213, 0.92) 100%
+        ),
+        url("https://web.whatsapp.com/img/8a055527b27b887521a9f084497d8879.png");
     }
+    .threads-list {
+      min-width: 350px;
+    }
+  }
 }
