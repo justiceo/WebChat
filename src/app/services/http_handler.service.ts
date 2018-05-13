@@ -1,9 +1,12 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/of';
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {map} from 'rxjs/operators';
+
+
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 
 import {CacheService} from './cache.service';
 
@@ -20,20 +23,20 @@ export class HttpHandlerService {
   }
 
   get(url: string): Observable<any> {
-    return this.http.get(url).map((res) => {
+    return this.http.get(url).pipe(map((res) => {
       return res;
-    });
+    }));
   }
 
   getAndCache(url: string): Observable<any> {
     const cached = this.cache.get(url);
     if (cached) {
-      return Observable.of(cached);
+      return observableOf(cached);
     } else {
-      return this.get(url).map((json) => {
+      return this.get(url).pipe(map((json) => {
         this.cache.set(url, json);
         return json;
-      });
+      }));
     }
   }
 }

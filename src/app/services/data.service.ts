@@ -1,19 +1,18 @@
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/expand';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/windowCount';
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/merge';
-import 'rxjs/add/operator/skipWhile';
-import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/pairwise';
-import 'rxjs/add/operator/takeWhile';
+
+import {mergeMap, takeWhile, pairwise, map,  expand } from 'rxjs/operators';
+
+
+
+
+
+
+
+
+
+
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { zip } from 'rxjs/observable/zip';
-import { expand } from 'rxjs/operators';
+import { Observable ,  from ,  zip, of } from 'rxjs';
 
 import { HttpHandlerService } from './http_handler.service';
 import { MessageContentType, Message } from '../model/message';
@@ -53,16 +52,16 @@ export class DataService implements Repository {
   }
 
   getQuotes(): Observable<string> {
-    return this.http.getAndCache('https://talaikis.com/api/quotes/')
-      .flatMap(x => x)
-      .map(x => x['quote']);
+    return this.http.getAndCache('https://talaikis.com/api/quotes/').pipe(
+      mergeMap(x => x),
+      map(x => x['quote']),);
   }
 
   genMessages(threadID: string, userIDs: string[]): Observable<Message> {
     const day = 86400000;
     let lastTimeStamp = Date.now() - day * 3;
-    return this.getQuotes()
-      .map(quote => {
+    return this.getQuotes().pipe(
+      map(quote => {
         const m = new Message();
         m.contentType = MessageContentType.PlainText;
         m.content = quote;
@@ -71,14 +70,14 @@ export class DataService implements Repository {
         m.timestamp = lastTimeStamp;
         m.threadID = threadID;
         return m;
-      })
-      .takeWhile(m => m.timestamp < Date.now())
-      .pairwise()
-      .flatMap((pair: Message[]) => {
+      }),
+      takeWhile(m => m.timestamp < Date.now()),
+      pairwise(),
+      mergeMap((pair: Message[]) => {
         if (pair.length === 1) {
           pair[0].isLocalLast = true;
           pair[0].isNewDay = true;
-          return Observable.of(pair[0]);
+          return of(pair[0]);
         }
 
         const curr = pair[0];
@@ -89,26 +88,26 @@ export class DataService implements Repository {
         if (new Date(curr.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
           next.isNewDay = true;
         }
-        return Observable.of(curr);
-      });
+        return of(curr);
+      }),);
   }
 
   getRandomUsers(): Observable<Thread> {
     const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
     return this.http
       .getAndCache(
-        'https://randomuser.me/api/?inc=name,cell,picture&results=20')
-      .map(x => x['results'])
-      .flatMap(x => x)
-      .map(x => {
+        'https://randomuser.me/api/?inc=name,cell,picture&results=20').pipe(
+      map(x => x['results']),
+      mergeMap(x => x),
+      map(x => {
         const thread = new Thread();
         thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
         thread.avatar = x['picture']['large'];
         thread.id = x['cell'];
         thread.userIDs = [thread.id];
         return thread;
-      }).pairwise()
-      .flatMap((pair: Thread[]) => {
+      }),pairwise(),
+      mergeMap((pair: Thread[]) => {
         const prob = this.randomInt(0, 100);
         if (pair.length < 2 || prob < 75) {
           return pair;
@@ -123,7 +122,7 @@ export class DataService implements Repository {
         thread.userIDs = [x.id, y.id];
         pair.push(thread);
         return pair;
-      });
+      }),);
   }
 
   // Returns a random integer between min (included) and max (included)

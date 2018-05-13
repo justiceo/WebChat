@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { bufferTime } from 'rxjs/operators';
 
 import { DataService } from '../../services/data.service';
