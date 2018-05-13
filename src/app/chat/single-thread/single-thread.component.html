@@ -47,7 +47,7 @@
         <div fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} top">
           <span class="arrow" fxFlexOrder="{{ message.userID != 'me' ? '0' : '1' }}"></span>
           <div class="content">
-            <div class="sender-name" *ngIf="_thread.userIDs.length > 1 && message.userID != 'me'">{{ dataService.getThreadInfo(message.userID).name  }}</div>
+            <div class="sender-name" *ngIf="_thread.userIDs.length > 1 && message.userID != 'me'">{{ dataService.getThreadInfo(message.userID).name }}</div>
             {{ message.content }}
             <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
           </div>
@@ -72,7 +72,7 @@
   -->
   </div>
 </div>
-<div class="single-thread-empty" *ngIf="!_thread" fxLayout="column" fxFlexFill fxLayoutAlign="center center" style="background: #f7f9fa; max-width: 300px">
+<div class="empty-thread" *ngIf="!_thread" fxLayout="column" fxFlexFill fxLayoutAlign="center center" style="background: #f7f9fa; max-width: 300px">
   <h2>Keep your phone connected</h2>
   <p style="text-align: center">WebChat connects to your phone to sync messages. To reduce data usage, connect your phone to Wi-Fi.</p>
   <hr />
