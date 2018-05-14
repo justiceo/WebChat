@@ -81,6 +81,12 @@
   img.avatar {
     visibility: hidden;
   }
+  .content-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+  }
   .content {
     border-radius: 7.5px;
     max-width: 450px;
@@ -108,11 +114,17 @@
     visibility: hidden;
   }
   &.out {
+    .content-wrapper {
+      justify-content: flex-end;
+    }
     img.avatar {
       visibility: hidden !important;
     }
     .content {
       background: #dcf8c6;
+    }
+    .arrow {
+      order: 1;
     }
   }
   &.out + &.in,

@@ -43,9 +43,9 @@
   <div class="message-list" fxFlex="100">
     <ul class="list-unstyled px-2">
       <li class="message" *ngFor="let message of messages" [ngClass]="{'out': message.userID === 'me', 'in': message.userID !== 'me', 'local-last': message.isLocalLast, 'new-day': message.isNewDay}">
-        <div class="day-sep" fxFlexAlign="center" *ngIf="message.isNewDay">{{ message.timestamp | timesince }}</div>
-        <div class="content-wrapper" fxLayoutAlign="{{ message.userID != 'me' ? 'start' : 'end'}} top">
-          <span class="arrow" fxFlexOrder="{{ message.userID != 'me' ? '0' : '1' }}"></span>
+        <div class="day-sep" *ngIf="message.isNewDay">{{ message.timestamp | timesince }}</div>
+        <div class="content-wrapper">
+          <span class="arrow"></span>
           <div class="content">
             <div class="sender-name" *ngIf="_thread.userIDs.length > 1 && message.userID != 'me'">{{ dataService.getThreadInfo(message.userID).name }}</div>
             {{ message.content }}
