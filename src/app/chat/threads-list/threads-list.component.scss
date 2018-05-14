@@ -1,121 +1,121 @@
 .img-circle {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .avatar {
-    padding-top: 10px;
-    padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .header {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .search {
-    padding: 10px;
-    background: #fafafa;
-    .form-control {
-        background-color: white;
-        border: 0px solid #f6f6f6;
-        border-radius: 5px;
-        height: 34px;
-        font-size: 16px;
-        &:focus,
-        &:hover {
-            outline: none;
-            outline-color: transparent; // box-shadow: none;
-        }
-        &::placeholder {
-            color: #aaa;
-            font-weight: lighter;
-        }
+  padding: 10px;
+  background: #fafafa;
+  .form-control {
+    background-color: white;
+    border: 0px solid #f6f6f6;
+    border-radius: 5px;
+    height: 34px;
+    font-size: 16px;
+    &:focus,
+    &:hover {
+      outline: none;
+      outline-color: transparent; // box-shadow: none;
     }
+    &::placeholder {
+      color: #aaa;
+      font-weight: lighter;
+    }
+  }
 }
 
 .notification {
-    padding: 20px 15px;
-    background: #9de1fe;
-    .icon {
-        margin-right: 10px;
+  padding: 20px 15px;
+  background: #9de1fe;
+  .icon {
+    margin-right: 10px;
+  }
+  .message {
+    color: #333;
+    font-size: 15px;
+    line-height: 19px;
+    font-family: "Roboto", sans-serif;
+    span {
+      text-decoration: underline;
+      font-size: 14px;
+      color: #667;
     }
-    .message {
-        color: #333;
-        font-size: 15px;
-        line-height: 19px;
-        font-family: 'Roboto', sans-serif;
-        span {
-            text-decoration: underline;
-            font-size: 14px;
-            color: #667;
-        }
-    }
+  }
 }
 
 .threads-list-wrapper {
-    overflow-y: scroll;
-    overflow-x: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .threads-list {
-    background: #fff;
-    .thread-item {
-        &.unread .meta .snippet,
-        &.unread .meta .name {
-            font-weight: 500;
-            color: rgba(0, 0, 0, 0.8);
-        }
-        &.unread .meta .timestamp {
-            color: rgba(0, 0, 0, 0.8);
-        }
-        line-height: 20px;
-        &:hover,
-        &.active {
-            background: #eee;
-        }
-        img {
-            border-radius: 50%;
-            width: 50px;
-        }
-        .meta {
-            border-bottom: 1px solid #f0f0f0;
-            padding-top: 15px;
-            padding-bottom: 10px;
-            padding-right: 20px;
-            .timestamp {
-                font-size: 12px;
-                color: rgba(0, 0, 0, 0.4);
-            }
-            .snippet {
-                font-size: 14px;
-                color: rgba(0, 0, 0, 0.6);
-            }
-            .unreadCount {
-                background: #09d261;
-                color: white;
-            }
-        }
+  background: #fff;
+  .thread-item {
+    &.unread .meta .snippet,
+    &.unread .meta .name {
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.8);
     }
+    &.unread .meta .timestamp {
+      color: rgba(0, 0, 0, 0.8);
+    }
+    line-height: 20px;
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+    img {
+      border-radius: 50%;
+      width: 50px;
+    }
+    .meta {
+      border-bottom: 1px solid #f0f0f0;
+      padding-top: 15px;
+      padding-bottom: 10px;
+      padding-right: 20px;
+      .timestamp {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.4);
+      }
+      .snippet {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+      .unreadCount {
+        background: #09d261;
+        color: white;
+      }
+    }
+  }
 }
 
-.profile-settings {
-    background: #eee;
-    img {
-        width: 40px;
-        border-radius: 50%;
-        margin-left: 5px;
+.profile {
+  background: #eee;
+  img {
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
+  }
+  a.nav-link {
+    padding: 8px;
+    padding-bottom: 0;
+    border-radius: 50%;
+    &:hover,
+    &:focus {
+      outline: none;
+      transition: background-color 0.18s ease;
+    } // you can also use :focus, this is extreme.
+    &.focus {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
     }
-    a.nav-link {
-        padding: 8px;
-        padding-bottom: 0;
-        border-radius: 50%;
-        &:hover,
-        &:focus {
-            outline: none;
-            transition: background-color 0.18s ease;
-        } // you can also use :focus, this is extreme.
-        &.focus {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-        }
-    }
+  }
 }
