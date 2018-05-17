@@ -12,6 +12,10 @@
 }
 
 .search {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
   padding: 10px;
   background: #fafafa;
   .form-control {
@@ -35,6 +39,12 @@
 .notification {
   padding: 20px 15px;
   background: #9de1fe;
+  .inner {
+    display: flex;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
+  }
   .icon {
     margin-right: 10px;
   }
@@ -59,6 +69,10 @@
 .threads-list {
   background: #fff;
   .thread-item {
+    display: flex;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
     &.unread .meta .snippet,
     &.unread .meta .name {
       font-weight: 500;
@@ -72,6 +86,12 @@
     &.active {
       background: #eee;
     }
+    .avatar {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+    }
     img {
       border-radius: 50%;
       width: 50px;
@@ -81,6 +101,13 @@
       padding-top: 15px;
       padding-bottom: 10px;
       padding-right: 20px;
+      .name-bar,
+      .snippet-bar {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        align-items: center;
+      }
       .timestamp {
         font-size: 12px;
         color: rgba(0, 0, 0, 0.4);
@@ -98,7 +125,17 @@
 }
 
 .profile {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
   background: #eee;
+  .avatar {
+    display: flex;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
+  }
   img {
     width: 40px;
     border-radius: 50%;
