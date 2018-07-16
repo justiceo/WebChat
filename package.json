@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "s-build": "tsc",
-    "s-start": "tsc & node dist/out-tsc/src/server/index.js",
+    "s-start": "tsc & nodemon dist/out-tsc/src/server",
     "tsc": "tsc"
   },
   "private": true,
@@ -28,6 +28,7 @@
     "angular2-qrcode": "^2.0.1",
     "core-js": "^2.4.1",
     "express": "^4.16.3",
+    "nodemon": "^1.18.2",
     "rxjs": "^6.1.0",
     "rxjs-compat": "^6.1.0",
     "zone.js": "^0.8.20"
@@ -53,5 +54,8 @@
     "ts-node": "~6.0.3",
     "tslint": "~5.10.0",
     "typescript": "^2.7.2"
+  },
+  "nodemonConfig": {
+    "delay": "0"
   }
 }
