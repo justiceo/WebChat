@@ -4,8 +4,7 @@ import * as http from "http";
 import * as socket from "socket.io";
 import * as redis from "redis";
 import * as redisServer from "redis-server";
-import ClientManager from "./client-manager";
-import Handlers from "./handlers";
+import EventHandler from "./event-handler";
 
 const result = dotenv.config({ path: __dirname + "/.env" });
 if (result.error) {
@@ -23,15 +22,17 @@ const io = socket(server);
 const dbClient = redis.createClient();
 const dbServer = new redisServer(6379);
 
-let handlers = new Handlers(new ClientManager(dbClient));
-handlers.garnish(io);
+let handler = new EventHandler(dbClient);
+handler.garnish(io);
 
 dbServer.open(err => {
-  if (err === null) {
-    dbClient.on("error", function(err) {
-      console.log("Error: " + err);
-    });
+  if (err != null) {
+    console.log("RedisServer: " + err);
+    return;
   }
+  dbClient.on("error", function(err) {
+    console.log("RedisClient: " + err);
+  });
 });
 
 const router = express.Router();
