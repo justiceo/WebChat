@@ -18,12 +18,12 @@ const port = process.env.PORT || 3000;
 const host = process.env.HOST || "localhost";
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
-const dbClient = redis.createClient();
+const socketServer: SocketIO.Server = socket(server);
+const dbClient: redis.RedisClient = redis.createClient();
 const dbServer = new redisServer(6379);
 
 let handler = new EventHandler(dbClient);
-handler.garnish(io);
+handler.registerEvents(socketServer);
 
 dbServer.open(err => {
   if (err != null) {
