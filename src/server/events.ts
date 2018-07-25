@@ -8,7 +8,5 @@ export enum Event {
 
   // custom events
   TOKEN_REQUEST = "tokenRequest", // received from clients to obtain token
-  TOKEN_REFRESH = "tokenRefresh", // received from clients (with old tokens) for new ones
-  REFRESH_FAIL = "refreshFail", // emitted by server when previous token couldn't be validated
   TOKEN = "token" // emitted by server with generated token
 }
