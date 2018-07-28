@@ -14,8 +14,12 @@ export class DataService implements Repository {
 
   constructor(private http: HttpHandlerService) {}
 
-  getMessages(threadID: string): Message[] {
+  getMessages(threadID: string): Array<Message> {
     return this.smsRepo[threadID];
+  }
+
+  getMessagesAsyc(threadID: string): Observable<Message> {
+    return from(this.getMessages(threadID));
   }
 
   getThreads(): Thread[] {
@@ -23,6 +27,8 @@ export class DataService implements Repository {
   }
 
   getThreadsAsync(): Observable<Thread> {
+    // TODO: In the real environment,
+    // first emit what is in the cache, then make the request for only fresh data.
     return this.getRandomUsers().pipe(
       map((t: Thread) => {
         this.threadRepo[t.id] = t;
@@ -56,6 +62,7 @@ export class DataService implements Repository {
     return this.getQuotes().pipe(
       map(quote => {
         const m = new Message();
+        m.id = this.makeID();
         m.contentType = MessageContentType.PlainText;
         m.content = quote;
         m.userID = this.chooseAny([...userIDs, "me"]);
@@ -87,6 +94,17 @@ export class DataService implements Repository {
         return of(curr);
       })
     );
+  }
+
+  makeID(): string {
+    let tokenStr = "";
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 10; i++) {
+      tokenStr += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return tokenStr + Date.now();
   }
 
   getRandomUsers(): Observable<Thread> {
@@ -137,6 +155,19 @@ export class DataService implements Repository {
       throw new Error("cannot choose from null or empty array");
     }
     return arr[this.randomInt(0, arr.length - 1)];
+  }
+
+  addOrUpdate(arr: { id: string }[], e: { id: string }) {
+    let found = false;
+    arr.forEach(i => {
+      if (i.id == e.id) {
+        i = e;
+        found = true;
+      }
+    });
+    if (!found) {
+      arr.push(e);
+    }
   }
 
   // a day is about 86400000 milliseconds

@@ -12,7 +12,7 @@ import { DataService } from "../../services/data.service";
 })
 export class ThreadsListComponent implements OnInit {
   threads: Thread[] = [];
-  @Input() current: Thread;
+  @Input() current: Thread = new Thread();
   @Output() threadChange = new EventEmitter<Thread>();
 
   avatarUrl = "https://randomuser.me/api/portraits/men/43.jpg";
@@ -21,10 +21,8 @@ export class ThreadsListComponent implements OnInit {
 
   constructor(private dataService: DataService) {
     dataService.getThreadsAsync().subscribe((t: Thread) => {
-      this.threads.push(t);
+      this.dataService.addOrUpdate(this.threads, t);
     });
-    // this.current = this.threads[0]; // uncomment to use first thread as default
-    this.current = new Thread();
   }
 
   changeThread(t: Thread) {

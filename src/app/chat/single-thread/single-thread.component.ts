@@ -12,7 +12,7 @@ import { Thread } from "../../model/thread";
   styleUrls: ["./single-thread.component.scss"]
 })
 export class SingleThreadComponent implements OnInit {
-  messages: Message[];
+  messages: Message[] = [];
   _thread: Thread;
 
   get thread() {
@@ -25,7 +25,10 @@ export class SingleThreadComponent implements OnInit {
       return;
     }
     this._thread = t;
-    this.messages = this.dataService.getMessages(t.id);
+    this.messages = [];
+    this.dataService.getMessagesAsyc(t.id).subscribe((m: Message) => {
+      this.dataService.addOrUpdate(this.messages, m);
+    });
   }
 
   constructor(private dataService: DataService) {}

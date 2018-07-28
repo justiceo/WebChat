@@ -12,6 +12,7 @@ export enum MessageContentType {
  * Mock-model for a single sms message in a thread
  */
 export class Message {
+  id: string;
   threadID: string;
   userID: string;
   contentType: MessageContentType;
