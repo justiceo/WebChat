@@ -1,23 +1,11 @@
+import { mergeMap, takeWhile, pairwise, map, expand } from "rxjs/operators";
+import { Observable, from, zip, of } from "rxjs";
+import { Injectable } from "@angular/core";
 
-import {mergeMap, takeWhile, pairwise, map,  expand } from 'rxjs/operators';
-
-
-
-
-
-
-
-
-
-
-
-import { Injectable } from '@angular/core';
-import { Observable ,  from ,  zip, of } from 'rxjs';
-
-import { HttpHandlerService } from './http_handler.service';
-import { MessageContentType, Message } from '../model/message';
-import { Thread } from '../model/thread';
-import { Repository, IdToMessages, IdToThread } from '../model/repository';
+import { HttpHandlerService } from "./http_handler.service";
+import { MessageContentType, Message } from "../model/message";
+import { Thread } from "../model/thread";
+import { Repository, IdToMessages, IdToThread } from "../model/repository";
 
 @Injectable()
 export class DataService implements Repository {
@@ -52,9 +40,9 @@ export class DataService implements Repository {
   }
 
   getQuotes(): Observable<string> {
-    return this.http.getAndCache('https://talaikis.com/api/quotes/').pipe(
-      mergeMap(x => x),
-      map(x => x['quote']),);
+    return this.http
+      .getAndCache("https://talaikis.com/api/quotes/")
+      .pipe(mergeMap(x => x), map(x => x["quote"]));
   }
 
   genMessages(threadID: string, userIDs: string[]): Observable<Message> {
@@ -65,7 +53,7 @@ export class DataService implements Repository {
         const m = new Message();
         m.contentType = MessageContentType.PlainText;
         m.content = quote;
-        m.userID = this.chooseAny([...userIDs, 'me']);
+        m.userID = this.chooseAny([...userIDs, "me"]);
         lastTimeStamp = this.getTimeAfter(lastTimeStamp);
         m.timestamp = lastTimeStamp;
         m.threadID = threadID;
@@ -85,44 +73,53 @@ export class DataService implements Repository {
         if (curr.userID !== next.userID) {
           curr.isLocalLast = true;
         }
-        if (new Date(curr.timestamp).getDate() !== new Date(next.timestamp).getDate()) {
+        if (
+          new Date(curr.timestamp).getDate() !==
+          new Date(next.timestamp).getDate()
+        ) {
           next.isNewDay = true;
         }
         return of(curr);
-      }),);
+      })
+    );
   }
 
   getRandomUsers(): Observable<Thread> {
     const cap = (x: string) => x.charAt(0).toUpperCase() + x.substr(1);
     return this.http
       .getAndCache(
-        'https://randomuser.me/api/?inc=name,cell,picture&results=20').pipe(
-      map(x => x['results']),
-      mergeMap(x => x),
-      map(x => {
-        const thread = new Thread();
-        thread.name = cap(x['name']['first']) + ' ' + cap(x['name']['last']);
-        thread.avatar = x['picture']['large'];
-        thread.id = x['cell'];
-        thread.userIDs = [thread.id];
-        return thread;
-      }),pairwise(),
-      mergeMap((pair: Thread[]) => {
-        const prob = this.randomInt(0, 100);
-        if (pair.length < 2 || prob < 75) {
+        "https://randomuser.me/api/?inc=name,cell,picture&results=20"
+      )
+      .pipe(
+        map(x => x["results"]),
+        mergeMap(x => x),
+        map(x => {
+          const thread = new Thread();
+          thread.name = cap(x["name"]["first"]) + " " + cap(x["name"]["last"]);
+          thread.avatar = x["picture"]["large"];
+          thread.id = x["cell"];
+          thread.userIDs = [thread.id];
+          return thread;
+        }),
+        pairwise(),
+        mergeMap((pair: Thread[]) => {
+          const prob = this.randomInt(0, 100);
+          if (pair.length < 2 || prob < 75) {
+            return pair;
+          }
+          const x = pair[0];
+          const y = pair[1];
+          const thread = new Thread();
+          thread.name = x.name + ", " + y.name;
+          thread.avatar =
+            "https://image.freepik.com/free-icon/group_318-27951.jpg";
+          // for merging avatars, see https://stackoverflow.com/a/15620872
+          thread.id = x.id + y.id;
+          thread.userIDs = [x.id, y.id];
+          pair.push(thread);
           return pair;
-        }
-        const x = pair[0];
-        const y = pair[1];
-        const thread = new Thread();
-        thread.name = x.name + ', ' + y.name;
-        thread.avatar = 'https://image.freepik.com/free-icon/group_318-27951.jpg';
-        // for merging avatars, see https://stackoverflow.com/a/15620872
-        thread.id = x.id + y.id;
-        thread.userIDs = [x.id, y.id];
-        pair.push(thread);
-        return pair;
-      }),);
+        })
+      );
   }
 
   // Returns a random integer between min (included) and max (included)
@@ -132,7 +129,7 @@ export class DataService implements Repository {
 
   chooseAny<E>(arr: E[]): E {
     if (!arr || arr.length === 0) {
-      throw new Error('cannot choose from null or empty array');
+      throw new Error("cannot choose from null or empty array");
     }
     return arr[this.randomInt(0, arr.length - 1)];
   }

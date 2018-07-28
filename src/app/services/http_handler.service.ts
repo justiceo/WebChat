@@ -1,14 +1,9 @@
+import { of as observableOf, Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import {of as observableOf,  Observable } from 'rxjs';
-
-import {map} from 'rxjs/operators';
-
-
-
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import {CacheService} from './cache.service';
+import { CacheService } from "./cache.service";
 
 /**
  * Http handler service that provides wrapper for ajax calls to server
@@ -16,16 +11,18 @@ import {CacheService} from './cache.service';
  */
 @Injectable()
 export class HttpHandlerService {
-  constructor(private http: HttpClient, private cache: CacheService) { }
+  constructor(private http: HttpClient, private cache: CacheService) {}
 
   host(url?: string): string {
     return window.location.origin + url;
   }
 
   get(url: string): Observable<any> {
-    return this.http.get(url).pipe(map((res) => {
-      return res;
-    }));
+    return this.http.get(url).pipe(
+      map(res => {
+        return res;
+      })
+    );
   }
 
   getAndCache(url: string): Observable<any> {
@@ -33,10 +30,12 @@ export class HttpHandlerService {
     if (cached) {
       return observableOf(cached);
     } else {
-      return this.get(url).pipe(map((json) => {
-        this.cache.set(url, json);
-        return json;
-      }));
+      return this.get(url).pipe(
+        map(json => {
+          this.cache.set(url, json);
+          return json;
+        })
+      );
     }
   }
 }

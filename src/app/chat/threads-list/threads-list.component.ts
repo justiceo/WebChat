@@ -1,23 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
-import { bufferCount } from 'rxjs/operators';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs";
+import { bufferCount } from "rxjs/operators";
 
-import { Thread } from '../../model/thread';
-import { DataService } from '../../services/data.service';
+import { Thread } from "../../model/thread";
+import { DataService } from "../../services/data.service";
 
 @Component({
-  selector: 'wc-threads-list',
-  templateUrl: './threads-list.component.html',
-  styleUrls: ['./threads-list.component.scss']
+  selector: "wc-threads-list",
+  templateUrl: "./threads-list.component.html",
+  styleUrls: ["./threads-list.component.scss"]
 })
 export class ThreadsListComponent implements OnInit {
   threads: Thread[];
   @Input() current: Thread;
   @Output() threadChange = new EventEmitter<Thread>();
 
-  avatarUrl = 'https://randomuser.me/api/portraits/men/43.jpg';
-  name = 'John Doe';
-  notification = { type: 'EnableNotifications'};
+  avatarUrl = "https://randomuser.me/api/portraits/men/43.jpg";
+  name = "John Doe";
+  notification = { type: "EnableNotifications" };
 
   constructor(private dataService: DataService) {
     this.threads = dataService.getThreads();

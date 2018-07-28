@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 /**
  * Http handler service that provides wrapper for ajax calls to server
@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 export class CacheService {
   storage: Storage = window.sessionStorage;
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Returns an json object of cached item.
@@ -28,8 +28,9 @@ export class CacheService {
    * @param ttl
    */
   set(key: string, value: any, ttl = 0): string {
-    if (!key) { // key cannot be falsy, to make retrievals safe
-      throw new Error('CacheService.set(): invalid/null key: ' + String(key));
+    if (!key) {
+      // key cannot be falsy, to make retrievals safe
+      throw new Error("CacheService.set(): invalid/null key: " + String(key));
     }
     const strVal = JSON.stringify(value);
     this.storage.setItem(key, strVal);

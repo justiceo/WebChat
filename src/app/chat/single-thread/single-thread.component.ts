@@ -1,15 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { bufferTime } from 'rxjs/operators';
+import { Component, OnInit, Input } from "@angular/core";
+import { Observable } from "rxjs";
+import { bufferTime } from "rxjs/operators";
 
-import { DataService } from '../../services/data.service';
-import { MessageContentType, Message } from '../../model/message';
-import { Thread } from '../../model/thread';
+import { DataService } from "../../services/data.service";
+import { MessageContentType, Message } from "../../model/message";
+import { Thread } from "../../model/thread";
 
 @Component({
-  selector: 'wc-single-thread',
-  templateUrl: './single-thread.component.html',
-  styleUrls: ['./single-thread.component.scss'],
+  selector: "wc-single-thread",
+  templateUrl: "./single-thread.component.html",
+  styleUrls: ["./single-thread.component.scss"]
 })
 export class SingleThreadComponent implements OnInit {
   messages: Message[];
@@ -21,15 +21,16 @@ export class SingleThreadComponent implements OnInit {
 
   @Input()
   set thread(t: Thread) {
-    if (!t) { return; }
+    if (!t) {
+      return;
+    }
     this._thread = t;
     this.messages = this.dataService.getMessages(t.id);
   }
 
-  constructor(private dataService: DataService) {
-  }
+  constructor(private dataService: DataService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 }
 
 // scroll to bottom of div: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
