@@ -8,6 +8,6 @@ import { Component, ViewEncapsulation } from "@angular/core";
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-  isAuthed = true;
+  isAuthed = false;
   title = "app";
 }

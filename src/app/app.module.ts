@@ -1,31 +1,27 @@
-import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { QRCodeModule } from 'angular2-qrcode';
+import { NgModule } from "@angular/core";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { HttpClientModule } from "@angular/common/http";
+import { BrowserModule } from "@angular/platform-browser";
+import { QRCodeModule } from "angular2-qrcode";
 
-import { AppComponent } from './app.component';
-import { CacheService } from './services/cache.service';
-import { ChatModule } from './chat/chat.module';
-import { DataService } from './services/data.service';
-import { HttpHandlerService } from './services/http_handler.service';
-import { AuthComponent } from './auth/auth.component';
-
+import { AppComponent } from "./app.component";
+import { CacheService } from "./services/cache.service";
+import { ChatModule } from "./chat/chat.module";
+import { DataService } from "./services/data.service";
+import { SocketService } from "./services/socket.service";
+import { HttpHandlerService } from "./services/http_handler.service";
+import { AuthComponent } from "./auth/auth.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-  ],
+  declarations: [AppComponent, AuthComponent],
   imports: [
     BrowserModule,
     FlexLayoutModule,
     QRCodeModule,
     HttpClientModule,
-    ChatModule,
+    ChatModule
   ],
-  providers: [CacheService, DataService, HttpHandlerService],
+  providers: [CacheService, DataService, HttpHandlerService, SocketService],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
