@@ -11,7 +11,7 @@ import { DataService } from "../../services/data.service";
   styleUrls: ["./threads-list.component.scss"]
 })
 export class ThreadsListComponent implements OnInit {
-  threads: Thread[];
+  threads: Thread[] = [];
   @Input() current: Thread;
   @Output() threadChange = new EventEmitter<Thread>();
 
@@ -20,7 +20,9 @@ export class ThreadsListComponent implements OnInit {
   notification = { type: "EnableNotifications" };
 
   constructor(private dataService: DataService) {
-    this.threads = dataService.getThreads();
+    dataService.getThreadsAsync().subscribe((t: Thread) => {
+      this.threads.push(t);
+    });
     // this.current = this.threads[0]; // uncomment to use first thread as default
     this.current = new Thread();
   }

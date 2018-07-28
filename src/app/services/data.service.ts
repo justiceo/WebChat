@@ -12,20 +12,7 @@ export class DataService implements Repository {
   smsRepo: IdToMessages = {};
   threadRepo: IdToThread = {};
 
-  constructor(private http: HttpHandlerService) {
-    this.getRandomUsers().subscribe((t: Thread) => {
-      this.threadRepo[t.id] = t;
-      this.genMessages(t.id, t.userIDs).subscribe(m => {
-        this.smsRepo[m.threadID] = this.smsRepo[m.threadID] || [];
-        this.smsRepo[m.threadID].push(m);
-
-        // set message to last
-        t.timestamp = m.timestamp;
-        t.snippet = m.content;
-        t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
-      });
-    });
-  }
+  constructor(private http: HttpHandlerService) {}
 
   getMessages(threadID: string): Message[] {
     return this.smsRepo[threadID];
@@ -33,6 +20,24 @@ export class DataService implements Repository {
 
   getThreads(): Thread[] {
     return Object.values(this.threadRepo);
+  }
+
+  getThreadsAsync(): Observable<Thread> {
+    return this.getRandomUsers().pipe(
+      map((t: Thread) => {
+        this.threadRepo[t.id] = t;
+        this.genMessages(t.id, t.userIDs).forEach(m => {
+          this.smsRepo[m.threadID] = this.smsRepo[m.threadID] || [];
+          this.smsRepo[m.threadID].push(m);
+
+          // set message to last
+          t.timestamp = m.timestamp;
+          t.snippet = m.content;
+          t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
+        });
+        return t;
+      })
+    );
   }
 
   getThreadInfo(id: string): Thread {
