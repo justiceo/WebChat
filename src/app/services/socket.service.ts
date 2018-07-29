@@ -3,6 +3,7 @@ import { Observable, Subject, interval, timer } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
 
 import { CacheService } from "./cache.service";
+import { Event } from "../../common/events";
 
 @Injectable()
 export class SocketService {
@@ -17,6 +18,9 @@ export class SocketService {
     // No need to watch localStorage, before/after setting this item call the subjects.
     // downside is  that other tabs may not receive it, which is better to prevent cross tab pollution.
     this.isAuthedSubj.next(token != null);
+    this.socket.addListener(Event.TOKEN, args => {
+      this.tokenSubj.next(args);
+    });
   }
 
   isClientAuthed(): Observable<boolean> {
@@ -24,16 +28,13 @@ export class SocketService {
   }
 
   requestToken(): Observable<string> {
-    const oneMinute = 60000;
-    interval(oneMinute).pipe(
-      takeUntil(timer(oneMinute * 8)),
-      takeUntil(this.pairedSubj),
-      map(() => this.socket.emit("TokenRequest"))
-    );
-
-    this.socket.addListener("Token", args => {
-      this.tokenSubj.next(args);
-    });
+    const oneMinute = 6000;
+    interval(oneMinute)
+      .pipe(takeUntil(timer(oneMinute * 8)), takeUntil(this.pairedSubj))
+      .subscribe(x => {
+        console.log("socket-service: emitting token request ", x);
+        this.socket.emit(Event.TOKEN_REQUEST);
+      });
     return this.tokenSubj.asObservable();
   }
 }

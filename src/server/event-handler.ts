@@ -1,5 +1,5 @@
 import { RedisClient } from "redis";
-import { Event } from "./events";
+import { Event } from "../common/events";
 
 // Handler returns true if socket event was successfully handled, false otherwise.
 interface Handler {
