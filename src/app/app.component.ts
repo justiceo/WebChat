@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from "@angular/core";
+import { SocketService } from "./services/socket.service";
 
 @Component({
   selector: "wc-root",
@@ -8,6 +9,15 @@ import { Component, ViewEncapsulation } from "@angular/core";
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-  isAuthed = false;
+  isAuthed: boolean;
   title = "app";
+
+  constructor(private socketService: SocketService) {
+    socketService
+      .isClientAuthed()
+      .subscribe(
+        next => (this.isAuthed = next),
+        err => console.log("wc-root: ", err)
+      );
+  }
 }

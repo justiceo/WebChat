@@ -1,24 +1,39 @@
 import { Injectable } from "@angular/core";
+import { Observable, Subject, interval, timer } from "rxjs";
+import { map, takeUntil } from "rxjs/operators";
 
 import { CacheService } from "./cache.service";
 
 @Injectable()
 export class SocketService {
-  socket: SocketIO.Socket;
+  private socket: SocketIO.Socket;
+  private isAuthedSubj = new Subject<boolean>();
+  private tokenSubj = new Subject<string>();
+  private pairedSubj = new Subject<string>();
   readonly TokenKey = "auth-token";
-  constructor(private cache: CacheService) {}
 
-  isClientAuthed(): boolean {
-    return this.cache.get(this.TokenKey) != null;
+  constructor(private cache: CacheService) {
+    let token = cache.get(this.TokenKey);
+    // No need to watch localStorage, before/after setting this item call the subjects.
+    // downside is  that other tabs may not receive it, which is better to prevent cross tab pollution.
+    this.isAuthedSubj.next(token != null);
   }
 
-  requestToken(): void {}
+  isClientAuthed(): Observable<boolean> {
+    return this.isAuthedSubj.asObservable();
+  }
 
-  requestRoomAccess(): void {}
+  requestToken(): Observable<string> {
+    const oneMinute = 60000;
+    interval(oneMinute).pipe(
+      takeUntil(timer(oneMinute * 8)),
+      takeUntil(this.pairedSubj),
+      map(() => this.socket.emit("TokenRequest"))
+    );
 
-  onToken(token: string): void {}
-
-  onRoomAuthed(token: string): void {}
-
-  onInactive(): void {}
+    this.socket.addListener("Token", args => {
+      this.tokenSubj.next(args);
+    });
+    return this.tokenSubj.asObservable();
+  }
 }
