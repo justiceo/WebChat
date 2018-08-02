@@ -13,6 +13,7 @@ export class AuthComponent implements OnInit {
       next => (this.qrcode = next),
       error => console.log("wc-auth: ", error),
       () => {
+        console.log("wc-auth: completing token request subscription.");
         // TODO: display refresh icon
       }
     );
