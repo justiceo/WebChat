@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject, interval, timer } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
+import io from "socket.io-client";
 
 import { CacheService } from "./cache.service";
 import { Event } from "../../common/events";
 
 @Injectable()
 export class SocketService {
-  private socket: SocketIO.Socket;
+  private socket: SocketIO.Socket = io();
   private isAuthedSubj = new Subject<boolean>();
   private tokenSubj = new Subject<string>();
   private pairedSubj = new Subject<string>();
@@ -18,7 +19,8 @@ export class SocketService {
     // No need to watch localStorage, before/after setting this item call the subjects.
     // downside is  that other tabs may not receive it, which is better to prevent cross tab pollution.
     this.isAuthedSubj.next(token != null);
-    this.socket.addListener(Event.TOKEN, args => {
+
+    this.socket.on(Event.TOKEN, args => {
       this.tokenSubj.next(args);
     });
   }
