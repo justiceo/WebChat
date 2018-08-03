@@ -9,7 +9,7 @@ interface Handler {
 class AuthToken {
   token: string;
   clientID: string;
-  timestamp: number; // time in msec
+  expires: number; // time in msec
 }
 
 export default class EventHandler {
@@ -37,8 +37,8 @@ export default class EventHandler {
       // TODO(justiceo): Update this to single comparison when js or typescript adds something like Object.equals
       t.clientID === token.clientID &&
       t.token === token.token &&
-      t.timestamp === token.timestamp &&
-      t.timestamp > Date.now() - 60 * 1000 // 1 minute
+      t.expires === token.expires &&
+      t.expires > Date.now() - 60 * 1000 // 1 minute
     );
   }
 
