@@ -74,6 +74,9 @@ export class SocketService {
       .subscribe(x => {
         console.log("socket-service: emitting token request ", x);
         this.socket.emit(Event.TOKEN_REQUEST);
+      })
+      .add(() => {
+        this.tokenSubj.complete();
       });
     return this.tokenSubj.asObservable();
   }
