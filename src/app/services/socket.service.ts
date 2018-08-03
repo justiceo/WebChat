@@ -4,7 +4,8 @@ import { map, takeUntil } from "rxjs/operators";
 import io from "socket.io-client";
 
 import { CacheService } from "./cache.service";
-import { Event } from "../../common/events";
+import { Event, Handler } from "../../common/events";
+import { Token } from "../../common/token";
 
 @Injectable()
 export class SocketService {
@@ -14,15 +15,52 @@ export class SocketService {
   private pairedSubj = new Subject<string>();
   readonly TokenKey = "auth-token";
 
-  constructor(private cache: CacheService) {
-    let token = cache.get(this.TokenKey);
-    // No need to watch localStorage, before/after setting this item call the subjects.
-    // downside is  that other tabs may not receive it, which is better to prevent cross tab pollution.
-    this.isAuthedSubj.next(token != null);
+  eventMap: { e: Event; h: Handler }[] = [
+    { e: Event.TOKEN, h: this.onToken },
+    { e: Event.Disconnect, h: this.onDisconnect },
+    { e: Event.PAIRED, h: this.onPaired }
+  ];
 
-    this.socket.on(Event.TOKEN, args => {
-      this.tokenSubj.next(args);
+  constructor(private cache: CacheService) {
+    this.registerHandlers();
+    let token = cache.get(this.TokenKey);
+    this.isAuthedSubj.next(token != null);
+  }
+
+  registerHandlers() {
+    this.socket.on(Event.Connection, (socket: SocketIO.Socket) => {
+      this.eventMap.forEach(e => {
+        socket.on(e.e, (...args: any[]) => {
+          e.h(socket, ...args);
+        });
+      });
     });
+  }
+
+  onToken(socket: SocketIO.Socket, tokenStr: string): boolean {
+    console.log("soc-service: tokenstr: ", tokenStr);
+    this.tokenSubj.next(tokenStr);
+    return true;
+  }
+
+  onPaired(socket: SocketIO.Socket, token: Token): boolean {
+    this.cache.set(this.TokenKey, token);
+    this.isAuthedSubj.next(true);
+    this.tokenSubj.complete();
+    return true;
+  }
+
+  onSuspend(socket: SocketIO.Socket): boolean {
+    this.tokenSubj.complete();
+    this.pairedSubj.complete();
+    return true;
+  }
+
+  onDisconnect(socket: SocketIO.Socket): boolean {
+    this.tokenSubj.complete();
+    this.pairedSubj.complete();
+    this.isAuthedSubj.complete();
+    return true;
   }
 
   isClientAuthed(): Observable<boolean> {

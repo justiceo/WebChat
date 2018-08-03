@@ -1,22 +1,12 @@
 import { RedisClient } from "redis";
-import { Event } from "../common/events";
-
-// Handler returns true if socket event was successfully handled, false otherwise.
-interface Handler {
-  (socket: SocketIO.Socket, ...args: any[]): boolean;
-}
-
-class AuthToken {
-  token: string;
-  clientID: string;
-  expires: number; // time in msec
-}
+import { Event, Handler } from "../common/events";
+import { Token } from "../common/token";
 
 export default class EventHandler {
   eventMap: Map<Event, Handler> = new Map([
     [Event.TOKEN_REQUEST, this.onTokenRequest]
   ]);
-  authTokens: Map<string, AuthToken> = new Map();
+  authTokens: Map<string, Token> = new Map();
 
   constructor(db: RedisClient) {}
 
@@ -30,7 +20,7 @@ export default class EventHandler {
     });
   }
 
-  isValidAuthToken(socket: SocketIO.Socket, token: AuthToken): boolean {
+  isValidAuthToken(socket: SocketIO.Socket, token: Token): boolean {
     const t = this.authTokens.get(socket.id);
     return (
       t != null &&
@@ -42,7 +32,7 @@ export default class EventHandler {
     );
   }
 
-  makeAuthToken(socket: SocketIO.Socket): AuthToken {
+  makeAuthToken(socket: SocketIO.Socket): Token {
     let tokenStr = "";
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -53,7 +43,7 @@ export default class EventHandler {
 
     const t = {
       token: tokenStr,
-      timestamp: Date.now(),
+      expires: Date.now(),
       clientID: socket.client.id
     };
     this.authTokens.set(socket.id, t);

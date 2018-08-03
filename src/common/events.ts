@@ -8,5 +8,11 @@ export enum Event {
 
   // custom events
   TOKEN_REQUEST = "tokenRequest", // received from clients to obtain token
-  TOKEN = "token" // emitted by server with generated token
+  TOKEN = "token", // emitted by server with generated token
+  PAIRED = "paired"
+}
+
+// Handler returns true if socket event was successfully handled, false otherwise.
+export interface Handler {
+  (socket: SocketIO.Socket, ...args: any[]): boolean;
 }
