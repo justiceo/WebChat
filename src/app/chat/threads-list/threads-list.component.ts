@@ -14,6 +14,10 @@ export class ThreadsListComponent implements OnInit {
   threads: Thread[] = [];
   @Input() current: Thread = new Thread();
   @Output() threadChange = new EventEmitter<Thread>();
+  // TODO: please please remove this
+  isFocused2;
+  isFocused3;
+  isFocused4;
 
   avatarUrl = "https://randomuser.me/api/portraits/men/43.jpg";
   name = "John Doe";
