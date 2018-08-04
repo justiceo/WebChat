@@ -21,7 +21,7 @@ var sassFiles = "src/style/*.scss";
 var jsFiles = "src/**/*.js";
 var viewFiles = "src/**/*.html";
 var assets = "src/assets/**/*";
-var buildDir = "./build/";
+var buildDir = "./dist/";
 var serverJs = "src/server/**/*";
 
 var interceptErrors = function(error) {
@@ -39,58 +39,9 @@ var interceptErrors = function(error) {
   this.emit("end");
 };
 
-gulp.task("browserify", function() {
-  return (browserify("./src/app/index.js")
-      .transform(babelify, { presets: ["es2015"] })
-      .transform(ngAnnotate)
-      .bundle()
-      .on("error", interceptErrors)
-      //Pass desired output filename to vinyl-source-stream
-      .pipe(source("main.js"))
-      // Start piping stream to tasks!
-      .pipe(gulp.dest(buildDir)) );
-});
-
 gulp.task("server", function() {
   // todo: hopefully someday we'll be able to compile this and bundle it
   gulp.src(serverJs).pipe(gulp.dest(buildDir));
-});
-
-gulp.task("sass", function() {
-  return gulp
-    .src(sassFiles)
-    .pipe(sass())
-    .on("error", interceptErrors)
-    .pipe(postcss([autoprefixer()]))
-    .pipe(minifyCSS())
-    .pipe(gulp.dest(buildDir));
-});
-
-gulp.task("html", function() {
-  return gulp
-    .src("src/index.html")
-    .on("error", interceptErrors)
-    .pipe(gulp.dest(buildDir));
-});
-
-gulp.task("views", function() {
-  return gulp
-    .src(viewFiles)
-    .pipe(
-      templateCache({
-        standalone: true
-      })
-    )
-    .on("error", interceptErrors)
-    .pipe(rename("app.templates.js"))
-    .pipe(gulp.dest("./src/app/"));
-  // todo: core doesn't need to know about all the templates from other modules - refactor!
-});
-
-// Copy over everything in assets directory
-gulp.task("assets", function() {
-  gulp.src(".env").pipe(gulp.dest(buildDir));
-  gulp.src(assets).pipe(gulp.dest(buildDir));
 });
 
 // clean build folder
@@ -109,35 +60,10 @@ gulp.task("test", ["build"], function(done) {
   ).start();
 });
 
-gulp.task("build", [
-  "clean",
-  "sass",
-  "assets",
-  "html",
-  "views",
-  "browserify",
-  "server"
-]);
+gulp.task("build", ["clean", "server"]);
 
 gulp.task("watch-server", ["server"], function() {
   gulp.watch(serverJs, ["server"]);
 });
 
-gulp.task("default", ["build"], function() {
-  gulp.start(["browserify"]);
-
-  browserSync.init([buildDir + "**/**.**"], {
-    server: buildDir,
-    port: 3000,
-    ui: {
-      port: 3001
-    }
-  });
-
-  gulp.watch(sassFiles, ["sass"]);
-  gulp.watch("src/index.html", ["html"]);
-  gulp.watch(viewFiles, ["views"]);
-  gulp.watch(jsFiles, ["browserify"]);
-  gulp.watch(assets, ["assets"]);
-  gulp.watch(serverJs, ["server"]);
-});
+gulp.task("default", ["build"]);
