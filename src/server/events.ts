@@ -9,7 +9,8 @@ export enum Event {
   // custom events
   TokenRequest = "tokenRequest", // received from clients to obtain token
   Token = "token", // emitted by server with generated token
-  Paired = "paired"
+  Paired = "paired",
+  Suspend = "suspend"
 }
 
 // Handler returns true if socket event was successfully handled, false otherwise.
