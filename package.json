@@ -4,16 +4,12 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --prod",
+    "start":
+      "concurrently \"ng build --watch\" \"gulp\" \"nodemon --delay 2000ms dist/index.js\"",
+    "build": "ng build --prod && gulp build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "sstart": "gulp build && node ./dist/server.js",
-    "sbuild": "gulp build",
-    "stest": "gulp test",
-    "test-watch": "gulp tdd",
-    "start-watch": "gulp"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -50,6 +46,7 @@
     "@types/redis": "^2.8.6",
     "@types/socket.io": "^1.4.36",
     "codelyzer": "^4.2.1",
+    "concurrently": "^3.6.1",
     "gulp": "^3.9.1",
     "gulp-typescript": "^5.0.0-alpha.3",
     "jasmine-core": "~3.1.0",
@@ -64,8 +61,5 @@
     "ts-node": "~6.0.3",
     "tslint": "~5.10.0",
     "typescript": "^2.7.2"
-  },
-  "nodemonConfig": {
-    "delay": "0"
   }
 }
