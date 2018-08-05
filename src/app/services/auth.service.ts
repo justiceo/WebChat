@@ -8,7 +8,7 @@ import { Event, Handler } from "../../server/events";
 import { Token } from "../../server/token";
 
 @Injectable()
-export class SocketService {
+export class AuthService {
   private socket: SocketIO.Socket = io();
   private isAuthedSubj = new Subject<boolean>();
   private tokenSubj = new Subject<string>();

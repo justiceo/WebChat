@@ -8,7 +8,7 @@ import { AppComponent } from "./app.component";
 import { CacheService } from "./services/cache.service";
 import { ChatModule } from "./chat/chat.module";
 import { DataService } from "./services/data.service";
-import { SocketService } from "./services/socket.service";
+import { AuthService } from "./services/auth.service";
 import { HttpHandlerService } from "./services/http_handler.service";
 import { AuthComponent } from "./auth/auth.component";
 
@@ -21,7 +21,7 @@ import { AuthComponent } from "./auth/auth.component";
     HttpClientModule,
     ChatModule
   ],
-  providers: [CacheService, DataService, HttpHandlerService, SocketService],
+  providers: [CacheService, DataService, HttpHandlerService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

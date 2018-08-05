@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { SocketService } from "../services/socket.service";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "wc-auth",
@@ -8,8 +8,8 @@ import { SocketService } from "../services/socket.service";
 })
 export class AuthComponent implements OnInit {
   qrcode = "so my dear, this is an intentionally long text for use in generating qr code for authentication in the auth component.";
-  constructor(private socketService: SocketService) {
-    socketService.requestToken().subscribe(
+  constructor(private auth: AuthService) {
+    auth.requestToken().subscribe(
       next => (this.qrcode = next),
       error => console.log("wc-auth: ", error),
       () => {
