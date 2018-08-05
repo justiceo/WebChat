@@ -7,14 +7,15 @@ import { AuthService } from "../services/auth.service";
   styleUrls: ["./auth.component.scss"]
 })
 export class AuthComponent implements OnInit {
-  qrcode = "so my dear, this is an intentionally long text for use in generating qr code for authentication in the auth component.";
+  qrcode: string;
+  reload: boolean;
   constructor(private auth: AuthService) {
     auth.requestToken().subscribe(
       next => (this.qrcode = next),
       error => console.log("wc-auth: ", error),
       () => {
         console.log("wc-auth: completing token request subscription.");
-        // TODO: display refresh icon
+        this.reload = true;
       }
     );
   }
