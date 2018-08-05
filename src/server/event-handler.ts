@@ -1,6 +1,6 @@
 import { RedisClient } from "redis";
-import { Event, Handler } from "../common/events";
-import { Token } from "../common/token";
+import { Event, Handler } from "./events";
+import { Token } from "./token";
 
 export default class EventHandler {
   eventMap: Map<Event, Handler> = new Map([

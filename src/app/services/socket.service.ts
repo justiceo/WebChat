@@ -4,8 +4,8 @@ import { map, takeUntil } from "rxjs/operators";
 import io from "socket.io-client";
 
 import { CacheService } from "./cache.service";
-import { Event, Handler } from "../../common/events";
-import { Token } from "../../common/token";
+import { Event, Handler } from "../../server/events";
+import { Token } from "../../server/token";
 
 @Injectable()
 export class SocketService {
