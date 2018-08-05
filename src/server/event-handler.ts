@@ -4,7 +4,7 @@ import { Token } from "./token";
 
 export default class EventHandler {
   eventMap: Map<Event, Handler> = new Map([
-    [Event.TOKEN_REQUEST, this.onTokenRequest]
+    [Event.TokenRequest, this.onTokenRequest]
   ]);
   authTokens: Map<string, Token> = new Map();
 
@@ -52,7 +52,7 @@ export default class EventHandler {
 
   onTokenRequest(socket: SocketIO.Socket): boolean {
     // TODO(justiceo): Remove this client from all other rooms they may be in.
-    socket.emit(Event.TOKEN, this.makeAuthToken(socket));
+    socket.emit(Event.Token, this.makeAuthToken(socket));
     return true;
   }
 }

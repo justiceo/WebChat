@@ -16,9 +16,9 @@ export class SocketService {
   readonly TokenKey = "auth-token";
 
   eventMap: { e: Event; h: Handler }[] = [
-    { e: Event.TOKEN, h: this.onToken },
+    { e: Event.Token, h: this.onToken },
     { e: Event.Disconnect, h: this.onDisconnect },
-    { e: Event.PAIRED, h: this.onPaired }
+    { e: Event.Paired, h: this.onPaired }
   ];
 
   constructor(private cache: CacheService) {
@@ -73,7 +73,7 @@ export class SocketService {
       .pipe(takeUntil(timer(oneMinute * 8)), takeUntil(this.pairedSubj))
       .subscribe(x => {
         console.log("socket-service: emitting token request ", x);
-        this.socket.emit(Event.TOKEN_REQUEST);
+        this.socket.emit(Event.TokenRequest);
       })
       .add(() => {
         this.tokenSubj.complete();
