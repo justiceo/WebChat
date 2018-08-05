@@ -15,12 +15,6 @@ export class AuthService {
   private pairedSubj = new Subject<string>();
   readonly TokenKey = "auth-token";
 
-  eventMap: { e: Event; h: Handler }[] = [
-    { e: Event.Token, h: this.onToken },
-    { e: Event.Disconnect, h: this.onDisconnect },
-    { e: Event.Paired, h: this.onPaired }
-  ];
-
   constructor(private cache: CacheService) {
     this.registerHandlers();
     let token = cache.get(this.TokenKey);
@@ -28,18 +22,18 @@ export class AuthService {
   }
 
   registerHandlers() {
-    this.socket.on(Event.Connection, (socket: SocketIO.Socket) => {
-      this.eventMap.forEach(e => {
-        socket.on(e.e, (...args: any[]) => {
-          e.h(socket, ...args);
-        });
+    // NB: This client should only ever have one socket, the one associate with this class.
+    this.socket.on(Event.Connect, () => {
+      console.log("soc-service: connection established.");
+      this.socket.on(Event.Token, (token: Token) => {
+        this.onToken(this.socket, token);
       });
     });
   }
 
-  onToken(socket: SocketIO.Socket, tokenStr: string): boolean {
-    console.log("soc-service: tokenstr: ", tokenStr);
-    this.tokenSubj.next(tokenStr);
+  onToken(socket: SocketIO.Socket, token: Token): boolean {
+    console.log("soc-service: tokenstr: ", token);
+    this.tokenSubj.next(token.token);
     return true;
   }
 

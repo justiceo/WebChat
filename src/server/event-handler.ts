@@ -3,19 +3,14 @@ import { Event, Handler } from "./events";
 import { Token } from "./token";
 
 export default class EventHandler {
-  eventMap: Map<Event, Handler> = new Map([
-    [Event.TokenRequest, this.onTokenRequest]
-  ]);
   authTokens: Map<string, Token> = new Map();
 
   constructor(db: RedisClient) {}
 
   registerEvents(server: SocketIO.Server) {
     server.on(Event.Connection, (socket: SocketIO.Socket) => {
-      this.eventMap.forEach((handler: Handler, event: Event) => {
-        socket.on(event, (...args: any[]) => {
-          handler(socket, args);
-        });
+      socket.on(Event.TokenRequest, () => {
+        this.onTokenRequest(socket);
       });
     });
   }
