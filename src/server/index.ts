@@ -36,14 +36,13 @@ dbServer.open(err => {
 });
 
 const router = express.Router();
-router.get("/server.js", (req, res) => {
-  return res.status(403).end("403 Forbidden");
+router.get("/*", (req, res) => {
+  if (req.originalUrl === "/index.js") {
+    return res.status(403).end("403 Forbidden");
+  }
+  return res.sendFile(__dirname + req.originalUrl);
 });
-router.get("/", (req, res) => {
-  // TODO(justiceo): Uncomment to return the index of the web app
-  // return res.sendFile(__dirname + req.originalUrl);
-  res.json("Hello world!");
-});
+
 app.use("/", router);
 
 server.listen(port, err => {
