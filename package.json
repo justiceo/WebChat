@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start":
-      "concurrently \"ng build --watch\" \"gulp\" \"nodemon --delay 2000ms dist/index.js\"",
+      "concurrently --kill-others --prefix \"{name}\" --names \"client,server,nodemon\" --prefix-colors \"magenta,yellow,cyan\" \"ng build --watch\" \"gulp\" \"nodemon --delay 2000ms dist/index.js\"",
     "build": "ng build --prod && gulp build",
     "test": "ng test",
     "lint": "ng lint",

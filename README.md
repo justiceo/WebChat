@@ -24,3 +24,8 @@ A clone of WhatsApp Web using the base of WebChat.
 * Unit testing
 * Notifications (new message, battery status, title bar, enable notifications)
 * Cherry picking into v2
+
+
+### NPM Gotchas
+- Nodemon repeatedly spawning new processes? Kill it before it kills your machine. 
+- Ensure the processes that are being started aren't already running in the background: node, ng, gulp, nodemon, redis-server.
