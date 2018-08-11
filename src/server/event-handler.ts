@@ -17,14 +17,7 @@ export default class EventHandler {
 
   isValidAuthToken(socket: SocketIO.Socket, token: Token): boolean {
     const t = this.authTokens.get(socket.id);
-    return (
-      t != null &&
-      // TODO(justiceo): Update this to single comparison when js or typescript adds something like Object.equals
-      t.clientID === token.clientID &&
-      t.token === token.token &&
-      t.expires === token.expires &&
-      t.expires > Date.now() - 60 * 1000 // 1 minute
-    );
+    return t.token === token.token && t.expires > Date.now() - 60 * 1000; // 1 minute
   }
 
   makeAuthToken(socket: SocketIO.Socket): string {
@@ -38,8 +31,7 @@ export default class EventHandler {
 
     const t = {
       token: tokenStr,
-      expires: Date.now(),
-      clientID: socket.client.id
+      expires: Date.now()
     };
     this.authTokens.set(socket.id, t);
     return tokenStr;
