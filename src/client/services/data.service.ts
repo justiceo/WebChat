@@ -5,25 +5,17 @@ import { Injectable } from "@angular/core";
 import { HttpHandlerService } from "./http_handler.service";
 import { MessageContentType, Message } from "../model/message";
 import { Thread } from "../model/thread";
-import { Repository, IdToMessages, IdToThread } from "../model/repository";
+import { IdToMessages, IdToThread } from "../model/repository";
 
 @Injectable()
-export class DataService implements Repository {
+export class DataService {
   smsRepo: IdToMessages = {};
   threadRepo: IdToThread = {};
 
   constructor(private http: HttpHandlerService) {}
 
-  getMessages(threadID: string): Array<Message> {
-    return this.smsRepo[threadID];
-  }
-
   getMessagesAsyc(threadID: string): Observable<Message> {
-    return from(this.getMessages(threadID));
-  }
-
-  getThreads(): Thread[] {
-    return Object.values(this.threadRepo);
+    return from(this.smsRepo[threadID]);
   }
 
   getThreadsAsync(): Observable<Thread> {
