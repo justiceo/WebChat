@@ -24,7 +24,7 @@ export class AuthService {
     // NB: This client should only ever have one socket, the one associate with this class.
     this.socket.on(Event.Connect, () => {
       console.log("soc-service: connection established.");
-      this.socket.on(Event.Token, (token: Token) => {
+      this.socket.on(Event.Token, (token: string) => {
         this.onToken(this.socket, token);
       });
       this.socket.on(Event.Paired, (token: Token) => {
@@ -39,9 +39,9 @@ export class AuthService {
     });
   }
 
-  onToken(socket: SocketIO.Socket, token: Token): boolean {
+  onToken(socket: SocketIO.Socket, token: string): boolean {
     console.log("soc-service: tokenstr: ", token);
-    this.tokenSubj.next(token.token);
+    this.tokenSubj.next(token);
     return true;
   }
 

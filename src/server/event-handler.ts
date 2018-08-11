@@ -27,7 +27,7 @@ export default class EventHandler {
     );
   }
 
-  makeAuthToken(socket: SocketIO.Socket): Token {
+  makeAuthToken(socket: SocketIO.Socket): string {
     let tokenStr = "";
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -42,7 +42,7 @@ export default class EventHandler {
       clientID: socket.client.id
     };
     this.authTokens.set(socket.id, t);
-    return t;
+    return tokenStr;
   }
 
   onTokenRequest(socket: SocketIO.Socket): boolean {
