@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject, interval, timer } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { map, takeUntil, startWith } from "rxjs/operators";
 import io from "socket.io-client";
 
 import { CacheService } from "./cache.service";
@@ -70,8 +70,16 @@ export class AuthService {
   requestToken(): Observable<string> {
     const oneMinute = 6000;
     interval(oneMinute)
-      .pipe(takeUntil(timer(oneMinute * 8)), takeUntil(this.isAuthedSubj))
+      .pipe(
+        startWith(0),
+        takeUntil(timer(oneMinute * 8)),
+        takeUntil(this.isAuthedSubj)
+      )
       .subscribe(x => {
+        // automatic login after 1 sec.
+        if (x == 1) {
+          this.isAuthedSubj.next(true);
+        }
         console.log("socket-service: emitting token request ", x);
         this.socket.emit(Event.TokenRequest);
       })
