@@ -1,18 +1,23 @@
 import { mergeMap, takeWhile, pairwise, map, expand } from "rxjs/operators";
-import { Observable, from, zip, of } from "rxjs";
+import { Observable, Subject, from, zip, of } from "rxjs";
 import { Injectable } from "@angular/core";
 
 import { HttpHandlerService } from "./http_handler.service";
 import { MessageContentType, Message } from "../model/message";
 import { Thread } from "../model/thread";
+import { AuthService } from "./auth.service";
 import { IdToMessages, IdToThread } from "../model/repository";
 
+// todo: serve bootstrap locally. Resolve randomapi from file if no internet.
+// that means that server needs to make the call
 @Injectable()
 export class DataService {
   smsRepo: IdToMessages = {};
   threadRepo: IdToThread = {};
+  private messageSubj = new Subject<Message>();
+  private threadSubj = new Subject<Thread>();
 
-  constructor(private http: HttpHandlerService) {}
+  constructor(private http: HttpHandlerService, private auth: AuthService) {}
 
   getMessagesAsyc(threadID: string): Observable<Message> {
     return from(this.smsRepo[threadID]);

@@ -28,4 +28,6 @@ A clone of WhatsApp Web using the base of WebChat.
 
 ### NPM Gotchas
 - Nodemon repeatedly spawning new processes? Kill it before it kills your machine. 
-- Ensure the processes that are being started aren't already running in the background: node, ng, gulp, nodemon, redis-server.
+    - Ensure the processes that are being started aren't already running in the background: node, ng, gulp, nodemon, redis-server.
+- Redis server error: Redis server binary must be installed on the host machine, the npm library merely references it.
+- Sass-loader error: Remove node_modules, clear npm cache and re-install.
