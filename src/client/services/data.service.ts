@@ -87,7 +87,7 @@ export class DataService {
   }
 
   getThreadInfo(id: string): Thread {
-    return this.threadRepo[id];
+    return this.cache.get(id + this.tRef);
   }
 
   getQuotes(): Observable<string> {
@@ -101,14 +101,14 @@ export class DataService {
     let lastTimeStamp = Date.now() - day * 3;
     return this.getQuotes().pipe(
       map(quote => {
-        const m = new Message();
+        const m = Message.make(
+          threadID,
+          this.chooseAny([...userIDs, this.userMe]),
+          quote
+        );
         m.id = this.makeID();
-        m.contentType = MessageContentType.PlainText;
-        m.content = quote;
-        m.userID = this.chooseAny([...userIDs, this.userMe]);
         lastTimeStamp = this.getTimeAfter(lastTimeStamp);
         m.timestamp = lastTimeStamp;
-        m.threadID = threadID;
         return m;
       }),
       takeWhile(m => m.timestamp < Date.now()),
@@ -209,6 +209,7 @@ export class DataService {
         pairwise(),
         mergeMap((pair: Thread[]) => {
           const prob = this.randomInt(0, 100);
+          // don't create group with one person, otherwise 75% of the time, let it be one person.
           if (pair.length < 2 || prob < 75) {
             return pair;
           }
