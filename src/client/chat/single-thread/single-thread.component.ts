@@ -31,9 +31,18 @@ export class SingleThreadComponent implements OnInit {
     });
   }
 
+  newMessage: string;
   constructor(private dataService: DataService) {}
 
   ngOnInit() {}
+
+  send() {
+    if (!this.newMessage) {
+      return;
+    }
+    this.dataService.sendMessageAsync(this._thread.id, this.newMessage);
+    this.newMessage = "";
+  }
 }
 
 // scroll to bottom of div: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div

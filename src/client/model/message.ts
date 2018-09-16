@@ -18,7 +18,11 @@ export class Message {
   contentType: MessageContentType;
   content: any;
   timestamp: number;
+
+  // True if the message after this one is by a different user.
   isLocalLast: boolean;
+
+  // True if the message before this one was sent/recieved yesterday.
   isNewDay: boolean;
 
   static make(threadID: string, userID: string, content: any): Message {
@@ -27,7 +31,7 @@ export class Message {
     m1.userID = userID;
     m1.content = content;
     m1.contentType = MessageContentType.PlainText;
-    m1.timestamp = Date.now() - 50000000;
+    m1.timestamp = Date.now();
     return m1;
   }
 }

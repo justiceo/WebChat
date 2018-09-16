@@ -131,6 +131,8 @@ export class DataService {
     );
   }
 
+  sendMessageAsync(threadID: string, message: string) {}
+
   makeID(): string {
     let tokenStr = "";
     const chars =
