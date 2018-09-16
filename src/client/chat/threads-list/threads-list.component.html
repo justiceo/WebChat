@@ -19,8 +19,8 @@
       </i>
     </a>
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" tabindex="4"
-        (click)="isFocused4 = !isFocused4" (blur)="isFocused4 = false" [ngClass]="{'focus': isFocused4}">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+        tabindex="4" (click)="isFocused4 = !isFocused4" (blur)="isFocused4 = false" [ngClass]="{'focus': isFocused4}">
         <i class="icons icon-options-vertical" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
             <path fill="#263238" fill-opacity=".6" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
@@ -56,7 +56,7 @@
 <div class="threads-list-wrapper " fxFlex="100">
   <div class="threads-list">
     <a (click)="changeThread(thread)" fxFlexLayout fxLayoutAlign="start center" *ngFor="let thread of threads" class="thread-item"
-      [ngClass]="{'unread': thread.isUnread, 'active': current.id === thread.id}">
+      [ngClass]="{'unread': thread.unreadCount > 0, 'active': current.id === thread.id}">
       <div class="avatar" fxFlex="80px" fxLayoutAlign="center center">
         <img [src]="thread.avatar" alt="" />
       </div>
@@ -71,7 +71,8 @@
             width:100%;
             text-overflow:
             ellipsis; overflow: hidden;
-            white-space:nowrap;">{{ thread.snippet }}</div>
+            white-space:nowrap;">{{
+              thread.snippet }}</div>
           </span>
           <span [hidden]="thread.unreadCount == 0" class="badge badge-pill unreadCount">{{ thread.unreadCount }}</span>
         </div>
