@@ -30,9 +30,9 @@ dbServer.open(err => {
     console.log("RedisServer: " + err);
     return;
   }
-  dbClient.on("error", function(err) {
-    console.log("RedisClient: " + err);
-  });
+});
+dbClient.on("error", function(err) {
+  console.log("RedisClient: " + err);
 });
 
 const router = express.Router();

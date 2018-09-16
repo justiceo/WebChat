@@ -81,7 +81,7 @@ export class AuthService {
       )
       .subscribe(x => {
         // automatic login after 1 sec.
-        if (x == 1) {
+        if (x === 1) {
           this.isAuthedSubj.next(true);
         }
         console.log("socket-service: emitting token request ", x);
