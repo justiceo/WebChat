@@ -20,6 +20,7 @@ export class DataService {
   readonly mRef = ":messages";
   readonly tRef = ":info";
   readonly userMe = "me";
+  readonly allThreadsRef = "all_threads";
 
   constructor(
     private http: HttpHandlerService,
@@ -31,21 +32,20 @@ export class DataService {
 
   getMessagesAsyc(threadID: string): Observable<Message> {
     const messages: Message[] = this.cache.get(threadID + this.mRef);
-    let messageSubj = new ReplaySubject<Message>();
     let lastTimestamp = -1;
     if (messages != null) {
       messages.forEach(m => {
-        messageSubj.next(m);
+        this.messageSubj.next(m);
       });
       lastTimestamp = messages[messages.length - 1].timestamp;
     }
     console.log("dataservice - get lastest from ", threadID, lastTimestamp);
     this.auth.emit("get_messages_after", threadID, lastTimestamp);
-    return messageSubj.asObservable();
+    return this.messageSubj.asObservable();
   }
 
   getThreadsAsync(): Observable<Thread> {
-    const threads: Thread[] = this.cache.get("threads") || [];
+    const threads: Thread[] = this.cache.get(this.allThreadsRef) || [];
     let lastTimestamp = -1;
     if (threads != null && threads.length > 0) {
       threads.forEach(t => {
@@ -78,7 +78,7 @@ export class DataService {
             this.cache.set(t.id + this.mRef, conv);
             this.cache.set(t.id + this.tRef, t);
             threads.push(t);
-            this.cache.set("threads", threads);
+            this.cache.set(this.allThreadsRef, threads);
             this.threadSubj.next(t);
           });
       })
