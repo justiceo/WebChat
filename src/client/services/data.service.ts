@@ -30,17 +30,18 @@ export class DataService {
     this.genThreads();
   }
 
-  getMessagesAsyc(threadID: string): Observable<Message> {
+  getMessagesAsyc(threadID: string) {
     const messages: Message[] = this.cache.get(threadID + this.mRef);
     let lastTimestamp = -1;
     if (messages != null) {
-      messages.forEach(m => {
-        this.messageSubj.next(m);
-      });
+      messages.forEach(m => this.messageSubj.next(m));
       lastTimestamp = messages[messages.length - 1].timestamp;
     }
     console.log("dataservice - get lastest from ", threadID, lastTimestamp);
     this.auth.emit("get_messages_after", threadID, lastTimestamp);
+  }
+
+  getMessagesSubj(): Observable<Message> {
     return this.messageSubj.asObservable();
   }
 

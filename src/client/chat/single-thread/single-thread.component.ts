@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { bufferTime } from "rxjs/operators";
 
 import { DataService } from "../../services/data.service";
@@ -26,13 +26,16 @@ export class SingleThreadComponent implements OnInit {
     }
     this._thread = t;
     this.messages = [];
-    this.dataService.getMessagesAsyc(t.id).subscribe((m: Message) => {
-      this.addOrUpdate(m);
-    });
+    this.dataService.getMessagesAsyc(t.id);
   }
 
   newMessage: string;
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) {
+    this.dataService.getMessagesSubj().subscribe((m: Message) => {
+      // TODO: you would need this.addOrUpdate() for when changing message status.
+      this.messages.push(m);
+    });
+  }
 
   ngOnInit() {}
 
