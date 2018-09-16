@@ -135,7 +135,47 @@ export class DataService {
     );
   }
 
-  sendMessageAsync(threadID: string, message: string) {}
+  sendMessageAsync(threadID: string, message: string) {
+    console.log("data-service: sending message -> ", threadID, message);
+    let m = Message.make(threadID, this.userMe, message);
+    let conv: Message[] = this.cache.get(threadID + this.mRef);
+    let thread: Thread = this.cache.get(threadID + this.tRef);
+    let threads: Thread[] = this.cache.get(this.allThreadsRef);
+
+    // If this message is starting a new thread, create it.
+    if (conv == null) {
+      thread = Thread.make(threadID, threadID, [threadID]);
+      conv = [];
+    }
+
+    // Use previous message for context in updating some ui elements.
+    // This logic maybe implemented by phone.
+    let prev = conv[conv.length - 1];
+    if (!prev) {
+      m.isNewDay = true;
+    } else {
+      m.isNewDay =
+        new Date(prev.timestamp).getDate() !== new Date(m.timestamp).getDate();
+      prev.isLocalLast = prev.userID === m.userID;
+    }
+    m.id = this.makeID();
+
+    // Update data containers and subscriptions.
+    conv.push(m);
+    this.messageSubj.next(m);
+    thread.timestamp = m.timestamp;
+    thread.snippet = m.content;
+    this.threadSubj.next(thread);
+    threads.push(thread);
+
+    // Update storage.
+    this.cache.set(threadID + this.mRef, conv);
+    this.cache.set(threadID + this.tRef, thread);
+    this.cache.set(this.allThreadsRef, threads);
+
+    // Fire request to send the message.
+    this.auth.emit("new_message", threadID, message);
+  }
 
   makeID(): string {
     let tokenStr = "";
@@ -196,19 +236,6 @@ export class DataService {
       throw new Error("cannot choose from null or empty array");
     }
     return arr[this.randomInt(0, arr.length - 1)];
-  }
-
-  addOrUpdate(arr: { id: string }[], e: { id: string }) {
-    let found = false;
-    arr.forEach(i => {
-      if (i.id == e.id) {
-        i = e;
-        found = true;
-      }
-    });
-    if (!found) {
-      arr.push(e);
-    }
   }
 
   // a day is about 86400000 milliseconds

@@ -25,7 +25,7 @@ export class ThreadsListComponent implements OnInit {
 
   constructor(private dataService: DataService) {
     dataService.getThreadsAsync().subscribe((t: Thread) => {
-      this.dataService.addOrUpdate(this.threads, t);
+      this.addOrUpdate(t);
     });
   }
 
@@ -36,5 +36,15 @@ export class ThreadsListComponent implements OnInit {
 
   ngOnInit() {
     // this.threadChange.emit(this.current);
+  }
+
+  addOrUpdate(e: Thread) {
+    for (let i = 0; i < this.threads.length; i++) {
+      if (this.threads[i].id === e.id) {
+        Thread.copy(e, this.threads[i]);
+        return;
+      }
+    }
+    this.threads.push(e);
   }
 }

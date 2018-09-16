@@ -34,4 +34,12 @@ export class Message {
     m1.timestamp = Date.now();
     return m1;
   }
+
+  // Copy copies over fields that can be updated safely from one message to another.
+  static copy(from: Message, to: Message) {
+    to.content = from.content;
+    to.timestamp = from.timestamp;
+    to.isLocalLast = from.isLocalLast;
+    to.isNewDay = from.isNewDay;
+  }
 }

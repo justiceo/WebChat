@@ -18,4 +18,15 @@ export class Thread {
     t.unreadCount = 4;
     return t;
   }
+
+  // Copy copies over only fields that can be updated safely from one thread to another.
+  static copy(from: Thread, to: Thread) {
+    to.name = from.name;
+    to.avatar = from.avatar;
+    to.timestamp = from.timestamp;
+    to.snippet = from.snippet;
+    to.unreadCount = from.unreadCount;
+  }
+
+  // NB: This is a data class, only static methods allowed.
 }

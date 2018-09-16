@@ -27,7 +27,7 @@ export class SingleThreadComponent implements OnInit {
     this._thread = t;
     this.messages = [];
     this.dataService.getMessagesAsyc(t.id).subscribe((m: Message) => {
-      this.dataService.addOrUpdate(this.messages, m);
+      this.addOrUpdate(m);
     });
   }
 
@@ -42,6 +42,16 @@ export class SingleThreadComponent implements OnInit {
     }
     this.dataService.sendMessageAsync(this._thread.id, this.newMessage);
     this.newMessage = "";
+  }
+
+  addOrUpdate(e: Message) {
+    for (let i = 0; i < this.messages.length; i++) {
+      if (this.messages[i].id === e.id) {
+        Message.copy(e, this.messages[i]);
+        return;
+      }
+    }
+    this.messages.push(e);
   }
 }
 
