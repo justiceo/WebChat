@@ -59,10 +59,10 @@ export class DataService {
   }
 
   genThreads() {
-    let threads: Thread[] = [];
+    const threads: Thread[] = [];
     this.getRandomUsers()
       .subscribe((t: Thread) => {
-        let conv: Message[] = this.cache.get(t.id + this.mRef) || [];
+        const conv: Message[] = this.cache.get(t.id + this.mRef) || [];
         const lastTimeStamp = conv.length ? conv[conv.length - 1].timestamp : 0;
         this.genMessages(t.id, t.userIDs)
           .forEach(m => {
@@ -138,10 +138,10 @@ export class DataService {
 
   sendMessageAsync(threadID: string, message: string) {
     console.log("data-service: sending message -> ", threadID, message);
-    let m = Message.make(threadID, this.userMe, message);
+    const m = Message.make(threadID, this.userMe, message);
     let conv: Message[] = this.cache.get(threadID + this.mRef);
     let thread: Thread = this.cache.get(threadID + this.tRef);
-    let threads: Thread[] = this.cache.get(this.allThreadsRef);
+    const threads: Thread[] = this.cache.get(this.allThreadsRef);
 
     // If this message is starting a new thread, create it.
     if (conv == null) {
@@ -151,7 +151,7 @@ export class DataService {
 
     // Use previous message for context in updating some ui elements.
     // This logic maybe implemented by phone.
-    let prev = conv[conv.length - 1];
+    const prev = conv[conv.length - 1];
     if (!prev) {
       m.isNewDay = true;
     } else {
@@ -183,7 +183,7 @@ export class DataService {
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (var i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       tokenStr += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return tokenStr + Date.now();

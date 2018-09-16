@@ -25,7 +25,7 @@ export default class EventHandler {
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (var i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       tokenStr += chars.charAt(Math.floor(Math.random() * chars.length));
     }
 

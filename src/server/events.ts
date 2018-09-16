@@ -14,6 +14,4 @@ export enum Event {
 }
 
 // Handler returns true if socket event was successfully handled, false otherwise.
-export interface Handler {
-  (socket: SocketIO.Socket, ...args: any[]): boolean;
-}
+export type Handler = (socket: SocketIO.Socket, ...args: any[]) => boolean;

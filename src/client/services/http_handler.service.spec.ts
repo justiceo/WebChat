@@ -26,7 +26,7 @@ describe("HttpHandlerService", () => {
       [HttpTestingController, HttpHandlerService],
       (httpMock: HttpTestingController, httpService: HttpHandlerService) => {
         const url = "/sample/endpoint";
-        const mockResponse = '{"some-key": "some-value"}';
+        const mockResponse = "{\"some-key\": \"some-value\"}";
 
         httpService.get(url).subscribe((event: HttpEvent<any>) => {
           switch (event.type) {

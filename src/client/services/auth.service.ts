@@ -16,7 +16,7 @@ export class AuthService {
 
   constructor(private cache: CacheService) {
     this.registerHandlers();
-    let token = cache.get(this.TokenKey);
+    const token = cache.get(this.TokenKey);
     this.isAuthedSubj.next(token != null);
   }
 

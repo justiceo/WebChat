@@ -10,7 +10,7 @@ const result = dotenv.config({ path: __dirname + "/.env" });
 if (result.error) {
   // TODO(justiceo): dotenv is not find the .evn file located at the root as the server is started from dist.
   // even specifying the path (as done above) still resolves to dist.
-  //throw result.error;
+  // throw result.error;
 }
 console.log(result.parsed);
 
@@ -22,7 +22,7 @@ const socketServer: SocketIO.Server = socket(server);
 const dbClient: redis.RedisClient = redis.createClient();
 const dbServer = new redisServer(6379);
 
-let handler = new EventHandler(dbClient);
+const handler = new EventHandler(dbClient);
 handler.registerEvents(socketServer);
 
 dbServer.open(err => {
