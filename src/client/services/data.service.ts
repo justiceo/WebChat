@@ -62,9 +62,13 @@ export class DataService {
     this.getRandomUsers()
       .subscribe((t: Thread) => {
         let conv: Message[] = this.cache.get(t.id + this.mRef) || [];
+        const lastTimeStamp = conv.length ? conv[conv.length - 1].timestamp : 0;
         this.genMessages(t.id, t.userIDs)
           .forEach(m => {
-            conv.push(m);
+            // Only add newer messages
+            if (m.timestamp > lastTimeStamp) {
+              conv.push(m);
+            }
           })
           .then(() => {
             const last = conv[conv.length - 1];
