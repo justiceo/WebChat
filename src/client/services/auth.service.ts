@@ -39,6 +39,10 @@ export class AuthService {
     });
   }
 
+  emit(event: string, ...args: any[]) {
+    this.socket.emit(event, ...args);
+  }
+
   onToken(socket: SocketIO.Socket, token: string): boolean {
     console.log("soc-service: tokenstr: ", token);
     this.tokenSubj.next(token);

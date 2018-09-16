@@ -1,11 +1,12 @@
 import { mergeMap, takeWhile, pairwise, map, expand } from "rxjs/operators";
-import { Observable, Subject, from, zip, of } from "rxjs";
+import { Observable, Subject, ReplaySubject, from, zip, of } from "rxjs";
 import { Injectable } from "@angular/core";
 
 import { HttpHandlerService } from "./http_handler.service";
 import { MessageContentType, Message } from "../model/message";
 import { Thread } from "../model/thread";
 import { AuthService } from "./auth.service";
+import { CacheService } from "./cache.service";
 import { IdToMessages, IdToThread } from "../model/repository";
 
 // todo: serve bootstrap locally. Resolve randomapi from file if no internet.
@@ -16,31 +17,68 @@ export class DataService {
   threadRepo: IdToThread = {};
   private messageSubj = new Subject<Message>();
   private threadSubj = new Subject<Thread>();
+  readonly mRef = ":messages";
+  readonly tRef = ":info";
+  readonly userMe = "me";
 
-  constructor(private http: HttpHandlerService, private auth: AuthService) {}
+  constructor(
+    private http: HttpHandlerService,
+    private cache: CacheService,
+    private auth: AuthService
+  ) {
+    this.genThreads();
+  }
 
   getMessagesAsyc(threadID: string): Observable<Message> {
-    return from(this.smsRepo[threadID]);
+    const messages: Message[] = this.cache.get(threadID + this.mRef);
+    let messageSubj = new ReplaySubject<Message>();
+    let lastTimestamp = -1;
+    if (messages != null) {
+      messages.forEach(m => {
+        messageSubj.next(m);
+      });
+      lastTimestamp = messages[messages.length - 1].timestamp;
+    }
+    console.log("dataservice - get lastest from ", threadID, lastTimestamp);
+    this.auth.emit("get_messages_after", threadID, lastTimestamp);
+    return messageSubj.asObservable();
   }
 
   getThreadsAsync(): Observable<Thread> {
-    // TODO: In the real environment,
-    // first emit what is in the cache, then make the request for only fresh data.
-    return this.getRandomUsers().pipe(
-      map((t: Thread) => {
-        this.threadRepo[t.id] = t;
-        this.genMessages(t.id, t.userIDs).forEach(m => {
-          this.smsRepo[m.threadID] = this.smsRepo[m.threadID] || [];
-          this.smsRepo[m.threadID].push(m);
+    const threads: Thread[] = this.cache.get("threads") || [];
+    let lastTimestamp = -1;
+    if (threads != null && threads.length > 0) {
+      threads.forEach(t => {
+        this.threadSubj.next(t);
+      });
+      lastTimestamp = threads[threads.length - 1].timestamp;
+    }
+    this.auth.emit("get_threads_after", lastTimestamp);
+    return this.threadSubj.asObservable();
+  }
 
-          // set message to last
-          t.timestamp = m.timestamp;
-          t.snippet = m.content;
-          t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
-        });
-        return t;
+  genThreads() {
+    let threads: Thread[] = [];
+    this.getRandomUsers()
+      .subscribe((t: Thread) => {
+        let conv: Message[] = this.cache.get(t.id + this.mRef) || [];
+        this.genMessages(t.id, t.userIDs)
+          .forEach(m => {
+            conv.push(m);
+          })
+          .then(() => {
+            const last = conv[conv.length - 1];
+            t.timestamp = last.timestamp;
+            t.snippet = last.content;
+            t.unreadCount = this.chooseAny([0, 0, 0, 0, 1, 2, 3, 5, 8]);
+            this.cache.set(t.id + this.mRef, conv);
+            this.cache.set(t.id + this.tRef, t);
+            threads.push(t);
+            this.cache.set("threads", threads);
+            this.threadSubj.next(t);
+          });
       })
-    );
+      .add(() => {});
   }
 
   getThreadInfo(id: string): Thread {
@@ -62,7 +100,7 @@ export class DataService {
         m.id = this.makeID();
         m.contentType = MessageContentType.PlainText;
         m.content = quote;
-        m.userID = this.chooseAny([...userIDs, "me"]);
+        m.userID = this.chooseAny([...userIDs, this.userMe]);
         lastTimeStamp = this.getTimeAfter(lastTimeStamp);
         m.timestamp = lastTimeStamp;
         m.threadID = threadID;
