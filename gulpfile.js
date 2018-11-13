@@ -11,6 +11,6 @@ gulp.task("build", function() {
     .pipe(gulp.dest("dist"));
 });
 
-gulp.task("default", ["build"], function() {
-  gulp.watch(source, ["build"]);
-});
+gulp.task("default",  gulp.series("build", function() {
+  gulp.watch(source, gulp.series("build"));
+}));
