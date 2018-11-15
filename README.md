@@ -30,3 +30,30 @@ A clone of WhatsApp Web using the base of WebChat.
   - Ensure the processes that are being started aren't already running in the background: node, ng, gulp, nodemon, redis-server.
 - Redis server error: Redis server binary must be installed on the host machine, the npm library merely references it.
 - Sass-loader error: Remove node_modules, clear npm cache and re-install.
+
+
+### Installation
+
+Download repo and install dependencies:
+```
+git clone https://github.com/justiceo/whatsapp-web-template
+cd whatsapp-web-template
+npm install
+```
+
+Install redis (for server app):
+```
+npm i redis
+apt install redis-server
+```
+
+To start up server (which would serve template):
+```
+npm start
+```
+
+To use angular-cli to serve the web app alone:
+```
+npm i -g @angular/cli
+ng serve
+```
