@@ -57,3 +57,28 @@ To use angular-cli to serve the web app alone:
 npm i -g @angular/cli
 ng serve
 ```
+
+### Deploying
+
+Build the UI and server (requires installation of @angular/cli and gulp@4):
+```
+ng build 
+gulp build
+```
+
+Install PM2 and start the server (starts webapp at http://localhost:3000):
+```
+npm i -g pm2
+pm2 start dist/index.js
+```
+
+There are several ways to view it at http://chat-domain.com, below is one using apache2 proxy (requires mod_proxy):
+```
+<VirtualHost *:80>
+  ServerName  chat-domain.com
+
+  # Point to pm2 or node instance of whatsapp web
+  ProxyPass             / http://localhost:3000/
+  ProxyPassReverse      / http://localhost:3000/
+</VirtualHost>
+```
