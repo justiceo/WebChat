@@ -32,7 +32,7 @@ export class SingleThreadComponent implements OnInit {
   newMessage: string;
   constructor(private dataService: DataService) {
     this.dataService.getMessagesSubj().subscribe((m: Message) => {
-      // TODO: you would need this.addOrUpdate() for when changing message status.
+       // TODO: you would need this.addOrUpdate() for when changing message status.
       this.messages.push(m);
     });
   }
@@ -50,6 +50,7 @@ export class SingleThreadComponent implements OnInit {
   addOrUpdate(e: Message) {
     for (let i = 0; i < this.messages.length; i++) {
       if (this.messages[i].id === e.id) {
+        // Implement a generic obj.Copy if all the fields need to be copied.
         Message.copy(e, this.messages[i]);
         return;
       }

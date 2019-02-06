@@ -5,6 +5,8 @@ import * as socket from "socket.io";
 import * as redis from "redis";
 import * as redisServer from "redis-server";
 import EventHandler from "./event-handler";
+import HttpHandler from "./http_handler";
+import Cache from "./cache";
 
 const result = dotenv.config({ path: __dirname + "/.env" });
 if (result.error) {
@@ -21,8 +23,10 @@ const server = http.createServer(app);
 const socketServer: SocketIO.Server = socket(server);
 const dbClient: redis.RedisClient = redis.createClient();
 const dbServer = new redisServer(6379);
+const cache:Cache = new Cache();
+const httpHandler = new HttpHandler(cache);
 
-const handler = new EventHandler(dbClient);
+const handler = new EventHandler(dbClient, httpHandler, cache);
 handler.registerEvents(socketServer);
 
 dbServer.open(err => {
