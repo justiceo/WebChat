@@ -36,7 +36,20 @@ export class AuthService {
       this.socket.on(Event.Disconnect, () => {
         this.onDisconnect(this.socket);
       });
+      this.socket.on(Event.Threads, (args) => {
+        console.log("received thread: ", args)
+      });
+      this.socket.on(Event.Threads, (args) => {
+        console.log("second registered thread eent: " ,args)
+      });
     });
+  }
+
+
+  register(event: Event, f: (s: SocketIO.Socket, ...args: any[]) => void ) {
+    this.socket.on(event, (...args) => {
+      console.log("auth-service received event: ", event, " to be handled by ", f.name)
+      f(this.socket, ...args)})
   }
 
   emit(event: string, ...args: any[]) {

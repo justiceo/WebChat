@@ -8,6 +8,7 @@ import { Thread } from "../model/thread";
 import { AuthService } from "./auth.service";
 import { CacheService } from "./cache.service";
 import { IdToMessages, IdToThread } from "../model/repository";
+import { Event, Handler } from "../../server/events";
 
 // todo: serve bootstrap locally. Resolve randomapi from file if no internet.
 // that means that server needs to make the call
@@ -23,11 +24,12 @@ export class DataService {
   readonly allThreadsRef = "all_threads";
 
   constructor(
-    private http: HttpHandlerService,
     private cache: CacheService,
     private auth: AuthService
   ) {
     // TODO: this.fetchThreads();
+
+    this.auth.register(Event.Threads, this.onThread)
   }
 
   getMessagesAsyc(threadID: string) {
@@ -39,6 +41,11 @@ export class DataService {
     }
     console.log("dataservice - get lastest from ", threadID, lastTimestamp);
     this.auth.emit("get_messages_after", threadID, lastTimestamp);
+  }
+
+  onThread(socket: SocketIO.Socket, thread: Thread): boolean {
+    this.threadSubj.next(thread);
+    return true;
   }
 
   getMessagesSubj(): Observable<Message> {
@@ -54,7 +61,7 @@ export class DataService {
       });
       lastTimestamp = threads[threads.length - 1].timestamp;
     }
-    this.auth.emit("get_threads_after", lastTimestamp);
+    this.auth.emit("threadsRequest", lastTimestamp);
     return this.threadSubj.asObservable();
   }
 
