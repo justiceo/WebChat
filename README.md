@@ -42,14 +42,23 @@ npm install
 ```
 
 Install redis (for server app):
+
+Follow guide here https://redis.io/docs/getting-started/installation/.
+
+Then install nodejs wrapper:
 ```
 npm i redis
-apt install redis-server
+```
+
+To build the server:
+```
+tsc --outDir dist src/server/index.js
 ```
 
 To start up server (which would serve template):
 ```
-npm start
+redis-server (start redis)
+node dist/index.js
 ```
 
 To use angular-cli to serve the web app alone:

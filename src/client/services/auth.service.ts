@@ -9,7 +9,7 @@ import { Token } from "../../server/token";
 
 @Injectable()
 export class AuthService {
-  private socket: SocketIO.Socket = io();
+  private socket = io();
   private isAuthedSubj = new Subject<boolean>();
   private tokenSubj = new Subject<string>();
   readonly TokenKey = "auth-token";
@@ -43,25 +43,25 @@ export class AuthService {
     this.socket.emit(event, ...args);
   }
 
-  onToken(socket: SocketIO.Socket, token: string): boolean {
+  onToken(socket: any, token: string): boolean {
     console.log("soc-service: tokenstr: ", token);
     this.tokenSubj.next(token);
     return true;
   }
 
-  onPaired(socket: SocketIO.Socket, token: Token): boolean {
+  onPaired(socket: any, token: Token): boolean {
     this.cache.set(this.TokenKey, token);
     this.isAuthedSubj.next(true);
     this.tokenSubj.complete();
     return true;
   }
 
-  onSuspend(socket: SocketIO.Socket): boolean {
+  onSuspend(socket: any): boolean {
     this.tokenSubj.complete();
     return true;
   }
 
-  onDisconnect(socket: SocketIO.Socket): boolean {
+  onDisconnect(socket: any): boolean {
     this.tokenSubj.complete();
     this.isAuthedSubj.complete();
     return true;
